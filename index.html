@@ -114,10 +114,12 @@
   .vco{margin:2px 0 0;font-size:14px;font-weight:600}
   .vnote,.vline{margin:2px 0 0;font-size:13px;color:var(--muted)}
   .vline:first-of-type{margin-top:6px}
-  .vbtns{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:6px;margin-top:auto;padding-top:14px}
-  .vbtns a:not(.call) svg{display:none}
-  .vbtns a{min-width:0;height:42px;padding:0 6px;font-size:13px !important;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:14px;font-weight:600;border:1px solid var(--line);background:#fff;color:var(--ink);white-space:nowrap}
-  .vbtns a.call{background:var(--navy);border-color:var(--navy);color:var(--cream)}
+  .vbtns{display:flex;gap:6px;margin-top:auto;padding-top:14px}
+  .vbtns a{height:44px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:14px;font-weight:600;border:1px solid var(--line);background:#fff;color:var(--ink);white-space:nowrap}
+  .vbtns a svg{width:17px;height:17px}
+  .vbtns a.call{flex:1;min-width:0;padding:0 12px;background:var(--navy);border-color:var(--navy);color:var(--cream)}
+  .vbtns a.ib{flex:none;width:44px;padding:0}
+  .vbtns a.ib span{display:none}
   .empty{padding:24px 0;text-align:center;color:var(--muted);font-size:14px}
   .empty a{color:var(--navy);font-weight:600;text-decoration:underline}
 
@@ -172,9 +174,10 @@
     .lcards .lcard{margin-top:12px}
     .pair{max-width:520px}
     .chips{margin:12px 0 0;padding:0 0 4px;flex-wrap:wrap}
-    .vbtns{display:flex;flex-wrap:nowrap;gap:8px}
-    .vbtns a{flex:0 0 auto;padding:0 16px;font-size:14px !important}
-    .vbtns a:not(.call) svg{display:inline}
+    .vbtns{gap:8px}
+    .vbtns a.call{flex:0 0 auto;padding:0 20px}
+    .vbtns a.ib{width:auto;padding:0 16px}
+    .vbtns a.ib span{display:inline}
     #sellers form,#help .refer,#help > .btn{max-width:560px}
     .sharebox{margin:40px 0 0;display:flex;align-items:center;justify-content:space-between;gap:20px}
     .sharebox p{margin-bottom:0}
@@ -417,14 +420,13 @@ function card(v){
   const sub = [v.contact, v.note].filter(Boolean).join(" | ");
   const num = v.phone || v.office;
   const b=[];
-  if(digits(num)) b.push(`<a class="call" href="tel:${digits(num)}">${icon('phone')}Call</a>`);
-  if(digits(v.phone)) b.push(`<a href="${sms(v.phone,"Hi, Stephen Leick referred me. ")}">${icon('msg')}Text</a>`);
-  if(v.email) b.push(`<a href="mailto:${esc(v.email)}?subject=${encodeURIComponent("Referred by Stephen Leick")}">${icon('mail')}Email</a>`);
-  if(v.web) b.push(`<a href="${esc(fixUrl(v.web))}" target="_blank" rel="noopener">${icon('globe')}Website</a>`);
+  if(digits(num)) b.push(`<a class="call" href="tel:${digits(num)}">${icon('phone')}Call ${esc(fmtPhone(num))}</a>`);
+  if(digits(v.phone)) b.push(`<a class="ib" aria-label="Text" title="Text" href="${sms(v.phone,"Hi, Stephen Leick referred me. ")}">${icon('msg')}<span>Text</span></a>`);
+  if(v.email) b.push(`<a class="ib" aria-label="Email" title="Email" href="mailto:${esc(v.email)}?subject=${encodeURIComponent("Referred by Stephen Leick")}">${icon('mail')}<span>Email</span></a>`);
+  if(v.web) b.push(`<a class="ib" aria-label="Website" title="Website" href="${esc(fixUrl(v.web))}" target="_blank" rel="noopener">${icon('globe')}<span>Website</span></a>`);
   return `<article class="vcard${v.pick?" pick":""}">
     <div class="vtop"><p class="vname">${esc(title)}</p>${v.pick?`<span class="badge">${icon('star')}Stephen's pick</span>`:""}</div>
     ${sub?`<p class="vco">${esc(sub)}</p>`:""}
-    ${digits(num)?`<p class="vline">${esc(fmtPhone(num))}</p>`:""}
     ${b.length?`<div class="vbtns">${b.join("")}</div>`:""}
   </article>`;
 }
