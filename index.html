@@ -65,11 +65,13 @@
   .pill{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:40px;padding:0 14px;border-radius:999px;font-size:14px;font-weight:600;border:1px solid var(--line);background:#fff;color:var(--ink)}
   .pill.dark{background:var(--navy);color:var(--cream);border-color:var(--navy)}
 
-  /* Home screen card */
-  .hs{margin:24px 20px 0}
-  .hs h3{margin:0;font-family:var(--serif);font-weight:400;font-size:21px}
-  .hs p{margin:6px 0 14px;font-size:14px;color:var(--muted)}
-  .howto{display:none;margin-top:12px;font-size:14px;color:var(--muted)}
+  /* Home screen tip */
+  .tip{margin:24px 20px 0;background:#f4ecd2;border:1px solid #e8d9a6;border-radius:22px;padding:16px;display:flex;gap:14px;align-items:flex-start}
+  .tip .emo{font-size:1.6rem;line-height:1}
+  .tip strong{display:block;font-size:16px;color:var(--navy)}
+  .tip p{margin:2px 0 10px;font-size:14px;color:#4b4630}
+  .tip .btn{height:36px;padding:0 14px;border-radius:10px;font-size:13px}
+  .howto{display:none;margin-top:10px;font-size:14px;color:#4b4630}
   .howto.show{display:block}
 
   /* Stats */
@@ -191,11 +193,14 @@
     </div>
   </header>
 
-  <div class="card hs">
-    <h3>Keep this on your home screen</h3>
-    <p>Save it once, and calling, texting, home search, and my vendor list stay one tap away. Nothing to sign in to.</p>
-    <button class="btn dark" id="hsBtn" style="border-radius:999px">Add to Home Screen</button>
-    <div class="howto" id="howto"><b>iPhone:</b> tap the Share icon in Safari, then <i>Add to Home Screen</i>.<br><b>Android:</b> tap the ⋮ menu in Chrome, then <i>Add to Home screen</i>.</div>
+  <div class="tip">
+    <div class="emo">📲</div>
+    <div>
+      <strong>Keep this on your home screen</strong>
+      <p>No app, no login. Save it once and you'll always have my number, my trusted vendors, and your next steps one tap away.</p>
+      <button class="btn dark" id="hsBtn">Show me how</button>
+      <div class="howto" id="howto"><b>iPhone:</b> tap the Share icon in Safari → <i>Add to Home Screen</i>.<br><b>Android:</b> tap the ⋮ menu in Chrome → <i>Add to Home screen</i>.</div>
+    </div>
   </div>
 
   <div class="stats">
@@ -466,12 +471,7 @@ viaSubmit($('#sellForm'),()=>({subj:"What's my home worth?", body:`${CONFIG.text
 viaSubmit($('#refForm'),()=>({subj:"Referral", body:`${CONFIG.textGreeting}I have a referral for you: ${$('#rInfo').value}.`}));
 
 /* ---------- Home screen + share ---------- */
-let installEvt=null;
-addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); installEvt=e; });
-$('#hsBtn').onclick=async()=>{
-  if(installEvt){ installEvt.prompt(); installEvt=null; return; }
-  $('#howto').classList.toggle('show');
-};
+$('#hsBtn').onclick=()=>$('#howto').classList.toggle('show');
 $$('[data-share]').forEach(b=>b.onclick=async()=>{
   const data={title:"Stephen Leick | "+(CONFIG.teamName||"REALTOR®"),text:"My go-to real estate agent and his trusted vendor list:",url:location.href.split('#')[0]};
   try{ if(navigator.share){ await navigator.share(data); return; } }catch(e){ if(e.name==="AbortError") return; }
