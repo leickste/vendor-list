@@ -518,11 +518,11 @@ function render(){
   const tree={};
   list.forEach(v=>{ const c=v.cat||"Other", s=v.sub||"Other"; (tree[c]=tree[c]||{}); (tree[c][s]=tree[c][s]||[]).push(v); });
   const force = !!q;                       // searching: show every match
-  const catOpen = c => force || cat!=="All" || (OPEN_CATS.has(c) !== DEFAULT_OPEN.test(c));
-  const subOpen = (c,s) => force || cat!=="All" || (OPEN_SUBS.has(c+"|"+s) !== DEFAULT_OPEN.test(c));
+  const catOpen = c => force || cat!=="All" || !OPEN_CATS.has(c);           // categories start open
+  const subOpen = (c,s) => force || cat!=="All" || OPEN_SUBS.has(c+"|"+s);  // types start closed
   $('#vlist').innerHTML=Object.entries(tree).map(([c,subs])=>`<section class="vcat${catOpen(c)?" open":""}" data-cat="${esc(c)}"><button type="button" class="cat" aria-expanded="${catOpen(c)}">${esc(c)}<svg class="chev"><use href="#i-chev"/></svg></button><div class="catbody">`+Object.entries(subs).map(([s,vs])=>`<div class="vsub${subOpen(c,s)?" open":""}" data-key="${esc(c+"|"+s)}"><button type="button" class="sub" aria-expanded="${subOpen(c,s)}"><span>${esc(s)}<svg class="chev"><use href="#i-chev"/></svg></span></button><div class="vgrid">`+vs.sort((a,b)=>(b.pick?1:0)-(a.pick?1:0)).map(card).join("")+`</div></div>`).join("")+`</div></section>`).join("");
 }
-/* Collapsible groups: Real Estate starts open, everything else starts closed.
+/* Collapsible groups: every category starts open showing its type labels; each type starts closed.
    OPEN_CATS / OPEN_SUBS hold the ones the visitor has flipped from their default. */
 const DEFAULT_OPEN = /real estate/i;
 const OPEN_CATS = new Set(), OPEN_SUBS = new Set();
