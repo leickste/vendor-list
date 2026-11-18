@@ -41,6 +41,12 @@
   .mono{display:grid;place-items:center;width:56px;height:56px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);font-family:var(--serif);font-size:20px;letter-spacing:-.02em}
   .team{margin:0;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-light)}
   .brk{margin:0;font-size:14px;color:rgba(255,255,255,.8)}
+  .brandrow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .vippill{flex:none;border:1px solid rgba(233,217,166,.6);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light)}
+  .vipcard{display:block;margin:12px 20px 0;background:var(--navy);color:var(--cream);border-radius:22px;padding:16px}
+  .vipcard .k{margin:0;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light)}
+  .vipcard .t{margin:4px 0 0;font-family:var(--serif);font-size:22px;line-height:1.15}
+  .vipcard .d{margin:4px 0 0;font-size:14px;color:rgba(255,255,255,.8)}
   h1{margin:24px 0 0;font-family:var(--serif);font-weight:500;font-size:2.6rem;line-height:.95;letter-spacing:-.025em}
   .tagline{margin:12px 0 0;font-size:15px;line-height:1.55;color:rgba(255,255,255,.85)}
   .hero-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
@@ -168,6 +174,7 @@
     h1{font-size:3rem}
     .tip{display:none}
     .stats{margin:16px 0 0}
+    .vipcard{margin:12px 0 0}
     .main{background:var(--cream);border:1px solid var(--line);border-radius:28px;padding:8px 40px 40px}
     section{padding:0;margin-top:40px}
     .lcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -205,12 +212,15 @@
   <header>
     <div class="glow"></div>
     <div class="rel">
+      <div class="brandrow">
       <div class="brand">
         <span class="mono">SL</span>
         <div>
           <p class="team" data-cfg="teamName"></p>
           <p class="brk" data-cfg="brokerage"></p>
         </div>
+      </div>
+      <a class="vippill" href="vip/">VIP</a>
       </div>
       <h1>Stephen Leick</h1>
       <p class="tagline" data-cfg="tagline"></p>
@@ -242,6 +252,11 @@
     <a class="stat link" data-href="readReviewsUrl" href="#reviews"><b data-cfg="stat3"></b><span data-cfg="stat3Label"></span></a>
   </div>
 
+  <a class="vipcard" href="vip/">
+    <p class="k">Stephen's VIP</p>
+    <p class="t">Log in here for VIP clients</p>
+    <p class="d">A private page for clients Stephen has invited. Enter the VIP password there.</p>
+  </a>
 </aside>
 <main class="main">
   <section id="search">
