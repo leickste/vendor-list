@@ -45,8 +45,17 @@
   .brand{min-width:0;flex:1 1 auto}
   .brand > div{min-width:0}
   .team{overflow-wrap:anywhere}
-  html,body{overflow-x:hidden}
-  .page{overflow-x:clip}
+  html{overflow-x:hidden} body{overflow-x:clip}
+  .page{overflow-x:clip;display:flex;flex-direction:column}
+  .left,.right{display:contents}
+  .left > header{order:1} .tabs{order:2} .extras{order:3} .main{order:4}
+  .tabs{position:sticky;top:0;z-index:25;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:10px 12px;background:rgba(246,241,231,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs a{flex:1 0 auto;text-align:center;padding:9px 11px;border-radius:999px;font-size:14px;font-weight:600;color:var(--navy);border:1px solid transparent;white-space:nowrap}
+  .tabs a.on{background:var(--navy);color:var(--cream)}
+  .panel{display:none} .panel.on{display:block}
+  .panel > section:first-child{margin-top:28px}
+  .lcards.one{margin:16px 0 4px}
   @media (max-width:420px){ .team{letter-spacing:.14em;font-size:10.5px} .brk{font-size:13px} .mono{width:48px;height:48px;font-size:18px} }
   .vippill{flex:none;border:1px solid rgba(233,217,166,.6);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light)}
   .vipcard{display:block;margin:12px 20px 0;background:var(--navy);color:var(--cream);border-radius:22px;padding:16px}
@@ -197,7 +206,11 @@
   @media (min-width: 960px){
     body{background:#efe8d9}
     .page{max-width:1200px;display:grid;grid-template-columns:400px minmax(0,1fr);gap:48px;align-items:start;padding:32px 32px 56px;background:transparent;box-shadow:none;min-height:0}
-    .side{position:sticky;top:32px}
+    .left{display:block;position:sticky;top:32px}
+    .right{display:block;min-width:0}
+    .tabs{top:0;margin:-12px 0 16px;padding:12px 0;background:rgba(239,232,217,.94);border:0;justify-content:flex-start}
+    .tabs a{flex:0 0 auto;padding:10px 18px;background:#fffdf8;border-color:var(--line)}
+    .tabs a.on{background:var(--navy);border-color:var(--navy)}
     header{border-radius:28px;padding:28px 28px 32px}
     h1{font-size:3rem}
     .tip{display:none}
@@ -206,6 +219,7 @@
     .main{background:var(--cream);border:1px solid var(--line);border-radius:28px;padding:8px 40px 40px}
     section{padding:0;margin-top:40px}
     .lcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .lcards.one{grid-template-columns:1fr}
     .lcards .lcard{margin-top:12px}
     .pair{max-width:520px}
     .chips{margin:12px 0 0;padding:0 0 4px;flex-wrap:wrap}
@@ -249,7 +263,7 @@
 </svg>
 
 <div class="page">
-<aside class="side">
+<div class="left side">
   <header>
     <div class="glow"></div>
     <div class="rel">
@@ -277,6 +291,7 @@
     </div>
   </header>
 
+  <div class="extras">
   <div class="tip">
     <div class="emo">📲</div>
     <div>
@@ -298,34 +313,18 @@
     <p class="t">Log in here for VIP clients</p>
     <p class="d">A private page for Stephen's VIP's. Click here to enter the VIP password.</p>
   </a>
-</aside>
+  </div>
+</div>
+<div class="right">
+<nav class="tabs" id="tabs" aria-label="Sections">
+  <a href="#vendors" data-tab="vendors">Vendors</a>
+  <a href="#local" data-tab="local">Local</a>
+  <a href="#buying" data-tab="buying">Buying</a>
+  <a href="#selling" data-tab="selling">Selling</a>
+  <a href="#refer" data-tab="refer">Refer</a>
+</nav>
 <main class="main">
-  <section id="search">
-    <p class="eyebrow">Search homes</p>
-    <h2>See what's on the market</h2>
-    <div class="lcards">
-    <a class="lcard dark" data-href="searchUrl" href="#">
-      <p class="k">Home search</p>
-      <p class="t" data-cfg="websiteLabel"></p>
-      <p class="d">Every listing in Omaha, Council Bluffs, and the surrounding area.</p>
-    </a>
-    <a class="lcard" data-href="valueUrl" href="#sellers">
-      <p class="t">What's my home worth?</p>
-      <p class="d">A real price from recent sales on your street, not an online guess.</p>
-    </a>
-    </div>
-  </section>
-
-  <section id="reviews">
-    <p class="eyebrow">Reviews</p>
-    <h2>What clients say</h2>
-    <p class="lead">Reviews from buyers and sellers across Nebraska and Iowa. If I helped you, a quick review means a lot.</p>
-    <div class="pair">
-      <a class="btn dark" data-href="readReviewsUrl" href="#"><svg><use href="#i-star"/></svg>Read reviews</a>
-      <a class="btn light" data-href="leaveReviewUrl" href="#">Leave a review</a>
-    </div>
-  </section>
-
+<div class="panel" data-panel="vendors">
   <section id="vendors">
     <p class="eyebrow">Preferred vendors</p>
     <h2>People I actually call</h2>
@@ -335,11 +334,54 @@
     <p class="count" id="vcount"></p>
     <div id="vlist"></div>
   </section>
+</div>
+<div class="panel" data-panel="local">
+  <section id="local">
+    <p class="eyebrow">Local favorites</p>
+    <h2>Eat &amp; explore</h2>
+    <p class="lead">My favorite restaurants and things to do around Omaha and Council Bluffs.</p>
+    <div id="llist"></div>
+  </section>
+</div>
+<div class="panel" data-panel="buying">
+  <section id="search">
+    <p class="eyebrow">Search homes</p>
+    <h2>See what's on the market</h2>
+    <div class="lcards">
+    <a class="lcard dark" data-href="searchUrl" href="#">
+      <p class="k">Home search</p>
+      <p class="t" data-cfg="websiteLabel"></p>
+      <p class="d">Every listing in Omaha, Council Bluffs, and the surrounding area.</p>
+    </a>
+    </div>
+  </section>
 
+  <section id="buyers">
+    <p class="eyebrow">Buyers</p>
+    <h2>From pre-approval to keys</h2>
+    <ol class="steps">
+      <li><span class="num">1</span><div><b>Get pre-approved</b><p>Sellers want a real approval before they take a showing seriously. <span id="lenderLine"></span></p></div></li>
+      <li><span class="num">2</span><div><b>Search with a local eye</b><p>I'll set up a live search so you see new listings the minute they hit the market.</p></div></li>
+      <li><span class="num">3</span><div><b>Tour and write offers</b><p>We'll compare homes, and I'll write a strong offer when you find the one.</p></div></li>
+      <li><span class="num">4</span><div><b>Inspect and insure</b><p>Inspection, insurance quotes, and radon and sewer checks from people I trust. They're all in the vendor list.</p></div></li>
+      <li><span class="num">5</span><div><b>Close</b><p>Final walkthrough, sign at title, and get your keys.</p></div></li>
+    </ol>
+    <a class="btn dark wide" id="lenderBtn" href="#vendors" style="height:52px">Get pre-approved</a>
+    <p class="center" id="lenderCall"></p>
+  </section>
+</div>
+<div class="panel" data-panel="selling">
   <section id="sellers">
     <p class="eyebrow">Sellers</p>
     <h2>What's my home worth?</h2>
     <p class="lead">An online estimate is a starting guess. I price from homes that actually sold on your street.</p>
+  <div class="lcards one">
+    <a class="lcard" data-href="valueUrl" href="#sellers">
+      <p class="k">Instant estimate</p>
+      <p class="t">Get an online home value</p>
+      <p class="d">A quick starting point. For a real number, send me your address below.</p>
+    </a>
+  </div>
     <ol class="steps">
       <li><span class="num">1</span><div><b>Send the address</b><p>Text or email it. I'll pull recent sales and current competition in your neighborhood.</p></div></li>
       <li><span class="num">2</span><div><b>Walk the house</b><p>Paint, lawn, and small repairs change the offer. The vendor list is who I send my own clients to.</p></div></li>
@@ -355,21 +397,17 @@
         <button class="btn light" type="submit" data-via="email">Email Stephen</button>
       </div>
     </form>
-    <a class="ulink" data-href="valueUrl" href="#">Or get an instant online estimate</a>
   </section>
-
-  <section id="buyers">
-    <p class="eyebrow">Buyers</p>
-    <h2>From pre-approval to keys</h2>
-    <ol class="steps">
-      <li><span class="num">1</span><div><b>Get pre-approved</b><p>Sellers want a real approval before they take a showing seriously. <span id="lenderLine"></span></p></div></li>
-      <li><span class="num">2</span><div><b>Search with a local eye</b><p>I'll set up a live search so you see new listings the minute they hit the market.</p></div></li>
-      <li><span class="num">3</span><div><b>Tour and write offers</b><p>We'll compare homes, and I'll write a strong offer when you find the one.</p></div></li>
-      <li><span class="num">4</span><div><b>Inspect and insure</b><p>Inspection, insurance quotes, and radon and sewer checks from people I trust. They're all in the vendor list.</p></div></li>
-      <li><span class="num">5</span><div><b>Close</b><p>Final walkthrough, sign at title, and get your keys.</p></div></li>
-    </ol>
-    <a class="btn dark wide" id="lenderBtn" href="#vendors" style="height:52px">Get pre-approved</a>
-    <p class="center" id="lenderCall"></p>
+</div>
+<div class="panel" data-panel="refer">
+  <section id="reviews">
+    <p class="eyebrow">Reviews</p>
+    <h2>What clients say</h2>
+    <p class="lead">Reviews from buyers and sellers across Nebraska and Iowa. If I helped you, a quick review means a lot.</p>
+    <div class="pair">
+      <a class="btn dark" data-href="readReviewsUrl" href="#"><svg><use href="#i-star"/></svg>Read reviews</a>
+      <a class="btn light" data-href="leaveReviewUrl" href="#">Leave a review</a>
+    </div>
   </section>
 
   <section id="help">
@@ -390,12 +428,14 @@
     <p>One link. They can add it to their home screen too.</p>
     <button class="btn" data-share><svg><use href="#i-share"/></svg>Share</button>
   </div>
+</div>
 
   <footer>
     <p>Vendor recommendations are a courtesy only. Stephen Leick and Keller Williams Greater Omaha are not affiliated with or liable for these businesses. Each Keller Williams office is independently owned and operated. Equal Housing Opportunity.</p>
     <p>Stephen Leick · <span data-cfg="brokerage"></span> · Licensed in Nebraska &amp; Iowa · <span data-email-text></span></p>
   </footer>
 </main>
+</div>
 </div>
 
 <nav>
@@ -463,8 +503,9 @@ function applyConfig(){
 
 /* ---------- Vendors ---------- */
 let cat="All";
+const isLocal = v => /local/i.test(v.cat||"");
 function buildChips(){
-  const cats=["All",...new Set(VENDORS.map(v=>v.cat).filter(Boolean))];
+  const cats=["All",...new Set(VENDORS.filter(v=>!isLocal(v)).map(v=>v.cat).filter(Boolean))];
   if(!cats.includes(cat)) cat="All";
   $('#chips').innerHTML=cats.map(c=>`<button class="chip${c===cat?" on":""}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
 }
@@ -532,17 +573,30 @@ function card(v){
     ${b.length?`<div class="vbtns">${b.join("")}</div>`:""}
   </article>`;
 }
-function render(){
-  const q=$('#vq').value.trim().toLowerCase(), qd=digits(q);
-  const list=VENDORS.filter(v=>v.name&&(cat==="All"||v.cat===cat)&&(!q||[v.name,v.sub,v.cat,v.contact,v.note,v.keywords,extraWords(v)].join(" ").toLowerCase().includes(q)||(qd.length>2&&(digits(v.phone)+" "+digits(v.office)).includes(qd))));
-  $('#vcount').textContent=`${list.length} vendor${list.length===1?"":"s"}`;
-  if(!list.length){ $('#vlist').innerHTML=`<div class="empty">No matches. <a href="${sms(CONFIG.phone,CONFIG.textGreeting+"Do you know a good ")}">Text me</a> and I'll find someone.</div>`; return; }
+function subHTML(c,s,vs,open){
+  return `<div class="vsub${open?" open":""}" data-key="${esc(c+"|"+s)}"><button type="button" class="sub" aria-expanded="${open}"><span>${esc(s)}<svg class="chev"><use href="#i-chev"/></svg></span></button><div class="vgrid">`+vs.sort((a,b)=>(b.pick?1:0)-(a.pick?1:0)).map(card).join("")+`</div>${moreLink(s,vs)}</div>`;
+}
+function treeOf(list){
   const tree={};
   list.forEach(v=>{ const c=v.cat||"Other", s=v.sub||"Other"; (tree[c]=tree[c]||{}); (tree[c][s]=tree[c][s]||[]).push(v); });
-  const force = !!q;                       // searching: show every match
-  const catOpen = c => force || cat!=="All" || !OPEN_CATS.has(c);           // categories start open
-  const subOpen = (c,s) => force || cat!=="All" || OPEN_SUBS.has(c+"|"+s);  // types start closed
-  $('#vlist').innerHTML=Object.entries(tree).map(([c,subs])=>`<section class="vcat${catOpen(c)?" open":""}" data-cat="${esc(c)}"><button type="button" class="cat" aria-expanded="${catOpen(c)}">${esc(c)}<svg class="chev"><use href="#i-chev"/></svg></button><div class="catbody">`+Object.entries(subs).map(([s,vs])=>`<div class="vsub${subOpen(c,s)?" open":""}" data-key="${esc(c+"|"+s)}"><button type="button" class="sub" aria-expanded="${subOpen(c,s)}"><span>${esc(s)}<svg class="chev"><use href="#i-chev"/></svg></span></button><div class="vgrid">`+vs.sort((a,b)=>(b.pick?1:0)-(a.pick?1:0)).map(card).join("")+`</div>${moreLink(s,vs)}</div>`).join("")+`</div></section>`).join("");
+  return tree;
+}
+function render(){
+  const q=$('#vq').value.trim().toLowerCase(), qd=digits(q);
+  // Vendors tab: everything except Local Favorites (searching looks through everything)
+  const list=VENDORS.filter(v=>v.name&&(q||!isLocal(v))&&(cat==="All"||v.cat===cat)&&(!q||[v.name,v.sub,v.cat,v.contact,v.note,v.keywords,extraWords(v)].join(" ").toLowerCase().includes(q)||(qd.length>2&&(digits(v.phone)+" "+digits(v.office)).includes(qd))));
+  $('#vcount').textContent=`${list.length} ${q?"match":"vendor"}${list.length===1?"":(q?"es":"s")}`;
+  const force = !!q;
+  const catOpen = c => force || cat!=="All" || !OPEN_CATS.has(c);
+  const subOpen = (c,s) => force || cat!=="All" || OPEN_SUBS.has(c+"|"+s);
+  $('#vlist').innerHTML = list.length
+    ? Object.entries(treeOf(list)).map(([c,subs])=>`<section class="vcat${catOpen(c)?" open":""}" data-cat="${esc(c)}"><button type="button" class="cat" aria-expanded="${catOpen(c)}">${esc(c)}<svg class="chev"><use href="#i-chev"/></svg></button><div class="catbody">`+Object.entries(subs).map(([s,vs])=>subHTML(c,s,vs,subOpen(c,s))).join("")+`</div></section>`).join("")
+    : `<div class="empty">No matches. <a href="${sms(CONFIG.phone,CONFIG.textGreeting+"Do you know a good ")}">Text me</a> and I'll find someone.</div>`;
+  // Local tab: restaurants and things to do
+  const loc=VENDORS.filter(v=>v.name&&isLocal(v));
+  $('#llist').innerHTML = loc.length
+    ? Object.entries(treeOf(loc)).map(([c,subs])=>Object.entries(subs).map(([s,vs])=>subHTML(c,s,vs,OPEN_SUBS.has(c+"|"+s))).join("")).join("")
+    : `<div class="empty">Coming soon.</div>`;
 }
 /* "+ 2 more plumbers" under the picks of a closed type */
 function typeWords(s,n){
@@ -561,7 +615,7 @@ function moreLink(s,vs){
 const DEFAULT_OPEN = /real estate/i;
 const OPEN_CATS = new Set(), OPEN_SUBS = new Set();
 const flip = (set,k) => set.has(k) ? set.delete(k) : set.add(k);
-$('#vlist').addEventListener('click', e=>{
+$('.main').addEventListener('click', e=>{
   const cb=e.target.closest('.cat'), sb=e.target.closest('.sub')||(e.target.closest('.more')&&e.target.closest('.vsub').querySelector('.sub'));
   if(cb){ const sec=cb.parentElement; flip(OPEN_CATS, sec.dataset.cat); const o=sec.classList.toggle('open'); cb.setAttribute('aria-expanded',o); }
   else if(sb){ const box=sb.parentElement; flip(OPEN_SUBS, box.dataset.key); const o=box.classList.toggle('open'); sb.setAttribute('aria-expanded',o); }
@@ -581,6 +635,28 @@ function applyLender(){
   $('#lenderCall').textContent = real ? `Or call ${first} at ${fmtPhone(lnum)}` : "";
 }
 $('#lenderBtn').addEventListener('click',e=>{ if($('#lenderBtn').getAttribute('href')==="#vendors"){ $('#vq').value="lender"; render(); }});
+
+/* ---------- Tabs ---------- */
+const TABS=["vendors","local","buying","selling","refer"];
+const ALIAS={sellers:"selling",buyers:"buying",search:"buying",reviews:"refer",help:"refer"};
+function tabFromHash(){ const h=location.hash.slice(1); return TABS.includes(h)?h:(ALIAS[h]||"vendors"); }
+function showTab(name, scroll){
+  $$('.panel').forEach(p=>p.classList.toggle('on', p.dataset.panel===name));
+  $$('#tabs a').forEach(a=>{ const on=a.dataset.tab===name; a.classList.toggle('on',on); a.setAttribute('aria-current',on?'page':'false'); if(on) a.scrollIntoView({block:'nearest',inline:'nearest'}); });
+  if(scroll){
+    const tabsH=$('#tabs').offsetHeight, top=$('.main').getBoundingClientRect().top+scrollY-tabsH-6;
+    if(scrollY>top || matchMedia('(max-width:959px)').matches) window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+  }
+}
+$('#tabs').addEventListener('click',e=>{
+  const a=e.target.closest('a[data-tab]'); if(!a) return;
+  e.preventDefault();
+  try{ history.pushState(null,'','#'+a.dataset.tab); }catch(_){}
+  showTab(a.dataset.tab,true);
+});
+addEventListener('hashchange',()=>showTab(tabFromHash(),true));
+addEventListener('popstate',()=>showTab(tabFromHash(),false));
+showTab(tabFromHash(),false);
 
 function applyAll(){ applyConfig(); buildChips(); render(); applyLender(); }
 
