@@ -415,6 +415,37 @@ function buildChips(){
 $('#chips').onclick=e=>{const b=e.target.closest('.chip'); if(!b) return; cat=b.dataset.c; $$('.chip').forEach(x=>x.classList.toggle('on',x===b)); render();};
 $('#vq').oninput=render;
 
+/* Extra words people search for, matched against each vendor's Type */
+const SYNONYMS = [
+  [/lend|mortgage|loan/i, "lender lenders mortgage loan loans loan officer pre-approval preapproval pre-approved preapproved refinance refi bank financing"],
+  [/insur/i, "insurance homeowners homeowner's home insurance policy coverage agent"],
+  [/title|escrow/i, "title escrow closing close settlement"],
+  [/inspect/i, "inspection inspector inspectors home inspection"],
+  [/sewer|drain|scope/i, "sewer scope sewer line drain camera inspection plumbing"],
+  [/radon/i, "radon mitigation test testing"],
+  [/attorney|law|legal|probate|estate/i, "attorney lawyer legal law"],
+  [/cpa|tax/i, "cpa accountant taxes tax bookkeeping"],
+  [/plumb/i, "plumber plumbing water heater leak drain toilet sink pipe"],
+  [/electric/i, "electrician electrical wiring outlet panel lights"],
+  [/hvac|heat|air/i, "hvac furnace ac a/c air conditioning heating cooling heat pump"],
+  [/roof/i, "roof roofer roofing shingles hail gutters"],
+  [/contractor/i, "contractor remodel renovation builder construction"],
+  [/handyman/i, "handyman repairs odd jobs fix"],
+  [/paint/i, "painter painting paint"],
+  [/garage/i, "garage door opener"],
+  [/foundation|waterproof/i, "foundation basement waterproofing crack leak water"],
+  [/lawn|landscap/i, "lawn mowing yard landscaping sod sprinkler"],
+  [/tree/i, "tree trimming removal arborist stump"],
+  [/snow/i, "snow removal plowing shoveling"],
+  [/pest/i, "pest exterminator bugs mice termites"],
+  [/clean/i, "cleaning cleaner maid house cleaning move-out"],
+  [/mov/i, "movers moving company truck"],
+  [/junk/i, "junk removal haul hauling dumpster"],
+  [/storage/i, "storage unit"],
+  [/security/i, "security alarm cameras"],
+];
+const extraWords = v => SYNONYMS.filter(([re])=>re.test(v.sub||"")).map(([,w])=>w).join(" ");
+
 function card(v){
   const title = v.name;
   const sub = [v.contact, v.note].filter(Boolean).join(" | ");
@@ -432,7 +463,7 @@ function card(v){
 }
 function render(){
   const q=$('#vq').value.trim().toLowerCase(), qd=digits(q);
-  const list=VENDORS.filter(v=>v.name&&(cat==="All"||v.cat===cat)&&(!q||[v.name,v.sub,v.cat,v.contact,v.note].join(" ").toLowerCase().includes(q)||(qd.length>2&&(digits(v.phone)+" "+digits(v.office)).includes(qd))));
+  const list=VENDORS.filter(v=>v.name&&(cat==="All"||v.cat===cat)&&(!q||[v.name,v.sub,v.cat,v.contact,v.note,v.keywords,extraWords(v)].join(" ").toLowerCase().includes(q)||(qd.length>2&&(digits(v.phone)+" "+digits(v.office)).includes(qd))));
   $('#vcount').textContent=`${list.length} vendor${list.length===1?"":"s"}`;
   if(!list.length){ $('#vlist').innerHTML=`<div class="empty">No matches. <a href="${sms(CONFIG.phone,CONFIG.textGreeting+"Do you know a good ")}">Text me</a> and I'll find someone.</div>`; return; }
   const tree={};
@@ -486,7 +517,7 @@ applyAll();
     info.forEach(r=>{ if(r.setting && r.setting in cfg && r.value!==undefined) cfg[r.setting]=r.value; });
     if(cfg.textGreeting && !/\s$/.test(cfg.textGreeting)) cfg.textGreeting+=" ";
     CONFIG=cfg;
-    VENDORS=vendors.filter(r=>r.business).map(r=>({cat:r.category,sub:r.type,name:r.business,contact:r.contact,phone:r["mobile phone"]||r.phone||"",office:r["office phone"]||"",note:r["title / note"],email:r.email,web:r.website,pick:/^(y|yes|x|★|true)/i.test(r["top pick"]||"")}));
+    VENDORS=vendors.filter(r=>r.business).map(r=>({cat:r.category,sub:r.type,name:r.business,contact:r.contact,phone:r["mobile phone"]||r.phone||"",office:r["office phone"]||"",note:r["title / note"],keywords:r["search keywords (not shown)"]||r["search keywords"]||r.keywords||"",email:r.email,web:r.website,pick:/^(y|yes|x|★|true)/i.test(r["top pick"]||"")}));
     applyAll();
   }catch(e){ console.warn("Sheet not loaded", e); }
 })();
