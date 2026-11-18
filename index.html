@@ -143,6 +143,7 @@
   .vname{margin:0;font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.2;font-style:italic}
   .badge{flex:none;display:inline-flex;align-items:center;gap:4px;background:var(--gold);color:var(--navy);border-radius:999px;padding:3px 9px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
   .badge svg{width:11px;height:11px}
+  .vtag{margin:2px 0 0;font-size:15px;font-weight:600;color:var(--gold-ink)}
   .vco{margin:3px 0 0;font-size:17px;line-height:1.3;font-weight:600}
   .vnote,.vline{margin:2px 0 0;font-size:13px;color:var(--muted)}
   .vline:first-of-type{margin-top:6px}
@@ -478,31 +479,45 @@ const SYNONYMS = [
   [/inspect/i, "inspection inspector inspectors home inspection"],
   [/sewer|drain|scope/i, "sewer scope sewer line drain camera inspection plumbing"],
   [/radon/i, "radon mitigation test testing"],
-  [/attorney|law|legal|probate|estate/i, "attorney lawyer legal law"],
+  [/attorney|law|legal|probate|estate &/i, "attorney lawyer legal law closing"],
   [/cpa|tax/i, "cpa accountant taxes tax bookkeeping"],
   [/plumb/i, "plumber plumbing water heater leak drain toilet sink pipe"],
+  [/septic/i, "septic tank pumping sewer acreage"],
   [/electric/i, "electrician electrical wiring outlet panel lights"],
-  [/hvac|heat|air/i, "hvac furnace ac a/c air conditioning heating cooling heat pump"],
+  [/^hvac|heating/i, "hvac furnace ac a/c air conditioning heating cooling heat pump"],
+  [/duct/i, "air duct ducts vents dryer vent cleaning"],
   [/roof/i, "roof roofer roofing shingles hail gutters"],
   [/contractor/i, "contractor remodel renovation builder construction"],
   [/handyman/i, "handyman repairs odd jobs fix"],
   [/paint/i, "painter painting paint"],
-  [/garage/i, "garage door opener"],
+  [/garage/i, "garage door opener spring"],
+  [/fence/i, "fence fencing gate privacy fence"],
   [/foundation|waterproof/i, "foundation basement waterproofing crack leak water"],
+  [/structural|engineer/i, "structural engineer foundation crack inspection letter"],
+  [/insulation/i, "insulation attic energy drafty"],
+  [/mold|odor|abatement|asbestos/i, "mold odor smell abatement asbestos remediation"],
+  [/chimney|fireplace/i, "chimney fireplace sweep gas logs"],
+  [/appliance/i, "appliance repair washer dryer fridge refrigerator dishwasher oven stove"],
+  [/blind|window cover|shade/i, "blinds shades shutters window coverings curtains"],
+  [/countertop|cabinet/i, "countertops counters granite quartz cabinets kitchen"],
+  [/carpet/i, "carpet cleaning rug tile grout steam"],
   [/lawn|landscap/i, "lawn mowing yard landscaping sod sprinkler"],
   [/tree/i, "tree trimming removal arborist stump"],
   [/snow/i, "snow removal plowing shoveling"],
   [/pest/i, "pest exterminator bugs mice termites"],
-  [/clean/i, "cleaning cleaner maid house cleaning move-out"],
-  [/mov/i, "movers moving company truck"],
+  [/^clean|house clean|maid/i, "cleaning cleaner maid house cleaning move-out"],
+  [/^mov/i, "movers moving company truck"],
   [/junk/i, "junk removal haul hauling dumpster"],
   [/storage/i, "storage unit"],
   [/security/i, "security alarm cameras"],
+  [/restaurant/i, "restaurant restaurants food eat dinner lunch date night"],
+  [/things to do/i, "things to do fun family kids attractions park museum weekend"],
 ];
 const extraWords = v => SYNONYMS.filter(([re])=>re.test(v.sub||"")).map(([,w])=>w).join(" ");
 
 function card(v){
-  const title = v.name;
+  const m = String(v.name).match(/^(.*?)\s*\(([^()]+)\)\s*$/);   // "Dolomiti (Wood-Fired Pizza)"
+  const title = m ? m[1] : v.name, tag = m ? m[2] : "";
   const sub = [v.contact, v.note].filter(Boolean).join(" | ");
   const num = v.phone || v.office;
   const b=[];
@@ -512,6 +527,7 @@ function card(v){
   if(v.web) b.push(`<a class="ib" aria-label="Website" title="Website" href="${esc(fixUrl(v.web))}" target="_blank" rel="noopener">${icon('globe')}<span>Website</span></a>`);
   return `<article class="vcard${v.pick?" pick":""}">
     <div class="vtop"><p class="vname">${esc(title)}</p>${v.pick?`<span class="badge">${icon('star')}Stephen's pick</span>`:""}</div>
+    ${tag?`<p class="vtag">${esc(tag)}</p>`:""}
     ${sub?`<p class="vco">${esc(sub)}</p>`:""}
     ${b.length?`<div class="vbtns">${b.join("")}</div>`:""}
   </article>`;
