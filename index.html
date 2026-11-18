@@ -42,6 +42,12 @@
   .team{margin:0;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-light)}
   .brk{margin:0;font-size:14px;color:rgba(255,255,255,.8)}
   .brandrow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .brand{min-width:0;flex:1 1 auto}
+  .brand > div{min-width:0}
+  .team{overflow-wrap:anywhere}
+  html,body{overflow-x:hidden}
+  .page{overflow-x:clip}
+  @media (max-width:420px){ .team{letter-spacing:.14em;font-size:10.5px} .brk{font-size:13px} .mono{width:48px;height:48px;font-size:18px} }
   .vippill{flex:none;border:1px solid rgba(233,217,166,.6);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light)}
   .vipcard{display:block;margin:12px 20px 0;background:var(--navy);color:var(--cream);border-radius:22px;padding:16px}
   .vipcard .k{margin:0;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-light)}
