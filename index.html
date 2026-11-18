@@ -510,7 +510,7 @@ const SYNONYMS = [
   [/junk/i, "junk removal haul hauling dumpster"],
   [/storage/i, "storage unit"],
   [/security/i, "security alarm cameras"],
-  [/restaurant/i, "restaurant restaurants food eat dinner lunch date night"],
+  [/restaurant/i, "restaurant restaurants food eat dining"],
   [/things to do/i, "things to do fun family kids attractions park museum weekend"],
 ];
 const extraWords = v => SYNONYMS.filter(([re])=>re.test(v.sub||"")).map(([,w])=>w).join(" ");
