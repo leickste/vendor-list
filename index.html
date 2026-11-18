@@ -115,7 +115,10 @@
   .chip.on{background:var(--navy);border-color:var(--navy);color:var(--cream)}
   .count{margin:10px 0 0;font-size:12px;color:var(--muted)}
   .cat{margin:24px 0 0;font-family:var(--serif);font-weight:400;font-size:24px;color:var(--navy)}
-  .sub{margin:16px 0 8px;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .sub{display:flex;align-items:center;gap:10px;margin:22px 0 10px}
+  .sub span{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:var(--gold-light);border-radius:999px;padding:6px 12px 6px 14px;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+  .sub span em{font-style:normal;background:var(--gold);color:var(--navy);border-radius:999px;min-width:20px;height:20px;padding:0 6px;display:inline-grid;place-items:center;font-size:11px;letter-spacing:0}
+  .sub::after{content:"";flex:1;height:1px;background:var(--line)}
   .vgrid{display:grid;gap:12px}
   .vcard{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:16px;display:flex;flex-direction:column}
   .vcard.pick{background:var(--pick);border-color:var(--pick-line)}
@@ -489,7 +492,7 @@ function render(){
   if(!list.length){ $('#vlist').innerHTML=`<div class="empty">No matches. <a href="${sms(CONFIG.phone,CONFIG.textGreeting+"Do you know a good ")}">Text me</a> and I'll find someone.</div>`; return; }
   const tree={};
   list.forEach(v=>{ const c=v.cat||"Other", s=v.sub||"Other"; (tree[c]=tree[c]||{}); (tree[c][s]=tree[c][s]||[]).push(v); });
-  $('#vlist').innerHTML=Object.entries(tree).map(([c,subs])=>`<h3 class="cat">${esc(c)}</h3>`+Object.entries(subs).map(([s,vs])=>`<p class="sub">${esc(s)}</p><div class="vgrid">`+vs.sort((a,b)=>(b.pick?1:0)-(a.pick?1:0)).map(card).join("")+`</div>`).join("")).join("");
+  $('#vlist').innerHTML=Object.entries(tree).map(([c,subs])=>`<h3 class="cat">${esc(c)}</h3>`+Object.entries(subs).map(([s,vs])=>`<p class="sub"><span>${esc(s)}<em>${vs.length}</em></span></p><div class="vgrid">`+vs.sort((a,b)=>(b.pick?1:0)-(a.pick?1:0)).map(card).join("")+`</div>`).join("")).join("");
 }
 
 function applyLender(){
