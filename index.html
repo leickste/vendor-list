@@ -79,6 +79,9 @@
   .stat{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:14px 6px;text-align:center}
   .stat b{display:block;font-family:var(--serif);font-weight:400;font-size:24px;line-height:1.1;color:var(--ink)}
   .stat span{display:block;margin-top:4px;font-size:11px;color:var(--muted)}
+  .stat.link{display:block;color:inherit;transition:border-color .15s}
+  .stat.link:hover{border-color:var(--gold)}
+  .stat.link span{text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:3px}
 
   /* Link cards */
   .lcard{display:block;margin-top:12px;border-radius:22px;padding:16px;border:1px solid var(--line);background:var(--paper)}
@@ -233,7 +236,7 @@
   <div class="stats">
     <div class="stat"><b data-cfg="stat1"></b><span data-cfg="stat1Label"></span></div>
     <div class="stat"><b data-cfg="stat2"></b><span data-cfg="stat2Label"></span></div>
-    <div class="stat"><b data-cfg="stat3"></b><span data-cfg="stat3Label"></span></div>
+    <a class="stat link" data-href="readReviewsUrl" href="#reviews"><b data-cfg="stat3"></b><span data-cfg="stat3Label"></span></a>
   </div>
 
 </aside>
