@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#14213d">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Stephen Leick">
+<meta name="apple-mobile-web-app-title" content="Stephen Leick's Vendor List">
 <meta name="description" content="Call, text, search homes, and Stephen Leick's trusted vendor list, one tap away.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2314213d'/%3E%3Cpath d='M32 14 11 32h5v18h32V32h5z' fill='%23c9a227'/%3E%3Crect x='28' y='38' width='8' height='12' fill='%2314213d'/%3E%3C/svg%3E">
 <link rel="icon" href="favicon.ico" sizes="any">
@@ -13,7 +13,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>Stephen Leick | Leick Homes</title>
+<title>Stephen Leick's Vendor List</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
@@ -400,7 +400,7 @@ function applyConfig(){
     if(u){a.href=u;a.target="_blank";a.rel="noopener";}
     else {a.removeAttribute('target'); a.href=sms(CONFIG.phone, CONFIG.textGreeting);}
   });
-  document.title = `Stephen Leick | ${CONFIG.teamName||"REALTOR®"}`;
+  document.title = "Stephen Leick's Vendor List";
 }
 
 /* ---------- Vendors ---------- */
@@ -505,7 +505,7 @@ viaSubmit($('#refForm'),()=>({subj:"Referral", body:`${CONFIG.textGreeting}I hav
 /* ---------- Home screen + share ---------- */
 $('#hsBtn').onclick=()=>$('#howto').classList.toggle('show');
 $$('[data-share]').forEach(b=>b.onclick=async()=>{
-  const data={title:"Stephen Leick | "+(CONFIG.teamName||"REALTOR®"),text:"My go-to real estate agent and his trusted vendor list:",url:location.href.split('#')[0]};
+  const data={title:"Stephen Leick's Vendor List",text:"My go-to real estate agent and his trusted vendor list:",url:location.href.split('#')[0]};
   try{ if(navigator.share){ await navigator.share(data); return; } }catch(e){ if(e.name==="AbortError") return; }
   try{ await navigator.clipboard.writeText(data.url); toast("Link copied"); }catch(e){ toast(data.url); }
 });
