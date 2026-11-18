@@ -2,259 +2,315 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#14213d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Stephen Leick">
+<meta name="description" content="Call, text, search homes, and Stephen Leick's trusted vendor list, one tap away.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2314213d'/%3E%3Cpath d='M32 14 11 32h5v18h32V32h5z' fill='%23c9a227'/%3E%3Crect x='28' y='38' width='8' height='12' fill='%2314213d'/%3E%3C/svg%3E">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>Stephen Leick | Keller Williams Greater Omaha</title>
+<title>Stephen Leick | Leick Homes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#14213d; --navy-2:#1d2f55; --gold:#c9a227; --gold-soft:#f4ecd2;
-    --ink:#1b1f2a; --muted:#5b6475; --line:#e3e6ec; --bg:#f6f7f9; --card:#fff;
-    --r:14px;
+    --navy:#14213d; --navy-2:#1f3160; --gold:#c9a227; --gold-ink:#9a7a17; --gold-light:#e9d9a6;
+    --cream:#f6f1e7; --paper:#fffdf8; --pick:#fffaf0; --pick-line:#d9c27e;
+    --ink:#1a2233; --muted:#5d6577; --line:#e4d9c6;
+    --serif:Fraunces,ui-serif,Georgia,serif; --sans:Outfit,ui-sans-serif,system-ui,sans-serif;
   }
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
-  a{color:inherit}
-  .wrap{max-width:640px;margin:0 auto;padding:0 18px}
-  h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.15;margin:0}
-  h2{font-size:1.55rem;color:var(--navy)}
-  section{padding:34px 0;border-bottom:1px solid var(--line)}
-  .eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:6px}
-  .lead{color:var(--muted);margin:8px 0 18px}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  button,input,textarea{font:inherit;color:inherit}
+  svg{width:16px;height:16px;flex:none}
+  .page{max-width:512px;margin:0 auto;min-height:100dvh;background:var(--cream);box-shadow:0 0 0 1px rgba(20,33,61,.06);padding-bottom:calc(64px + 4rem + env(safe-area-inset-bottom))}
+  .px{padding-left:20px;padding-right:20px}
 
   /* Header */
-  header{background:var(--navy);color:#fff;padding:30px 0 26px;position:relative;overflow:hidden}
-  header::after{content:"";position:absolute;inset:auto -60px -80px auto;width:220px;height:220px;border-radius:50%;border:2px solid rgba(201,162,39,.35)}
-  .mono{width:58px;height:58px;border-radius:50%;background:var(--gold);color:var(--navy);display:grid;place-items:center;font-family:Fraunces,serif;font-weight:700;font-size:1.35rem;margin-bottom:14px}
-  header .firm{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700}
-  header h1{font-size:2.2rem;margin:4px 0 6px}
-  header .brk{color:#cfd6e6;font-size:.95rem}
-  header .area{margin-top:12px;font-size:.9rem;color:#e6eaf3}
+  header{position:relative;overflow:hidden;background:var(--navy);color:var(--cream);padding:max(1.25rem,env(safe-area-inset-top)) 20px 32px}
+  header .glow{position:absolute;inset:0;pointer-events:none;opacity:.45;background:radial-gradient(circle at 100% 0%,rgba(201,162,39,.5),transparent 42%),radial-gradient(circle at 0% 80%,rgba(255,255,255,.08),transparent 36%)}
+  header .rel{position:relative}
+  .brand{display:flex;align-items:center;gap:12px}
+  .mono{display:grid;place-items:center;width:56px;height:56px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);font-family:var(--serif);font-size:20px;letter-spacing:-.02em}
+  .team{margin:0;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-light)}
+  .brk{margin:0;font-size:14px;color:rgba(255,255,255,.8)}
+  h1{margin:24px 0 0;font-family:var(--serif);font-weight:500;font-size:2.6rem;line-height:.95;letter-spacing:-.025em}
+  .tagline{margin:12px 0 0;font-size:15px;line-height:1.55;color:rgba(255,255,255,.85)}
+  .hero-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+  .hbtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:56px;border-radius:16px;font-size:16px;font-weight:500}
+  .hbtn.white{background:#fff;color:var(--navy)}
+  .hbtn.gold{background:var(--gold);color:var(--navy)}
+  .hphone{display:block;text-align:center;margin-top:12px;font-size:14px;font-weight:500;color:rgba(255,255,255,.85)}
+  .hero-btns.sm{margin-top:12px;gap:8px}
+  .glass{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;font-size:14px;font-weight:600}
 
-  /* Contact bar */
-  .contact{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(20,33,61,.06)}
-  .contact .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding-top:10px;padding-bottom:10px}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:10px;padding:11px 14px;font-weight:600;font-size:.95rem;text-decoration:none;border:0;cursor:pointer;font-family:inherit}
-  .btn svg{width:18px;height:18px;flex:none}
-  .btn-navy{background:var(--navy);color:#fff}
-  .btn-gold{background:var(--gold);color:var(--navy)}
-  .btn-ghost{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
-  .btn-sm{padding:7px 11px;font-size:.84rem;border-radius:8px}
-  .contact-sub{font-size:.85rem;color:var(--muted);text-align:center;padding:0 18px 10px}
-  .contact-sub a{color:var(--navy);font-weight:600}
+  /* Generic */
+  section{padding:0 20px;margin-top:40px}
+  .eyebrow{margin:0;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-ink)}
+  h2{margin:6px 0 0;font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.05;color:var(--ink)}
+  .lead{margin:10px 0 0;font-size:14px;line-height:1.6;color:var(--muted)}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 1px 0 rgba(26,34,51,.04)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:16px;border:1px solid transparent;font-size:14px;font-weight:600;cursor:pointer;background:none;padding:0 16px}
+  .btn.dark{background:var(--navy);color:var(--cream)}
+  .btn.light{background:#fff;color:var(--ink);border-color:var(--line)}
+  .btn.wide{width:100%}
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+  .pill{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:40px;padding:0 14px;border-radius:999px;font-size:14px;font-weight:600;border:1px solid var(--line);background:#fff;color:var(--ink)}
+  .pill.dark{background:var(--navy);color:var(--cream);border-color:var(--navy)}
 
-  /* Home screen tip */
-  .tip{background:var(--gold-soft);border:1px solid #e8d9a6;border-radius:var(--r);padding:16px;margin-top:22px;display:flex;gap:14px;align-items:flex-start}
-  .tip strong{display:block;color:var(--navy)}
-  .tip p{margin:2px 0 10px;font-size:.92rem;color:#4b4630}
-  .howto{display:none;font-size:.88rem;color:#4b4630;margin-top:8px}
+  /* Home screen card */
+  .hs{margin:24px 20px 0}
+  .hs h3{margin:0;font-family:var(--serif);font-weight:400;font-size:21px}
+  .hs p{margin:6px 0 14px;font-size:14px;color:var(--muted)}
+  .howto{display:none;margin-top:12px;font-size:14px;color:var(--muted)}
   .howto.show{display:block}
 
   /* Stats */
-  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 8px;text-align:center}
-  .stat b{display:block;font-family:Fraunces,serif;font-size:1.6rem;color:var(--navy)}
-  .stat span{font-size:.78rem;color:var(--muted)}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 20px 0}
+  .stat{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:14px 6px;text-align:center}
+  .stat b{display:block;font-family:var(--serif);font-weight:400;font-size:24px;line-height:1.1;color:var(--ink)}
+  .stat span{display:block;margin-top:4px;font-size:11px;color:var(--muted)}
 
   /* Link cards */
-  .links{display:grid;gap:10px}
-  .lcard{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--r);padding:16px;text-decoration:none}
-  .lcard b{color:var(--navy)}
-  .lcard small{display:block;color:var(--muted)}
-  .lcard .arr{color:var(--gold);font-size:1.3rem}
+  .lcard{display:block;margin-top:12px;border-radius:22px;padding:16px;border:1px solid var(--line);background:var(--paper)}
+  .lcard.dark{background:var(--navy);border-color:var(--navy);color:var(--cream)}
+  .lcard .k{margin:0;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-ink)}
+  .lcard.dark .k{color:var(--gold-light)}
+  .lcard .t{margin:4px 0 0;font-family:var(--serif);font-size:24px;line-height:1.15}
+  .lcard .d{margin:4px 0 0;font-size:14px;color:var(--muted)}
+  .lcard.dark .d{color:rgba(255,255,255,.8)}
 
   /* Vendors */
-  .search{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:10px;font-size:1rem;font-family:inherit;background:#fff}
-  .search:focus{outline:none;border-color:var(--navy)}
-  .chips{display:flex;gap:8px;overflow-x:auto;padding:12px 0 6px;scrollbar-width:none}
+  .search{position:relative;margin-top:16px}
+  .search svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .search input{width:100%;height:48px;border-radius:18px;border:1px solid var(--line);background:#fff;padding:0 16px 0 42px;font-size:14px}
+  .search input:focus,.field:focus{outline:2px solid rgba(20,33,61,.25);outline-offset:1px}
+  .chips{display:flex;gap:8px;overflow-x:auto;margin:12px -20px 0;padding:0 20px 4px;scrollbar-width:none}
   .chips::-webkit-scrollbar{display:none}
-  .chip{white-space:nowrap;border:1.5px solid var(--line);background:#fff;color:var(--navy);border-radius:999px;padding:7px 14px;font-weight:600;font-size:.86rem;cursor:pointer;font-family:inherit}
-  .chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
-  .count{font-size:.82rem;color:var(--muted);margin:6px 0 10px}
-  .group h3{font-family:Inter,sans-serif;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
-  .vcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin-bottom:10px}
-  .vcard.pick{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
-  .vtop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-  .vname{font-weight:700;color:var(--navy)}
-  .badge{flex:none;background:var(--gold);color:var(--navy);font-size:.7rem;font-weight:700;border-radius:999px;padding:3px 9px;letter-spacing:.03em}
-  .vmeta{font-size:.87rem;color:var(--muted);margin-top:2px}
-  .vact{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-  .empty{text-align:center;color:var(--muted);padding:24px 0}
+  .chip{flex:none;height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer}
+  .chip.on{background:var(--navy);border-color:var(--navy);color:var(--cream)}
+  .count{margin:10px 0 0;font-size:12px;color:var(--muted)}
+  .cat{margin:24px 0 0;font-family:var(--serif);font-weight:400;font-size:24px;color:var(--navy)}
+  .sub{margin:16px 0 8px;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .vcard{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:16px;margin-bottom:12px}
+  .vcard.pick{background:var(--pick);border-color:var(--pick-line)}
+  .vtop{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .vname{margin:0;font-family:var(--serif);font-weight:400;font-size:20px;line-height:1.2}
+  .badge{flex:none;display:inline-flex;align-items:center;gap:4px;background:var(--gold);color:var(--navy);border-radius:999px;padding:3px 9px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+  .badge svg{width:11px;height:11px}
+  .vco{margin:2px 0 0;font-size:14px;font-weight:600}
+  .vnote,.vaddr{margin:2px 0 0;font-size:13px;color:var(--muted)}
+  .vaddr{margin-top:6px}
+  .vrow{display:flex;gap:8px;margin-top:12px}
+  .vrow .grow{flex:1}
+  .vrow + .vrow{margin-top:8px}
+  .vcall{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;border-radius:999px;background:var(--navy);color:var(--cream);font-size:14px;font-weight:600}
+  .voff{flex:1;justify-content:flex-start}
+  .empty{padding:24px 0;text-align:center;color:var(--muted);font-size:14px}
+  .empty a{color:var(--navy);font-weight:600;text-decoration:underline}
 
   /* Steps */
-  .steps{list-style:none;padding:0;margin:0;counter-reset:s}
-  .steps li{counter-increment:s;position:relative;padding:0 0 18px 50px}
-  .steps li::before{content:counter(s);position:absolute;left:0;top:0;width:34px;height:34px;border-radius:50%;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-weight:700;font-family:Fraunces,serif}
-  .steps li:not(:last-child)::after{content:"";position:absolute;left:16px;top:38px;bottom:4px;width:2px;background:var(--line)}
-  .steps b{color:var(--navy)}
-  .steps p{margin:2px 0 0;color:var(--muted);font-size:.93rem}
+  .steps{list-style:none;margin:18px 0 0;padding:0}
+  .steps li{display:flex;gap:14px;margin-bottom:16px}
+  .num{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--navy);color:var(--cream);font-family:var(--serif);font-size:14px}
+  .steps b{display:block;font-weight:600;font-size:16px}
+  .steps p{margin:2px 0 0;font-size:14px;line-height:1.55;color:var(--muted)}
 
   /* Forms */
-  .form{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-top:8px}
-  .form label{display:block;font-size:.82rem;font-weight:600;color:var(--navy);margin:0 0 5px}
-  .form input,.form textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:9px;font:inherit;margin-bottom:12px;background:#fff}
-  .form input:focus,.form textarea:focus{outline:none;border-color:var(--navy)}
-  .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .label{display:block;margin-top:6px;font-size:14px;font-weight:600}
+  .field{display:block;width:100%;height:48px;margin-top:8px;border-radius:18px;border:1px solid var(--line);background:#fff;padding:0 16px;font-size:14px}
+  .hint{margin:8px 0 0;font-size:12px;color:var(--muted)}
+  .ulink{display:inline-block;margin-top:14px;font-size:14px;font-weight:600;color:var(--navy);text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--gold)}
+  .center{text-align:center;margin:10px 0 0;font-size:14px;color:var(--muted)}
+  .refer{margin-top:16px}
+  .refer h3{display:flex;align-items:center;gap:8px;margin:0;font-family:var(--serif);font-weight:400;font-size:24px}
+  .refer h3 svg{width:20px;height:20px;color:var(--gold-ink)}
+  .refer p{margin:6px 0 10px;font-size:14px;color:var(--muted)}
 
-  /* Share + footer */
-  .share{text-align:center}
-  footer{background:var(--navy);color:#cfd6e6;padding:28px 0 40px;font-size:.84rem}
-  footer b{color:#fff}
-  footer .gold{color:var(--gold)}
-  footer p{margin:0 0 10px}
-  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:var(--navy);color:#fff;padding:11px 18px;border-radius:999px;font-size:.9rem;transition:transform .25s;z-index:50}
-  .toast.show{transform:translateX(-50%) translateY(0)}
+  /* Share */
+  .sharebox{margin:40px 20px 0;background:var(--navy);color:var(--cream);border-radius:22px;padding:20px 16px}
+  .sharebox h3{margin:0;font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.2}
+  .sharebox p{margin:6px 0 16px;font-size:14px;color:rgba(255,255,255,.8)}
+  .sharebox .btn{background:#fff;color:var(--navy);height:44px;border-radius:14px}
+
+  footer{margin:28px 20px 0;font-size:12px;line-height:1.6;color:var(--muted)}
+  footer p{margin:0 0 12px}
+
+  /* Bottom nav */
+  nav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(255,253,248,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+  nav .in{max-width:512px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);height:64px}
+  nav a,nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:0;background:none;font-size:11px;font-weight:600;color:var(--navy);cursor:pointer}
+  nav svg{width:20px;height:20px}
+
+  .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);opacity:0;background:var(--navy);color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;transition:.2s;z-index:40;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></symbol>
+  <symbol id="i-msg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></symbol>
+  <symbol id="i-star-o" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M16 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6.3"/></symbol>
+</svg>
 
-<header>
-  <div class="wrap">
-    <div class="mono">SL</div>
-    <div class="firm">Leick Realty</div>
-    <h1>Stephen Leick</h1>
-    <div class="brk">REALTOR® · Keller Williams Greater Omaha<br>Licensed in Nebraska &amp; Iowa</div>
-    <div class="area">Serving Omaha, Council Bluffs, Papillion, La Vista, Bellevue, Elkhorn &amp; Southwest Iowa</div>
-  </div>
-</header>
-
-<div class="contact" id="contact">
-  <div class="wrap">
-    <a class="btn btn-navy" data-call href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>Call</a>
-    <a class="btn btn-gold" data-text href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Text</a>
-    <a class="btn btn-ghost" data-email href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>Email</a>
-  </div>
-  <div class="contact-sub"><span data-phone-text></span> · <span data-email-text></span></div>
-</div>
-
-<main class="wrap">
-
-  <div class="tip">
-    <div style="font-size:1.6rem">📲</div>
-    <div>
-      <strong>Keep this on your home screen</strong>
-      <p>No app, no login. Save it once and you'll always have my number, my trusted vendors, and your next steps one tap away.</p>
-      <button class="btn btn-navy btn-sm" id="howBtn">Show me how</button>
-      <div class="howto" id="howto">
-        <b>iPhone:</b> tap the Share icon in Safari → <i>Add to Home Screen</i>.<br>
-        <b>Android:</b> tap the ⋮ menu in Chrome → <i>Add to Home screen</i>.
+<div class="page">
+  <header>
+    <div class="glow"></div>
+    <div class="rel">
+      <div class="brand">
+        <span class="mono">SL</span>
+        <div>
+          <p class="team" data-cfg="teamName"></p>
+          <p class="brk" data-cfg="brokerage"></p>
+        </div>
+      </div>
+      <h1>Stephen Leick</h1>
+      <p class="tagline" data-cfg="tagline"></p>
+      <div class="hero-btns">
+        <a class="hbtn white" data-call href="#"><svg><use href="#i-phone"/></svg>Call</a>
+        <a class="hbtn gold" data-text href="#"><svg><use href="#i-msg"/></svg>Text</a>
+      </div>
+      <a class="hphone" data-call data-phone-text href="#"></a>
+      <div class="hero-btns sm">
+        <a class="glass" data-email href="#"><svg><use href="#i-mail"/></svg>Email</a>
+        <a class="glass" data-href="websiteUrl" href="#"><svg><use href="#i-globe"/></svg><span data-cfg="websiteLabel"></span></a>
       </div>
     </div>
+  </header>
+
+  <div class="card hs">
+    <h3>Keep this on your home screen</h3>
+    <p>Save it once, and calling, texting, home search, and my vendor list stay one tap away. Nothing to sign in to.</p>
+    <button class="btn dark" id="hsBtn" style="border-radius:999px">Add to Home Screen</button>
+    <div class="howto" id="howto"><b>iPhone:</b> tap the Share icon in Safari, then <i>Add to Home Screen</i>.<br><b>Android:</b> tap the ⋮ menu in Chrome, then <i>Add to Home screen</i>.</div>
   </div>
 
   <div class="stats">
-    <div class="stat"><b data-cfg="stat1">—</b><span data-cfg="stat1Label"></span></div>
-    <div class="stat"><b data-cfg="stat2">—</b><span data-cfg="stat2Label"></span></div>
-    <div class="stat"><b data-cfg="stat3">—</b><span data-cfg="stat3Label"></span></div>
+    <div class="stat"><b data-cfg="stat1"></b><span data-cfg="stat1Label"></span></div>
+    <div class="stat"><b data-cfg="stat2"></b><span data-cfg="stat2Label"></span></div>
+    <div class="stat"><b data-cfg="stat3"></b><span data-cfg="stat3Label"></span></div>
   </div>
 
   <section id="search">
-    <div class="eyebrow">Search homes</div>
-    <h2>Find your next place</h2>
-    <p class="lead">Every listing on the market, updated live. See something you like? Text me the address.</p>
-    <div class="links">
-      <a class="lcard" data-href="searchUrl" href="#"><div><b>Search Omaha-area homes</b><small>All MLS listings in Nebraska &amp; Southwest Iowa</small></div><span class="arr">→</span></a>
-      <a class="lcard" data-href="valueUrl" href="#"><div><b>What's my home worth?</b><small>Get a free market analysis from me</small></div><span class="arr">→</span></a>
-    </div>
+    <p class="eyebrow">Search homes</p>
+    <h2>See what's on the market</h2>
+    <a class="lcard dark" data-href="searchUrl" href="#">
+      <p class="k">Home search</p>
+      <p class="t" data-cfg="websiteLabel"></p>
+      <p class="d">Every listing in Omaha, Council Bluffs, and the surrounding area.</p>
+    </a>
+    <a class="lcard" href="#sellers">
+      <p class="t">What's my home worth?</p>
+      <p class="d">A real price from recent sales on your street, not an online guess.</p>
+    </a>
   </section>
 
   <section id="reviews">
-    <div class="eyebrow">Reviews</div>
+    <p class="eyebrow">Reviews</p>
     <h2>What clients say</h2>
-    <p class="lead">Reviews from past buyers and sellers. If I helped you, a quick review means a lot.</p>
-    <div class="links">
-      <a class="lcard" data-href="readReviewsUrl" href="#"><div><b>Read my reviews</b><small>Google · Zillow</small></div><span class="arr">→</span></a>
-      <a class="lcard" data-href="leaveReviewUrl" href="#"><div><b>Leave a review</b><small>Takes about a minute</small></div><span class="arr">→</span></a>
+    <p class="lead">Reviews from buyers and sellers across Nebraska and Iowa. If I helped you, a quick review means a lot.</p>
+    <div class="pair">
+      <a class="btn dark" data-href="readReviewsUrl" href="#"><svg><use href="#i-star"/></svg>Read reviews</a>
+      <a class="btn light" data-href="leaveReviewUrl" href="#">Leave a review</a>
     </div>
   </section>
 
   <section id="vendors">
-    <div class="eyebrow">Preferred vendors</div>
-    <h2>People I trust</h2>
-    <p class="lead">The lenders, inspectors, trades and local spots I send my own clients to. My top picks are marked ★.</p>
-    <input class="search" id="vq" type="search" placeholder="Search plumber, lender, roofer…" autocomplete="off">
+    <p class="eyebrow">Preferred vendors</p>
+    <h2>People I actually call</h2>
+    <p class="lead">Lenders, inspectors, and the trades I send my own clients to. My top picks are pinned at the top of their lists.</p>
+    <label class="search"><svg><use href="#i-search"/></svg><input id="vq" type="search" placeholder="Search plumber, lender, a name, a phone…" autocomplete="off"></label>
     <div class="chips" id="chips"></div>
-    <div class="count" id="vcount"></div>
+    <p class="count" id="vcount"></p>
     <div id="vlist"></div>
   </section>
 
   <section id="sellers">
-    <div class="eyebrow">Selling</div>
-    <h2>Thinking about selling?</h2>
-    <p class="lead">Here's how it works with me.</p>
+    <p class="eyebrow">Sellers</p>
+    <h2>What's my home worth?</h2>
+    <p class="lead">An online estimate is a starting guess. I price from homes that actually sold on your street.</p>
     <ol class="steps">
-      <li><b>Send me your address</b><p>I'll pull recent sales and current competition in your neighborhood.</p></li>
-      <li><b>We walk the house together</b><p>I'll point out what's worth fixing, what to leave alone, and who can help.</p></li>
-      <li><b>Price it right and list it</b><p>Professional photos, MLS, and marketing to get the right buyers in the door.</p></li>
-      <li><b>Negotiate through closing</b><p>Offers, inspection, appraisal, and title. I handle the back-and-forth.</p></li>
+      <li><span class="num">1</span><div><b>Send the address</b><p>Text or email it. I'll pull recent sales and current competition in your neighborhood.</p></div></li>
+      <li><span class="num">2</span><div><b>Walk the house</b><p>Paint, lawn, and small repairs change the offer. The vendor list is who I send my own clients to.</p></div></li>
+      <li><span class="num">3</span><div><b>Price it and launch</b><p>The listing goes on the MLS with professional photos and a plan for showings.</p></div></li>
+      <li><span class="num">4</span><div><b>Negotiate through close</b><p>Offers, inspection, appraisal, and title, through the day you hand over the keys.</p></div></li>
     </ol>
-    <form class="form" id="sellForm">
-      <label for="sAddr">Property address</label>
-      <input id="sAddr" placeholder="123 Main St, Omaha, NE" required>
-      <div class="row2">
-        <button class="btn btn-gold" type="submit" data-via="text">Text it to me</button>
-        <button class="btn btn-ghost" type="submit" data-via="email">Email it</button>
+    <form id="sellForm">
+      <label class="label" for="sAddr">Property address</label>
+      <input class="field" id="sAddr" placeholder="123 Main St, Omaha" required>
+      <p class="hint">Stays on this phone. It only fills in the message to Stephen.</p>
+      <div class="pair">
+        <button class="btn dark" type="submit" data-via="text">Text Stephen</button>
+        <button class="btn light" type="submit" data-via="email">Email Stephen</button>
       </div>
     </form>
+    <a class="ulink" data-href="websiteUrl" href="#">Or start at <span data-cfg="websiteLabel"></span></a>
   </section>
 
   <section id="buyers">
-    <div class="eyebrow">Buying</div>
-    <h2>Ready to buy?</h2>
-    <p class="lead">Five steps from first showing to keys in hand.</p>
+    <p class="eyebrow">Buyers</p>
+    <h2>From pre-approval to keys</h2>
     <ol class="steps">
-      <li><b>Get pre-approved</b><p>Know your budget before you fall in love with a house. <a href="#vendors" data-jump="Lenders" style="color:var(--navy);font-weight:600">See my lenders →</a></p></li>
-      <li><b>Search</b><p>I'll set up a live search so you see new listings the minute they hit.</p></li>
-      <li><b>Tour and write offers</b><p>We'll compare homes, and I'll write a strong offer when you find the one.</p></li>
-      <li><b>Inspect and insure</b><p>Inspection, insurance quotes, and appraisal. I'll line up people I trust.</p></li>
-      <li><b>Close</b><p>Final walkthrough, sign at title, get your keys.</p></li>
+      <li><span class="num">1</span><div><b>Get pre-approved</b><p>Sellers want a real approval before they take a showing seriously. <span id="lenderLine"></span></p></div></li>
+      <li><span class="num">2</span><div><b>Search with a local eye</b><p>I'll set up a live search so you see new listings the minute they hit the market.</p></div></li>
+      <li><span class="num">3</span><div><b>Tour and write offers</b><p>We'll compare homes, and I'll write a strong offer when you find the one.</p></div></li>
+      <li><span class="num">4</span><div><b>Inspect and insure</b><p>Inspection, insurance quotes, and radon and sewer checks from people I trust. They're all in the vendor list.</p></div></li>
+      <li><span class="num">5</span><div><b>Close</b><p>Final walkthrough, sign at title, and get your keys.</p></div></li>
     </ol>
+    <a class="btn dark wide" id="lenderBtn" href="#vendors" style="height:52px">Get pre-approved</a>
+    <p class="center" id="lenderCall"></p>
   </section>
 
-  <section id="clients">
-    <div class="eyebrow">Past clients</div>
-    <h2>Already worked with me?</h2>
-    <p class="lead">Need a contractor? <a href="#vendors" style="color:var(--navy);font-weight:600">Check my vendor list</a>. Know someone thinking about buying or selling? I'd be glad to help them.</p>
-    <form class="form" id="refForm">
-      <div class="row2">
-        <div><label for="rName">Their name</label><input id="rName" required></div>
-        <div><label for="rPhone">Their phone</label><input id="rPhone" type="tel"></div>
-      </div>
-      <label for="rNote">Anything I should know?</label>
-      <textarea id="rNote" rows="2" placeholder="Buying, selling, timeline…"></textarea>
-      <div class="row2">
-        <button class="btn btn-gold" type="submit" data-via="text">Text referral</button>
-        <button class="btn btn-ghost" type="submit" data-via="email">Email referral</button>
+  <section id="help">
+    <p class="eyebrow">Past clients</p>
+    <h2>Home help, after the closing</h2>
+    <p class="lead">The furnace quits in January, or the basement takes on water. The same people I use are in the vendor directory. No login, no account.</p>
+    <a class="btn light wide" href="#vendors" style="margin-top:14px">Open the vendor directory</a>
+    <form class="card refer" id="refForm">
+      <h3><svg><use href="#i-users"/></svg>Refer a friend</h3>
+      <p>Buying or selling in Omaha or Southwest Iowa? Send me their name and I'll take it from there.</p>
+      <label class="label" for="rInfo">Friend's name and number</label>
+      <input class="field" id="rInfo" placeholder="Alex Rivera, (402) 555-0148" required>
+      <div class="pair">
+        <button class="btn dark" type="submit" data-via="text">Text Stephen</button>
+        <button class="btn light" type="submit" data-via="email">Email Stephen</button>
       </div>
     </form>
   </section>
 
-  <section class="share" style="border-bottom:0">
-    <h2>Know someone who'd use this?</h2>
-    <p class="lead">Send them the link.</p>
-    <button class="btn btn-navy" id="shareBtn">Share this page</button>
-  </section>
-</main>
-
-<footer>
-  <div class="wrap">
-    <p><b>Stephen Leick</b>, REALTOR® · <span class="gold">Keller Williams Greater Omaha</span><br>Licensed in Nebraska &amp; Iowa · <span data-phone-text></span> · <span data-email-text></span></p>
-    <p>Vendor recommendations are provided as a courtesy only. Stephen Leick, Leick Realty LLC, and Keller Williams Greater Omaha are not affiliated with, and are not responsible or liable for, the products or services of any business listed. Please do your own due diligence before hiring.</p>
-    <p>Each Keller Williams office is independently owned and operated. Equal Housing Opportunity.</p>
+  <div class="sharebox">
+    <h3>Send this to someone who needs it</h3>
+    <p>One link. They can add it to their home screen too.</p>
+    <button class="btn" data-share><svg><use href="#i-share"/></svg>Share</button>
   </div>
-</footer>
 
+  <footer>
+    <p>Vendor recommendations are a courtesy only. Stephen Leick, Leick Realty LLC, and Keller Williams Greater Omaha are not affiliated with or liable for these businesses. Each Keller Williams office is independently owned and operated. Equal Housing Opportunity.</p>
+    <p>Stephen Leick · <span data-cfg="brokerage"></span> · Licensed in Nebraska &amp; Iowa · <span data-email-text></span></p>
+  </footer>
+</div>
+
+<nav>
+  <div class="in">
+    <a data-call href="#"><svg><use href="#i-phone"/></svg>Call</a>
+    <a data-text href="#"><svg><use href="#i-msg"/></svg>Text</a>
+    <a href="#vendors"><svg><use href="#i-star-o"/></svg>Vendors</a>
+    <button data-share><svg><use href="#i-share"/></svg>Share</button>
+  </div>
+</nav>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -266,76 +322,51 @@
 const SHEET_ID = "1XluNvaKMuCE5ZSEVjFrmukfpiq-uKAWySEVFOcuiK0Q";
 
 let CONFIG = {
-  phone: "4029904750",
+  phone: "402-990-4750",
   email: "stephen@leickhomes.com",
   textGreeting: "Hi Stephen! ",
-  stat1: "150+", stat1Label: "homes sold",
-  stat2: "9+",   stat2Label: "years in real estate",
-  stat3: "5★",   stat3Label: "client reviews",      // REPLACE
-  searchUrl: "https://www.kw.com/",                  // your KW search link — REPLACE
-  valueUrl: "",                                      // blank = opens a text to you
-  readReviewsUrl: "https://www.google.com/search?q=Stephen+Leick+Keller+Williams+Omaha",
-  leaveReviewUrl: "",                                // your Google "write a review" link — REPLACE
+  teamName: "Leick Homes",
+  brokerage: "Keller Williams Greater Omaha",
+  tagline: "REALTOR® in Omaha, serving the Omaha metro, Council Bluffs, and Southwest Iowa.",
+  websiteUrl: "https://leickhomes.com/",
+  websiteLabel: "leickhomes.com",
+  stat1: "150+", stat1Label: "Homes sold",
+  stat2: "9+",   stat2Label: "Years in real estate",
+  stat3: "5★",   stat3Label: "Client reviews",
+  searchUrl: "https://leickhomes.com/",
+  valueUrl: "",
+  readReviewsUrl: "https://search.google.com/local/reviews?placeid=ChIJ3YgRuxzzk4cRTqJIUmbXi-E",
+  leaveReviewUrl: "https://g.page/leickhomes/review?gm",
 };
-
-/* Vendors: cat = filter group, sub = type. pick:true pins to the top with a ★.
-   Leave any field "" to hide its button. */
-let VENDORS = [
-  {cat:"Real estate", sub:"Lenders", name:"Lender name", contact:"Loan officer", phone:"", email:"", web:"", address:"", pick:true},
-  {cat:"Real estate", sub:"Lenders", name:"Lender name", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Real estate", sub:"Home insurance", name:"Insurance agency", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Real estate", sub:"Title & escrow", name:"Title company", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Real estate", sub:"Home inspectors", name:"Inspection company", contact:"", phone:"", email:"", web:"", address:"", pick:true},
-  {cat:"Real estate", sub:"Radon & sewer scope", name:"Radon / sewer scope company", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Legal & tax", sub:"Real estate attorney", name:"Law firm", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Legal & tax", sub:"Estate & probate", name:"Law firm", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Legal & tax", sub:"CPA / taxes", name:"CPA firm", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Home services", sub:"Plumbers", name:"Plumbing company", contact:"", phone:"", email:"", web:"", address:"", pick:true},
-  {cat:"Home services", sub:"Electricians", name:"Electrical company", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Home services", sub:"HVAC", name:"Heating & air company", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Home services", sub:"Roofers", name:"Roofing company", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Home services", sub:"General contractors", name:"Contractor", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Home services", sub:"Handyman", name:"Handyman", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Home services", sub:"Painters", name:"Painting company", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Home services", sub:"Garage doors", name:"Garage door company", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Home services", sub:"Foundation & waterproofing", name:"Foundation repair company", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Home services", sub:"Lawn & landscaping", name:"Lawn care company", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Home services", sub:"Tree service", name:"Tree service", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Home services", sub:"Snow removal", name:"Snow removal", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Home services", sub:"Pest control", name:"Pest control company", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Home services", sub:"Cleaning", name:"Cleaning service", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Moving & specialty", sub:"Movers", name:"Moving company", contact:"", phone:"", email:"", web:"", address:"", pick:true},
-  {cat:"Moving & specialty", sub:"Junk removal", name:"Junk removal", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Moving & specialty", sub:"Storage", name:"Storage facility", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Moving & specialty", sub:"Security systems", name:"Security company", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Local favorites", sub:"Restaurants", name:"Restaurant", contact:"", phone:"", email:"", web:"", address:""},
-  {cat:"Local favorites", sub:"Things to do", name:"Local spot", contact:"", phone:"", email:"", web:"", address:""},
-];
+let VENDORS = [];
 
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const digits = s => String(s||"").replace(/\D/g,"");
-const fmtPhone = s => { const d=digits(s); return d.length===10 ? `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}` : s; };
+const fmtPhone = s => { const d=digits(s); return d.length===10 ? `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}` : (s||""); };
 const sms = (num, body) => `sms:${digits(num)}${/iP(hone|ad|od)/.test(navigator.userAgent)?'&':'?'}body=${encodeURIComponent(body)}`;
 const mail = (subj, body) => `mailto:${CONFIG.email}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
 const toast = m => { const t=$('#toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); };
 const esc = s => String(s??"").replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fixUrl = u => !u ? "" : /^https?:\/\//i.test(u) ? u : "https://"+u;
+const cap = s => s ? s.charAt(0).toUpperCase()+s.slice(1) : s;
+const icon = n => `<svg><use href="#i-${n}"/></svg>`;
 
 function applyConfig(){
   $$('[data-call]').forEach(a=>a.href=`tel:${digits(CONFIG.phone)}`);
   $$('[data-text]').forEach(a=>a.href=sms(CONFIG.phone, CONFIG.textGreeting));
   $$('[data-email]').forEach(a=>a.href=mail("Real estate question",""));
-  $$('[data-phone-text]').forEach(e=>e.innerHTML=`<a href="tel:${digits(CONFIG.phone)}">${esc(fmtPhone(CONFIG.phone))}</a>`);
+  $$('[data-phone-text]').forEach(e=>e.textContent=fmtPhone(CONFIG.phone));
   $$('[data-email-text]').forEach(e=>e.innerHTML=`<a href="mailto:${esc(CONFIG.email)}">${esc(CONFIG.email)}</a>`);
-  $$('[data-cfg]').forEach(e=>e.textContent=CONFIG[e.dataset.cfg]||"");
+  $$('[data-cfg]').forEach(e=>{ let v=CONFIG[e.dataset.cfg]||""; if(/Label$/.test(e.dataset.cfg) && /^stat/.test(e.dataset.cfg)) v=cap(v); e.textContent=v; });
   $$('[data-href]').forEach(a=>{
     const u=fixUrl(CONFIG[a.dataset.href]);
     if(u){a.href=u;a.target="_blank";a.rel="noopener";}
-    else {a.removeAttribute('target'); a.href=sms(CONFIG.phone, a.dataset.href==="valueUrl" ? CONFIG.textGreeting+"I'd like to know what my home is worth. My address is: " : CONFIG.textGreeting);}
+    else {a.removeAttribute('target'); a.href=sms(CONFIG.phone, CONFIG.textGreeting);}
   });
+  document.title = `Stephen Leick | ${CONFIG.teamName||"REALTOR®"}`;
 }
 
-// Vendors
+/* ---------- Vendors ---------- */
 let cat="All";
 function buildChips(){
   const cats=["All",...new Set(VENDORS.map(v=>v.cat).filter(Boolean))];
@@ -346,29 +377,48 @@ $('#chips').onclick=e=>{const b=e.target.closest('.chip'); if(!b) return; cat=b.
 $('#vq').oninput=render;
 
 function card(v){
-  const a=[];
-  if(digits(v.phone)){a.push(`<a class="btn btn-navy btn-sm" href="tel:${digits(v.phone)}">Call</a>`);a.push(`<a class="btn btn-gold btn-sm" href="${sms(v.phone,"Hi, Stephen Leick referred me. ")}">Text</a>`);}
-  if(v.email) a.push(`<a class="btn btn-ghost btn-sm" href="mailto:${esc(v.email)}?subject=${encodeURIComponent("Referred by Stephen Leick")}">Email</a>`);
-  if(v.web) a.push(`<a class="btn btn-ghost btn-sm" href="${esc(fixUrl(v.web))}" target="_blank" rel="noopener">Website</a>`);
-  const meta=[v.contact, v.phone&&fmtPhone(v.phone), v.address].filter(Boolean).map(esc).join(" · ");
-  return `<div class="vcard${v.pick?" pick":""}"><div class="vtop"><div class="vname">${esc(v.name)}</div>${v.pick?'<span class="badge">★ Stephen\'s pick</span>':""}</div>${meta?`<div class="vmeta">${meta}</div>`:""}${a.length?`<div class="vact">${a.join("")}</div>`:""}</div>`;
+  const title = v.contact || v.name, company = v.contact ? v.name : "";
+  let rows = "";
+  if(digits(v.phone)) rows += `<div class="vrow"><a class="vcall" href="tel:${digits(v.phone)}">${icon('phone')}Call ${esc(fmtPhone(v.phone))}</a><a class="pill" href="${sms(v.phone,"Hi, Stephen Leick referred me. ")}">Text</a></div>`;
+  if(digits(v.office)) rows += `<div class="vrow"><a class="pill voff" href="tel:${digits(v.office)}">${icon('phone')}Office ${esc(fmtPhone(v.office))}</a></div>`;
+  const extra=[];
+  if(v.email) extra.push(`<a class="pill" href="mailto:${esc(v.email)}?subject=${encodeURIComponent("Referred by Stephen Leick")}">${icon('mail')}Email</a>`);
+  if(v.web) extra.push(`<a class="pill" href="${esc(fixUrl(v.web))}" target="_blank" rel="noopener">${icon('globe')}Website</a>`);
+  if(extra.length) rows += `<div class="vrow">${extra.join("")}</div>`;
+  return `<article class="vcard${v.pick?" pick":""}">
+    <div class="vtop"><p class="vname">${esc(title)}</p>${v.pick?`<span class="badge">${icon('star')}Stephen's pick</span>`:""}</div>
+    ${company?`<p class="vco">${esc(company)}</p>`:""}
+    ${v.note?`<p class="vnote">${esc(v.note)}</p>`:""}
+    ${v.address?`<p class="vaddr">${esc(v.address)}</p>`:""}
+    ${rows}
+  </article>`;
 }
 function render(){
-  const q=$('#vq').value.trim().toLowerCase();
-  const list=VENDORS.filter(v=>v.name&&(cat==="All"||v.cat===cat)&&(!q||[v.name,v.sub,v.cat,v.contact,v.address].join(" ").toLowerCase().includes(q)));
-  const groups={};
-  list.forEach(v=>(groups[v.sub||"Other"]=groups[v.sub||"Other"]||[]).push(v));
+  const q=$('#vq').value.trim().toLowerCase(), qd=digits(q);
+  const list=VENDORS.filter(v=>v.name&&(cat==="All"||v.cat===cat)&&(!q||[v.name,v.sub,v.cat,v.contact,v.note,v.address].join(" ").toLowerCase().includes(q)||(qd.length>2&&(digits(v.phone)+" "+digits(v.office)).includes(qd))));
   $('#vcount').textContent=`${list.length} vendor${list.length===1?"":"s"}`;
-  $('#vlist').innerHTML=Object.keys(groups).length
-    ? Object.entries(groups).map(([s,vs])=>`<div class="group"><h3>${esc(s)}</h3>${vs.sort((a,b)=>(b.pick?1:0)-(a.pick?1:0)).map(card).join("")}</div>`).join("")
-    : `<div class="empty">No matches. <a href="${sms(CONFIG.phone,CONFIG.textGreeting+"Do you know a good ")}" style="color:var(--navy);font-weight:600">Text me</a> and I'll find someone.</div>`;
+  if(!list.length){ $('#vlist').innerHTML=`<div class="empty">No matches. <a href="${sms(CONFIG.phone,CONFIG.textGreeting+"Do you know a good ")}">Text me</a> and I'll find someone.</div>`; return; }
+  const tree={};
+  list.forEach(v=>{ const c=v.cat||"Other", s=v.sub||"Other"; (tree[c]=tree[c]||{}); (tree[c][s]=tree[c][s]||[]).push(v); });
+  $('#vlist').innerHTML=Object.entries(tree).map(([c,subs])=>`<h3 class="cat">${esc(c)}</h3>`+Object.entries(subs).map(([s,vs])=>`<p class="sub">${esc(s)}</p>`+vs.sort((a,b)=>(b.pick?1:0)-(a.pick?1:0)).map(card).join("")).join("")).join("");
 }
-$$('[data-jump]').forEach(a=>a.addEventListener('click',()=>{$('#vq').value=a.dataset.jump;render();}));
 
-function applyAll(){ applyConfig(); buildChips(); render(); }
-applyAll();
+function applyLender(){
+  const lenders=VENDORS.filter(v=>/lend|mortgage/i.test(v.sub||""));
+  const L=lenders.find(v=>v.pick)||lenders[0];
+  const real = L && digits(L.phone);
+  const who = L ? (L.contact||L.name) : "";
+  const first = who.split(" ")[0];
+  $('#lenderLine').textContent = real ? `Start with ${who}${L.contact&&L.name?` at ${L.name}`:""}.` : "Start with a lender from my list.";
+  $('#lenderBtn').textContent = real ? `Get pre-approved with ${first}` : "See my lenders";
+  $('#lenderBtn').href = real ? `tel:${digits(L.phone)}` : "#vendors";
+  $('#lenderCall').textContent = real ? `Or call ${first} at ${fmtPhone(L.phone)}` : "";
+}
+$('#lenderBtn').addEventListener('click',e=>{ if($('#lenderBtn').getAttribute('href')==="#vendors"){ $('#vq').value="lender"; render(); }});
 
-// Load the Google Sheet
+function applyAll(){ applyConfig(); buildChips(); render(); applyLender(); }
+
+/* ---------- Google Sheet ---------- */
 function parseCSV(t){
   const rows=[]; let row=[], f="", q=false;
   for(let i=0;i<t.length;i++){
@@ -389,20 +439,20 @@ async function sheetTab(name){
   const head=rows.shift().map(h=>h.trim().toLowerCase());
   return rows.map(r=>Object.fromEntries(head.map((h,i)=>[h,(r[i]||"").trim()])));
 }
+applyAll();
 (async()=>{
   try{
     const [info, vendors] = await Promise.all([sheetTab("Info"), sheetTab("Vendors")]);
     const cfg={...CONFIG};
-    info.forEach(r=>{ if(r.setting && r.setting in cfg) cfg[r.setting]=r.value; });
-    if(!/\s$/.test(cfg.textGreeting)) cfg.textGreeting+=" ";
+    info.forEach(r=>{ if(r.setting && r.setting in cfg && r.value!==undefined) cfg[r.setting]=r.value; });
+    if(cfg.textGreeting && !/\s$/.test(cfg.textGreeting)) cfg.textGreeting+=" ";
     CONFIG=cfg;
-    const v=vendors.filter(r=>r.business).map(r=>({cat:r.category,sub:r.type,name:r.business,contact:r.contact,phone:r.phone,email:r.email,web:r.website,address:r.address,pick:/^(y|yes|x|★|true)/i.test(r["top pick"]||"")}));
-    if(v.length) VENDORS=v;
+    VENDORS=vendors.filter(r=>r.business).map(r=>({cat:r.category,sub:r.type,name:r.business,contact:r.contact,phone:r.phone,office:r["office phone"],note:r["title / note"],email:r.email,web:r.website,address:r.address,pick:/^(y|yes|x|★|true)/i.test(r["top pick"]||"")}));
     applyAll();
-  }catch(e){ /* Sheet unavailable: backup values stay on screen */ }
+  }catch(e){ console.warn("Sheet not loaded", e); }
 })();
 
-// Forms
+/* ---------- Forms ---------- */
 function viaSubmit(form, build){
   let via="text";
   form.querySelectorAll('[data-via]').forEach(b=>b.addEventListener('click',()=>via=b.dataset.via));
@@ -412,16 +462,21 @@ function viaSubmit(form, build){
     location.href = via==="text" ? sms(CONFIG.phone, body) : mail(subj, body);
   });
 }
-viaSubmit($('#sellForm'),()=>({subj:"Thinking about selling", body:`${CONFIG.textGreeting}I'm thinking about selling. My address is ${$('#sAddr').value}.`}));
-viaSubmit($('#refForm'),()=>({subj:"Referral", body:`${CONFIG.textGreeting}I have a referral for you: ${$('#rName').value}${$('#rPhone').value?`, ${$('#rPhone').value}`:""}.${$('#rNote').value?` ${$('#rNote').value}`:""}`}));
-$('#howBtn').onclick=()=>$('#howto').classList.toggle('show');
+viaSubmit($('#sellForm'),()=>({subj:"What's my home worth?", body:`${CONFIG.textGreeting}I'd like to know what my home is worth. The address is ${$('#sAddr').value}.`}));
+viaSubmit($('#refForm'),()=>({subj:"Referral", body:`${CONFIG.textGreeting}I have a referral for you: ${$('#rInfo').value}.`}));
 
-// Share
-$('#shareBtn').onclick=async()=>{
-  const data={title:"Stephen Leick | Keller Williams Greater Omaha",text:"My go-to real estate agent and his trusted vendor list:",url:location.href.split('#')[0]};
+/* ---------- Home screen + share ---------- */
+let installEvt=null;
+addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); installEvt=e; });
+$('#hsBtn').onclick=async()=>{
+  if(installEvt){ installEvt.prompt(); installEvt=null; return; }
+  $('#howto').classList.toggle('show');
+};
+$$('[data-share]').forEach(b=>b.onclick=async()=>{
+  const data={title:"Stephen Leick | "+(CONFIG.teamName||"REALTOR®"),text:"My go-to real estate agent and his trusted vendor list:",url:location.href.split('#')[0]};
   try{ if(navigator.share){ await navigator.share(data); return; } }catch(e){ if(e.name==="AbortError") return; }
   try{ await navigator.clipboard.writeText(data.url); toast("Link copied"); }catch(e){ toast(data.url); }
-};
+});
 </script>
 </body>
 </html>
