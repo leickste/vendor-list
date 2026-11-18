@@ -121,8 +121,9 @@
   .vcat.open > .cat .chev{transform:rotate(180deg)}
   .catbody{display:none;padding-bottom:12px}
   .vcat.open > .catbody{display:block}
-  .vsub > .vgrid{display:none}
-  .vsub.open > .vgrid{display:grid}
+  /* Closed type: only Stephen's picks show. Open type: everyone. */
+  .vsub:not(.open) .vcard:not(.pick){display:none}
+  .vsub:not(.open) > .vgrid:not(:has(.pick)){display:none}
   .sub{background:none;border:0;padding:0;cursor:pointer;width:100%;text-align:left;font:inherit}
   .sub span{gap:6px}
   .sub .chev{width:13px;height:13px}
