@@ -114,8 +114,20 @@
   .chip{flex:none;height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer}
   .chip.on{background:var(--navy);border-color:var(--navy);color:var(--cream)}
   .count{margin:10px 0 0;font-size:12px;color:var(--muted)}
-  .cat{margin:24px 0 0;font-family:var(--serif);font-weight:400;font-size:24px;color:var(--navy)}
-  .sub{display:flex;align-items:center;gap:10px;margin:22px 0 10px}
+  .vcat{border-bottom:1px solid var(--line)}
+  .cat{display:flex;width:100%;align-items:center;justify-content:space-between;gap:12px;margin:0;padding:18px 2px 14px;border:0;background:none;cursor:pointer;text-align:left;font-family:var(--serif);font-weight:400;font-size:24px;color:var(--navy)}
+  .cat .chev,.sub .chev{flex:none;transition:transform .2s}
+  .cat .chev{width:22px;height:22px;color:var(--gold-ink)}
+  .vcat.open > .cat .chev{transform:rotate(180deg)}
+  .catbody{display:none;padding-bottom:12px}
+  .vcat.open > .catbody{display:block}
+  .vsub > .vgrid{display:none}
+  .vsub.open > .vgrid{display:grid}
+  .sub{background:none;border:0;padding:0;cursor:pointer;width:100%;text-align:left;font:inherit}
+  .sub span{gap:6px}
+  .sub .chev{width:13px;height:13px}
+  .vsub.open .sub .chev{transform:rotate(180deg)}
+  .sub{display:flex;align-items:center;gap:10px;margin:14px 0 10px}
   .sub span{display:inline-flex;align-items:center;background:#efe5c8;color:var(--navy);border-radius:999px;padding:5px 12px;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
   .sub::after{content:"";flex:1;height:1px;background:var(--line)}
   .vgrid{display:grid;gap:12px}
@@ -134,6 +146,7 @@
   .vbtns a.call{flex:1;min-width:0;padding:0 12px;background:var(--navy);border-color:var(--navy);color:var(--cream)}
   .vbtns a.ib{flex:none;width:44px;padding:0}
   .vbtns a.ib span{display:none}
+  @media (max-width:400px){ .vbtns a.call .cw{display:none} .vbtns a.ib{width:42px} }
   .empty{padding:24px 0;text-align:center;color:var(--muted);font-size:14px}
   .empty a{color:var(--navy);font-weight:600;text-decoration:underline}
 
@@ -224,6 +237,7 @@
   <symbol id="i-star-o" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
   <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
   <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M16 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6.3"/></symbol>
 </svg>
 
@@ -486,7 +500,7 @@ function card(v){
   const sub = [v.contact, v.note].filter(Boolean).join(" | ");
   const num = v.phone || v.office;
   const b=[];
-  if(digits(num)) b.push(`<a class="call" href="tel:${digits(num)}">${icon('phone')}Call ${esc(fmtPhone(num))}</a>`);
+  if(digits(num)) b.push(`<a class="call" href="tel:${digits(num)}">${icon('phone')}<span class="cw">Call&nbsp;</span>${esc(fmtPhone(num))}</a>`);
   if(digits(v.phone)) b.push(`<a class="ib" aria-label="Text" title="Text" href="${sms(v.phone,"Hi, Stephen Leick referred me. ")}">${icon('msg')}<span>Text</span></a>`);
   if(v.email) b.push(`<a class="ib" aria-label="Email" title="Email" href="mailto:${esc(v.email)}?subject=${encodeURIComponent("Referred by Stephen Leick")}">${icon('mail')}<span>Email</span></a>`);
   if(v.web) b.push(`<a class="ib" aria-label="Website" title="Website" href="${esc(fixUrl(v.web))}" target="_blank" rel="noopener">${icon('globe')}<span>Website</span></a>`);
@@ -503,8 +517,21 @@ function render(){
   if(!list.length){ $('#vlist').innerHTML=`<div class="empty">No matches. <a href="${sms(CONFIG.phone,CONFIG.textGreeting+"Do you know a good ")}">Text me</a> and I'll find someone.</div>`; return; }
   const tree={};
   list.forEach(v=>{ const c=v.cat||"Other", s=v.sub||"Other"; (tree[c]=tree[c]||{}); (tree[c][s]=tree[c][s]||[]).push(v); });
-  $('#vlist').innerHTML=Object.entries(tree).map(([c,subs])=>`<h3 class="cat">${esc(c)}</h3>`+Object.entries(subs).map(([s,vs])=>`<p class="sub"><span>${esc(s)}</span></p><div class="vgrid">`+vs.sort((a,b)=>(b.pick?1:0)-(a.pick?1:0)).map(card).join("")+`</div>`).join("")).join("");
+  const force = !!q;                       // searching: show every match
+  const catOpen = c => force || cat!=="All" || (OPEN_CATS.has(c) !== DEFAULT_OPEN.test(c));
+  const subOpen = (c,s) => force || cat!=="All" || (OPEN_SUBS.has(c+"|"+s) !== DEFAULT_OPEN.test(c));
+  $('#vlist').innerHTML=Object.entries(tree).map(([c,subs])=>`<section class="vcat${catOpen(c)?" open":""}" data-cat="${esc(c)}"><button type="button" class="cat" aria-expanded="${catOpen(c)}">${esc(c)}<svg class="chev"><use href="#i-chev"/></svg></button><div class="catbody">`+Object.entries(subs).map(([s,vs])=>`<div class="vsub${subOpen(c,s)?" open":""}" data-key="${esc(c+"|"+s)}"><button type="button" class="sub" aria-expanded="${subOpen(c,s)}"><span>${esc(s)}<svg class="chev"><use href="#i-chev"/></svg></span></button><div class="vgrid">`+vs.sort((a,b)=>(b.pick?1:0)-(a.pick?1:0)).map(card).join("")+`</div></div>`).join("")+`</div></section>`).join("");
 }
+/* Collapsible groups: Real Estate starts open, everything else starts closed.
+   OPEN_CATS / OPEN_SUBS hold the ones the visitor has flipped from their default. */
+const DEFAULT_OPEN = /real estate/i;
+const OPEN_CATS = new Set(), OPEN_SUBS = new Set();
+const flip = (set,k) => set.has(k) ? set.delete(k) : set.add(k);
+$('#vlist').addEventListener('click', e=>{
+  const cb=e.target.closest('.cat'), sb=e.target.closest('.sub');
+  if(cb){ const sec=cb.parentElement; flip(OPEN_CATS, sec.dataset.cat); const o=sec.classList.toggle('open'); cb.setAttribute('aria-expanded',o); }
+  else if(sb){ const box=sb.parentElement; flip(OPEN_SUBS, box.dataset.key); const o=box.classList.toggle('open'); sb.setAttribute('aria-expanded',o); }
+});
 
 function applyLender(){
   const lenders=VENDORS.filter(v=>/lend|mortgage/i.test(v.sub||""));
