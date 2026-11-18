@@ -101,20 +101,20 @@
   .count{margin:10px 0 0;font-size:12px;color:var(--muted)}
   .cat{margin:24px 0 0;font-family:var(--serif);font-weight:400;font-size:24px;color:var(--navy)}
   .sub{margin:16px 0 8px;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-  .vcard{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:16px;margin-bottom:12px}
+  .vgrid{display:grid;gap:12px}
+  .vcard{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:16px;display:flex;flex-direction:column}
   .vcard.pick{background:var(--pick);border-color:var(--pick-line)}
   .vtop{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
   .vname{margin:0;font-family:var(--serif);font-weight:400;font-size:20px;line-height:1.2}
   .badge{flex:none;display:inline-flex;align-items:center;gap:4px;background:var(--gold);color:var(--navy);border-radius:999px;padding:3px 9px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
   .badge svg{width:11px;height:11px}
   .vco{margin:2px 0 0;font-size:14px;font-weight:600}
-  .vnote,.vaddr{margin:2px 0 0;font-size:13px;color:var(--muted)}
-  .vaddr{margin-top:6px}
-  .vrow{display:flex;gap:8px;margin-top:12px}
-  .vrow .grow{flex:1}
-  .vrow + .vrow{margin-top:8px}
-  .vcall{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;border-radius:999px;background:var(--navy);color:var(--cream);font-size:14px;font-weight:600}
-  .voff{flex:1;justify-content:flex-start}
+  .vnote,.vline{margin:2px 0 0;font-size:13px;color:var(--muted)}
+  .vline:first-of-type{margin-top:6px}
+  .vbtns{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:6px;margin-top:auto;padding-top:14px}
+  .vbtns a:not(.call) svg{display:none}
+  .vbtns a{min-width:0;height:42px;padding:0 6px;font-size:13px !important;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:14px;font-weight:600;border:1px solid var(--line);background:#fff;color:var(--ink);white-space:nowrap}
+  .vbtns a.call{background:var(--navy);border-color:var(--navy);color:var(--cream)}
   .empty{padding:24px 0;text-align:center;color:var(--muted);font-size:14px}
   .empty a{color:var(--navy);font-weight:600;text-decoration:underline}
 
@@ -153,6 +153,32 @@
 
   .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);opacity:0;background:var(--navy);color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;transition:.2s;z-index:40;pointer-events:none}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* Desktop */
+  @media (min-width: 960px){
+    body{background:#efe8d9}
+    .page{max-width:1200px;display:grid;grid-template-columns:400px minmax(0,1fr);gap:48px;align-items:start;padding:32px 32px 56px;background:transparent;box-shadow:none;min-height:0}
+    .side{position:sticky;top:32px}
+    header{border-radius:28px;padding:28px 28px 32px}
+    h1{font-size:3rem}
+    .tip{display:none}
+    .stats{margin:16px 0 0}
+    .main{background:var(--cream);border:1px solid var(--line);border-radius:28px;padding:8px 40px 40px}
+    section{padding:0;margin-top:40px}
+    .lcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .lcards .lcard{margin-top:12px}
+    .pair{max-width:520px}
+    .chips{margin:12px 0 0;padding:0 0 4px;flex-wrap:wrap}
+    .vbtns{display:flex;flex-wrap:nowrap;gap:8px}
+    .vbtns a{flex:0 0 auto;padding:0 16px;font-size:14px !important}
+    .vbtns a:not(.call) svg{display:inline}
+    #sellers form,#help .refer,#help > .btn{max-width:560px}
+    .sharebox{margin:40px 0 0;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .sharebox p{margin-bottom:0}
+    footer{margin:28px 0 0}
+    nav{display:none}
+    .toast{bottom:32px}
+  }
 </style>
 </head>
 <body>
@@ -169,6 +195,7 @@
 </svg>
 
 <div class="page">
+<aside class="side">
   <header>
     <div class="glow"></div>
     <div class="rel">
@@ -209,9 +236,12 @@
     <div class="stat"><b data-cfg="stat3"></b><span data-cfg="stat3Label"></span></div>
   </div>
 
+</aside>
+<main class="main">
   <section id="search">
     <p class="eyebrow">Search homes</p>
     <h2>See what's on the market</h2>
+    <div class="lcards">
     <a class="lcard dark" data-href="searchUrl" href="#">
       <p class="k">Home search</p>
       <p class="t" data-cfg="websiteLabel"></p>
@@ -221,6 +251,7 @@
       <p class="t">What's my home worth?</p>
       <p class="d">A real price from recent sales on your street, not an online guess.</p>
     </a>
+    </div>
   </section>
 
   <section id="reviews">
@@ -306,6 +337,7 @@
     <p>Vendor recommendations are a courtesy only. Stephen Leick, Leick Realty LLC, and Keller Williams Greater Omaha are not affiliated with or liable for these businesses. Each Keller Williams office is independently owned and operated. Equal Housing Opportunity.</p>
     <p>Stephen Leick · <span data-cfg="brokerage"></span> · Licensed in Nebraska &amp; Iowa · <span data-email-text></span></p>
   </footer>
+</main>
 </div>
 
 <nav>
@@ -383,19 +415,19 @@ $('#vq').oninput=render;
 
 function card(v){
   const title = v.contact || v.name, company = v.contact ? v.name : "";
-  let rows = "";
-  if(digits(v.phone)) rows += `<div class="vrow"><a class="vcall" href="tel:${digits(v.phone)}">${icon('phone')}Call ${esc(fmtPhone(v.phone))}</a><a class="pill" href="${sms(v.phone,"Hi, Stephen Leick referred me. ")}">Text</a></div>`;
-  if(digits(v.office)) rows += `<div class="vrow"><a class="pill voff" href="tel:${digits(v.office)}">${icon('phone')}Office ${esc(fmtPhone(v.office))}</a></div>`;
-  const extra=[];
-  if(v.email) extra.push(`<a class="pill" href="mailto:${esc(v.email)}?subject=${encodeURIComponent("Referred by Stephen Leick")}">${icon('mail')}Email</a>`);
-  if(v.web) extra.push(`<a class="pill" href="${esc(fixUrl(v.web))}" target="_blank" rel="noopener">${icon('globe')}Website</a>`);
-  if(extra.length) rows += `<div class="vrow">${extra.join("")}</div>`;
+  const phones = [digits(v.phone)&&fmtPhone(v.phone), digits(v.office)&&("Office "+fmtPhone(v.office))].filter(Boolean).join(" · ");
+  const b=[];
+  if(digits(v.phone)){ b.push(`<a class="call" href="tel:${digits(v.phone)}">${icon('phone')}Call</a>`); b.push(`<a href="${sms(v.phone,"Hi, Stephen Leick referred me. ")}">${icon('msg')}Text</a>`); }
+  if(digits(v.office)) b.push(`<a href="tel:${digits(v.office)}">${icon('phone')}Office</a>`);
+  if(v.email) b.push(`<a href="mailto:${esc(v.email)}?subject=${encodeURIComponent("Referred by Stephen Leick")}">${icon('mail')}Email</a>`);
+  if(v.web) b.push(`<a href="${esc(fixUrl(v.web))}" target="_blank" rel="noopener">${icon('globe')}Website</a>`);
   return `<article class="vcard${v.pick?" pick":""}">
     <div class="vtop"><p class="vname">${esc(title)}</p>${v.pick?`<span class="badge">${icon('star')}Stephen's pick</span>`:""}</div>
     ${company?`<p class="vco">${esc(company)}</p>`:""}
     ${v.note?`<p class="vnote">${esc(v.note)}</p>`:""}
-    ${v.address?`<p class="vaddr">${esc(v.address)}</p>`:""}
-    ${rows}
+    ${phones?`<p class="vline">${esc(phones)}</p>`:""}
+    ${v.address?`<p class="vline">${esc(v.address)}</p>`:""}
+    ${b.length?`<div class="vbtns">${b.join("")}</div>`:""}
   </article>`;
 }
 function render(){
@@ -405,7 +437,7 @@ function render(){
   if(!list.length){ $('#vlist').innerHTML=`<div class="empty">No matches. <a href="${sms(CONFIG.phone,CONFIG.textGreeting+"Do you know a good ")}">Text me</a> and I'll find someone.</div>`; return; }
   const tree={};
   list.forEach(v=>{ const c=v.cat||"Other", s=v.sub||"Other"; (tree[c]=tree[c]||{}); (tree[c][s]=tree[c][s]||[]).push(v); });
-  $('#vlist').innerHTML=Object.entries(tree).map(([c,subs])=>`<h3 class="cat">${esc(c)}</h3>`+Object.entries(subs).map(([s,vs])=>`<p class="sub">${esc(s)}</p>`+vs.sort((a,b)=>(b.pick?1:0)-(a.pick?1:0)).map(card).join("")).join("")).join("");
+  $('#vlist').innerHTML=Object.entries(tree).map(([c,subs])=>`<h3 class="cat">${esc(c)}</h3>`+Object.entries(subs).map(([s,vs])=>`<p class="sub">${esc(s)}</p><div class="vgrid">`+vs.sort((a,b)=>(b.pick?1:0)-(a.pick?1:0)).map(card).join("")+`</div>`).join("")).join("");
 }
 
 function applyLender(){
