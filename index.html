@@ -413,25 +413,22 @@ $('#chips').onclick=e=>{const b=e.target.closest('.chip'); if(!b) return; cat=b.
 $('#vq').oninput=render;
 
 function card(v){
-  const title = v.contact || v.name, company = v.contact ? v.name : "";
-  const phones = [digits(v.phone)&&fmtPhone(v.phone), digits(v.office)&&("Office "+fmtPhone(v.office))].filter(Boolean).join(" · ");
+  const title = v.contact || v.name;
+  const sub = (v.contact ? [v.name, v.note] : [v.note]).filter(Boolean).join(", ");
   const b=[];
   if(digits(v.phone)){ b.push(`<a class="call" href="tel:${digits(v.phone)}">${icon('phone')}Call</a>`); b.push(`<a href="${sms(v.phone,"Hi, Stephen Leick referred me. ")}">${icon('msg')}Text</a>`); }
-  if(digits(v.office)) b.push(`<a href="tel:${digits(v.office)}">${icon('phone')}Office</a>`);
   if(v.email) b.push(`<a href="mailto:${esc(v.email)}?subject=${encodeURIComponent("Referred by Stephen Leick")}">${icon('mail')}Email</a>`);
   if(v.web) b.push(`<a href="${esc(fixUrl(v.web))}" target="_blank" rel="noopener">${icon('globe')}Website</a>`);
   return `<article class="vcard${v.pick?" pick":""}">
     <div class="vtop"><p class="vname">${esc(title)}</p>${v.pick?`<span class="badge">${icon('star')}Stephen's pick</span>`:""}</div>
-    ${company?`<p class="vco">${esc(company)}</p>`:""}
-    ${v.note?`<p class="vnote">${esc(v.note)}</p>`:""}
-    ${phones?`<p class="vline">${esc(phones)}</p>`:""}
-    ${v.address?`<p class="vline">${esc(v.address)}</p>`:""}
+    ${sub?`<p class="vco">${esc(sub)}</p>`:""}
+    ${digits(v.phone)?`<p class="vline">${esc(fmtPhone(v.phone))}</p>`:""}
     ${b.length?`<div class="vbtns">${b.join("")}</div>`:""}
   </article>`;
 }
 function render(){
   const q=$('#vq').value.trim().toLowerCase(), qd=digits(q);
-  const list=VENDORS.filter(v=>v.name&&(cat==="All"||v.cat===cat)&&(!q||[v.name,v.sub,v.cat,v.contact,v.note,v.address].join(" ").toLowerCase().includes(q)||(qd.length>2&&(digits(v.phone)+" "+digits(v.office)).includes(qd))));
+  const list=VENDORS.filter(v=>v.name&&(cat==="All"||v.cat===cat)&&(!q||[v.name,v.sub,v.cat,v.contact,v.note].join(" ").toLowerCase().includes(q)||(qd.length>2&&digits(v.phone).includes(qd))));
   $('#vcount').textContent=`${list.length} vendor${list.length===1?"":"s"}`;
   if(!list.length){ $('#vlist').innerHTML=`<div class="empty">No matches. <a href="${sms(CONFIG.phone,CONFIG.textGreeting+"Do you know a good ")}">Text me</a> and I'll find someone.</div>`; return; }
   const tree={};
@@ -485,7 +482,7 @@ applyAll();
     info.forEach(r=>{ if(r.setting && r.setting in cfg && r.value!==undefined) cfg[r.setting]=r.value; });
     if(cfg.textGreeting && !/\s$/.test(cfg.textGreeting)) cfg.textGreeting+=" ";
     CONFIG=cfg;
-    VENDORS=vendors.filter(r=>r.business).map(r=>({cat:r.category,sub:r.type,name:r.business,contact:r.contact,phone:r.phone,office:r["office phone"],note:r["title / note"],email:r.email,web:r.website,address:r.address,pick:/^(y|yes|x|★|true)/i.test(r["top pick"]||"")}));
+    VENDORS=vendors.filter(r=>r.business).map(r=>({cat:r.category,sub:r.type,name:r.business,contact:r.contact,phone:r.phone,note:r["title / note"],email:r.email,web:r.website,pick:/^(y|yes|x|★|true)/i.test(r["top pick"]||"")}));
     applyAll();
   }catch(e){ console.warn("Sheet not loaded", e); }
 })();
