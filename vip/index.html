@@ -24,6 +24,7 @@
   header .glow{position:absolute;inset:0;pointer-events:none;opacity:.45;background:radial-gradient(circle at 100% 0%,rgba(201,162,39,.5),transparent 42%)}
   header .rel{position:relative}
   .top{display:flex;justify-content:space-between;align-items:center}
+  .out{background:none;border:0;padding:4px 0;color:#fff;font-size:13px;font-weight:500;cursor:pointer}
   .back{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-light)}
   .eyebrow{margin:20px 0 0;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-light)}
   h1{margin:6px 0 0;font-family:var(--serif);font-weight:500;font-size:2.6rem;line-height:.95;letter-spacing:-.025em}
@@ -50,7 +51,10 @@
   .vip-body .tile b{display:block;font-family:var(--serif);font-weight:400;font-size:21px}
   .vip-body .tile span{display:block;margin-top:4px;font-size:14px;color:var(--muted)}
   .vip-body .tile.dark span{color:rgba(255,255,255,.8)}
-  .vip-body .tile.ph{border-style:dashed;background:transparent}
+  .welcome{margin-top:20px !important;background:#fffaf0;border:1px solid #d9c27e;border-radius:22px;padding:16px 18px}
+  .welcome h2{font-size:26px !important;margin-top:2px !important}
+  .welcome p.t{margin-top:6px !important;font-size:14px !important}
+  .vip-body .tile.ph{border-style:dashed;background:#fff}
   .vip-body .tile.ph b{color:var(--muted)}
   .vip-body .tile.soon{border-style:dashed;border-color:#cdb98a}
   .vip-body .tile .k{margin:0 0 2px}
@@ -82,7 +86,7 @@
   <header>
     <div class="glow"></div>
     <div class="rel">
-      <div class="top"><a class="back" href="../">← Stephen Leick</a></div>
+      <div class="top"><a class="back" href="../">← Stephen Leick</a><button class="out" id="out" type="button" hidden>Log out</button></div>
       <p class="eyebrow">Keller Williams Greater Omaha</p>
       <h1>Stephen's VIP</h1>
       <p class="sub" id="sub">Enter the VIP password Stephen gave you.</p>
@@ -110,7 +114,7 @@
 <script>
 /* The VIP content below is encrypted with the VIP password (AES-GCM, PBKDF2).
    It cannot be read without the password. */
-const VAULT = {"salt": "JOYHWTTieG//kRhkzlqE7w==", "iv": "bOhefXeNhi2Par8+", "iter": 310000, "data": "qBvQ70u3RXu0jLJimk+mgOBIiXDBXhzcG4fLrVYtdHNrot9fdiwSVtCd86pkS4tz54JlZGpvv3DO7JfSFJ2tcK0CWzwmG8hW8cIT0eKOM6kP2rmsBoIBS7IaTnYqBz01ue6kDR8U3FP3Nrnhc+w+CrRto6c7CQm3r8EWs66IVnZg73UkIRmwr/wANW5oHCi6ThOsh7X0VJOAwKUNpg0WFfXD1cSv1sQIaiwms7UVfgVWdIZrEBOYofbsXd5nUvnfpMlE4FQpUA88x1LTq42dMEfNq0Ur6q0075kUQ3Rzn1Lo0MZzGKy6GVYIJJ0ayMan3doN3FVn7Eg+5f7fpWJ7b2ogPkMzjhhIh8nUR+4keXzIpuLMWFzSstcineuGnZ1DmkF+ogMrhmSnzTCyixgxfif4KM25IeKFtsf3AKiC+qpKjG6eSOmACciTTohSMWdphREMx91MyfAvttK7vSBCCcHvhCUmrKk7CTLXxw5kZQY5EvMvaBRX4zGJdLtLrfglP6ajcvOJNoXhbnA6s78bC3Nw2jH5lKhleDgMZbsF6FTCSLVlhDGg12fY/WAiYtz3bbl0OhZL6tJmaEpzanwgCKlli26wrJSECfiwofSDWjplRzoHDwvcvfNSnlZ9GkoZA07aiuGQpxv4aGkq7qS2TEF9tPQOULkNUeS5l7wI0omICSpFf55HLqpwt8HTkjxJjPZqGfyb9AM54jBlBBKamwJ+4JZe20w3cK7/LCdCa3Gqlsle9jtnDZcTfBE9pqjEeHlKtZSHg+NCjsF8vKxwIVLH3tMw6KLk87Iuz3m3sN/+D38otp3Tn8MWGiVNl/dR/xo80iz2geVw3onRpG52ZKnuZ5SgjS+tHaRdjj8bwwf1dy+JUlpGlAwmvqpmBoGvIUwCiw2/X3pEyaJGUlU/2X1tS1S+NCv1pqgPteUsQp5Jo+gGbRKA5dDLVclmWQXdFIuDGjvStijXx8jM2DGKql4zC6jlnO/i+eVodBFbs9Gwx2O92MBwYtoABvkN5PnBVIpTOwf+ByIehAldRWRrZiRWyY6NPha+6larCo0GHdoVLmRiBlTQXHYxRfcWW0j+l+nRTbVrYIC942A9VrrP9f5H/+G01XzteDAq5TkyppLubSLeNdKLZwdYllIR981WBytCbMX8V3Sn/5bCElo829Lsi2WbWE2GztWlDB71GEMQLEM915cPPhIOOUn+vKXnG2Q9NOXWyp/DR6rL557qb1YZiNhZqm81J/hGBbKFWifDGxZTikLzd4qgKM6Vk1m/dQ7wgqL8Fyzkz9qpOrI2l/RKCF0UXrnq2Jvof34P8y9i7gXJwmiNS0KGNl47KxrL5VLwgnP3o8fuG2jIiGueQjbH8pzflkJqstVMnc+TnQEBVMYLaOHkyRYxjKorKe4+K9nkGmCEDxeX5FECtf05pXNi1OBwmqjamx81DPVSk+mLCNs/9rXhEHZ3nvtE/9tBxIS5GFTaYvGElJ12gYMXmMV95TURWmyP/01QcZaL7w70WmvlaKzRFVPKoEk3ZgUZMSVIZJOLaw6ww9XGXfYl6Iru7Ndc6jhp4JccnXub9g1x0PsNJIkCy1sp+4Vgwe4vZtxI53WvEiaQdU0AODyt27PgMjhqsx9h5uMZcBnpm0lG/2r8jcrUozedNSLFatB8PmV1H7HZLwaEcdFVOMJmLsiJQ2O1lpbRv9denKNwwvUk+vZGsdmiG4/u0RRklGumkvw9Dy9FHZbVHxJPtjoTzK2O4muvrZCFr59316KtudBV4fRgoqicuZBPnD4DCssjC1t4bjSCMzlxxKqhwOuwRx8faaGa9dGykd4tA8Ii2O7NRB2wAQppVuBPtD8lFa1NAk43g4XszH6/7hJ0h6IrCp/wvw2elVYt4omuaVcgdmWp+cU+Vs2K05FwZDdI1gOb8LLC"};
+const VAULT = {"salt": "onZiQEW2uADbYfKPBA3+4w==", "iv": "gTeGH+TeGkPBcaeR", "iter": 310000, "data": "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"};
 const KEY = "stephen-vip-pw";
 const sms=(n,b)=>`sms:${n}${/iP(hone|ad|od)/.test(navigator.userAgent)?'&':'?'}body=${encodeURIComponent(b)}`;
 const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
@@ -122,10 +126,11 @@ async function unlock(pw){
 }
 function show(html){
   const v=document.getElementById('vip');
-  v.innerHTML = html + '<div class="logout"><button class="btn light" id="out">Log out</button></div>';
+  v.innerHTML = html;
+  document.getElementById('out').hidden=false;
   v.classList.add('show');
   document.getElementById('login').style.display='none';
-  document.getElementById('sub').textContent='Welcome. This page is just for clients Stephen has invited.';
+  document.getElementById('sub').textContent='Welcome. This page is for clients Stephen has invited.';
   document.querySelectorAll('[data-vtext]').forEach(x=>x.href=sms("4029904750","Hi Stephen! "));
   document.getElementById('out').onclick=()=>{ try{localStorage.removeItem(KEY)}catch(e){} location.reload(); };
 }
