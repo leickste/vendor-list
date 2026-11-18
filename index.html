@@ -517,10 +517,19 @@ function parseCSV(t){
   if(f!==""||row.length){ row.push(f); rows.push(row); }
   return rows;
 }
-async function sheetTab(name){
+const TAB_GID = { Info: "1679600153", Vendors: "2093505892" };
+async function sheetCSV(name){
+  // Export keeps every cell as shown in the sheet (gviz drops cells whose type doesn't match the column).
+  try{
+    const r=await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${TAB_GID[name]}`,{cache:"no-store"});
+    if(r.ok) return await r.text();
+  }catch(e){}
   const r=await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(name)}`,{cache:"no-store"});
   if(!r.ok) throw new Error(r.status);
-  const rows=parseCSV(await r.text());
+  return await r.text();
+}
+async function sheetTab(name){
+  const rows=parseCSV(await sheetCSV(name)).filter(r=>r.some(c=>c.trim()!==""));
   const head=rows.shift().map(h=>h.trim().toLowerCase());
   return rows.map(r=>Object.fromEntries(head.map((h,i)=>[h,(r[i]||"").trim()])));
 }
