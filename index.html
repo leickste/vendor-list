@@ -450,8 +450,10 @@ function applyLender(){
   const who = L ? (L.contact||L.name) : "";
   const first = who.split(" ")[0];
   $('#lenderLine').textContent = real ? `Start with ${who}${L.contact&&L.name?` at ${L.name}`:""}.` : "Start with a lender from my list.";
-  $('#lenderBtn').textContent = real ? `Get pre-approved with ${first}` : "See my lenders";
-  $('#lenderBtn').href = real ? `tel:${digits(L.phone)}` : "#vendors";
+  $('#lenderBtn').textContent = (real || (L&&L.web)) ? `Get pre-approved with ${first}` : "See my lenders";
+  const btn=$('#lenderBtn');
+  if(L && L.web){ btn.href=fixUrl(L.web); btn.target="_blank"; btn.rel="noopener"; }
+  else { btn.href = real ? `tel:${digits(L.phone)}` : "#vendors"; btn.removeAttribute('target'); }
   $('#lenderCall').textContent = real ? `Or call ${first} at ${fmtPhone(L.phone)}` : "";
 }
 $('#lenderBtn').addEventListener('click',e=>{ if($('#lenderBtn').getAttribute('href')==="#vendors"){ $('#vq').value="lender"; render(); }});
