@@ -126,6 +126,8 @@
   .vsub:not(.open) > .vgrid:not(:has(.pick)){display:none}
   .more{display:none;margin:2px 0 4px;padding:6px 2px;border:0;background:none;cursor:pointer;font-size:14px;font-weight:600;color:var(--navy);text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:4px}
   .vsub:not(.open) > .more{display:inline-block}
+  .vsub.open > .more.less{display:inline-block}
+  .vsub.open > .more:not(.less), .vsub:not(.open) > .more.less{display:none}
   .sub{background:none;border:0;padding:0;cursor:pointer;width:100%;text-align:left;font:inherit}
   .sub span{gap:6px}
   .sub .chev{width:13px;height:13px}
@@ -535,7 +537,8 @@ function typeWords(s,n){
 function moreLink(s,vs){
   const rest=vs.filter(v=>!v.pick).length; if(!rest) return "";
   const hasPick=vs.some(v=>v.pick);
-  return `<button type="button" class="more">+ ${rest} ${hasPick?"more ":""}${esc(typeWords(s,rest))}</button>`;
+  return `<button type="button" class="more">+ ${rest} ${hasPick?"more ":""}${esc(typeWords(s,rest))}</button>`
+       + `<button type="button" class="more less">− ${hasPick?"Show only Stephen's pick"+(vs.filter(v=>v.pick).length>1?"s":""):"Hide "+esc(typeWords(s,vs.length))}</button>`;
 }
 /* Collapsible groups: every category starts open showing its type labels; each type starts closed.
    OPEN_CATS / OPEN_SUBS hold the ones the visitor has flipped from their default. */
