@@ -395,7 +395,7 @@ let CONFIG = {
 let VENDORS = [];
 
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
-const digits = s => String(s||"").replace(/\D/g,"");
+const digits = s => { const d=String(s||"").replace(/\D/g,""); return d.length===11 && d[0]==="1" ? d.slice(1) : d; };
 const fmtPhone = s => { const d=digits(s); return d.length===10 ? `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}` : (s||""); };
 const sms = (num, body) => `sms:${digits(num)}${/iP(hone|ad|od)/.test(navigator.userAgent)?'&':'?'}body=${encodeURIComponent(body)}`;
 const mail = (subj, body) => `mailto:${CONFIG.email}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
