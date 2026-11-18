@@ -413,8 +413,8 @@ $('#chips').onclick=e=>{const b=e.target.closest('.chip'); if(!b) return; cat=b.
 $('#vq').oninput=render;
 
 function card(v){
-  const title = v.contact || v.name;
-  const sub = (v.contact ? [v.note, v.name] : [v.note]).filter(Boolean).join(" | ");
+  const title = v.name;
+  const sub = [v.contact, v.note].filter(Boolean).join(" | ");
   const b=[];
   if(digits(v.phone)){ b.push(`<a class="call" href="tel:${digits(v.phone)}">${icon('phone')}Call</a>`); b.push(`<a href="${sms(v.phone,"Hi, Stephen Leick referred me. ")}">${icon('msg')}Text</a>`); }
   if(v.email) b.push(`<a href="mailto:${esc(v.email)}?subject=${encodeURIComponent("Referred by Stephen Leick")}">${icon('mail')}Email</a>`);
