@@ -42,6 +42,7 @@
   #vip{display:none}
   #vip.show{display:block}
   .vip-body{padding:0 20px}
+  #pub section:first-child{margin-top:12px}
   .vip-body section{margin-top:32px}
   .vip-body .k{margin:0;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-ink)}
   .vip-body h2{margin:6px 0 0;font-family:var(--serif);font-weight:400;font-size:28px;line-height:1.1}
@@ -116,6 +117,23 @@
     <p class="err" id="err">That password didn't work. Text Stephen if you need it.</p>
   </form>
 
+  <div class="vip-body" id="pub">
+    <section>
+      <div class="qbox">
+        <h3>Questions</h3>
+        <p>Call or text Stephen at (402) 990-4750.</p>
+        <div class="qbtns"><a class="qcall" href="tel:4029904750">Call</a><a class="qtext" data-vtext href="sms:4029904750">Text</a></div>
+      </div>
+    </section>
+    <section>
+      <a class="tile backlist" href="../#vendors">
+        <p class="k">Preferred vendors</p>
+        <b>Back to the vendor list →</b>
+        <span>Lenders, inspectors, and the trades Stephen sends his own clients to.</span>
+      </a>
+    </section>
+  </div>
+
   <div id="vip"></div>
 </div>
 <nav><div class="in">
@@ -128,7 +146,7 @@
 <script>
 /* The VIP content below is encrypted with the VIP password (AES-GCM, PBKDF2).
    It cannot be read without the password. */
-const VAULT = {"salt": "W++jYAaHM3d346JSgvdcpw==", "iv": "2oQbtv8/ODqosx6w", "iter": 310000, "data": "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"};
+const VAULT = {"salt": "Zgvhw84IohL8n+fwsFJkmg==", "iv": "fjqneqMGw5WrVTqF", "iter": 310000, "data": "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"};
 const KEY = "stephen-vip-pw";
 const sms=(n,b)=>`sms:${n}${/iP(hone|ad|od)/.test(navigator.userAgent)?'&':'?'}body=${encodeURIComponent(b)}`;
 const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
@@ -144,6 +162,7 @@ function show(html){
   document.getElementById('out').hidden=false;
   v.classList.add('show');
   document.getElementById('login').style.display='none';
+  document.getElementById('pub').style.display='none';
   document.getElementById('sub').textContent='Welcome. This page is for clients Stephen has invited.';
   document.querySelectorAll('[data-vtext]').forEach(x=>x.href=sms("4029904750","Hi Stephen! "));
   document.getElementById('out').onclick=()=>{ try{localStorage.removeItem(KEY)}catch(e){} location.reload(); };
@@ -158,6 +177,7 @@ document.getElementById('login').addEventListener('submit', async e=>{
 (async()=>{ let pw=null; try{pw=localStorage.getItem(KEY)}catch(e){}
   if(pw){ try{ show(await unlock(pw)); }catch(e){ try{localStorage.removeItem(KEY)}catch(_){} } } })();
 document.querySelector('[data-text]').href=sms("4029904750","Hi Stephen! ");
+document.querySelectorAll('#pub [data-vtext]').forEach(x=>x.href=sms("4029904750","Hi Stephen! "));
 </script>
 </body>
 </html>
