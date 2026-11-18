@@ -1,561 +1,421 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Stephen Leick | Trusted Vendors</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#14213d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Stephen Leick">
+<title>Stephen Leick | Keller Williams Greater Omaha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#14213d; --navy-2:#1d2f55; --gold:#c9a227; --gold-soft:#f4ecd2;
+    --ink:#1b1f2a; --muted:#5b6475; --line:#e3e6ec; --bg:#f6f7f9; --card:#fff;
+    --r:14px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:640px;margin:0 auto;padding:0 18px}
+  h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.15;margin:0}
+  h2{font-size:1.55rem;color:var(--navy)}
+  section{padding:34px 0;border-bottom:1px solid var(--line)}
+  .eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:6px}
+  .lead{color:var(--muted);margin:8px 0 18px}
 
-    :root {
-      --navy: #1B3A5C;
-      --navy-deep: #112537;
-      --gold: #C9A84C;
-      --gold-light: #e8c96a;
-      --cream: #FAFAF7;
-      --white: #ffffff;
-      --gray-100: #F3F3F0;
-      --gray-200: #E5E5E0;
-      --gray-500: #8A8A82;
-      --gray-700: #4A4A44;
-      --text: #2C2C28;
-      --font-display: 'Playfair Display', Georgia, serif;
-      --font-body: 'Inter', system-ui, sans-serif;
-    }
+  /* Header */
+  header{background:var(--navy);color:#fff;padding:30px 0 26px;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;inset:auto -60px -80px auto;width:220px;height:220px;border-radius:50%;border:2px solid rgba(201,162,39,.35)}
+  .mono{width:58px;height:58px;border-radius:50%;background:var(--gold);color:var(--navy);display:grid;place-items:center;font-family:Fraunces,serif;font-weight:700;font-size:1.35rem;margin-bottom:14px}
+  header .firm{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700}
+  header h1{font-size:2.2rem;margin:4px 0 6px}
+  header .brk{color:#cfd6e6;font-size:.95rem}
+  header .area{margin-top:12px;font-size:.9rem;color:#e6eaf3}
 
-    html { scroll-behavior: smooth; }
+  /* Contact bar */
+  .contact{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(20,33,61,.06)}
+  .contact .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding-top:10px;padding-bottom:10px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:10px;padding:11px 14px;font-weight:600;font-size:.95rem;text-decoration:none;border:0;cursor:pointer;font-family:inherit}
+  .btn svg{width:18px;height:18px;flex:none}
+  .btn-navy{background:var(--navy);color:#fff}
+  .btn-gold{background:var(--gold);color:var(--navy)}
+  .btn-ghost{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+  .btn-sm{padding:7px 11px;font-size:.84rem;border-radius:8px}
+  .contact-sub{font-size:.85rem;color:var(--muted);text-align:center;padding:0 18px 10px}
+  .contact-sub a{color:var(--navy);font-weight:600}
 
-    body {
-      font-family: var(--font-body);
-      background: var(--cream);
-      color: var(--text);
-      line-height: 1.6;
-    }
+  /* Home screen tip */
+  .tip{background:var(--gold-soft);border:1px solid #e8d9a6;border-radius:var(--r);padding:16px;margin-top:22px;display:flex;gap:14px;align-items:flex-start}
+  .tip strong{display:block;color:var(--navy)}
+  .tip p{margin:2px 0 10px;font-size:.92rem;color:#4b4630}
+  .howto{display:none;font-size:.88rem;color:#4b4630;margin-top:8px}
+  .howto.show{display:block}
 
-    /* ── NAV ── */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--navy-deep);
-      border-bottom: 2px solid var(--gold);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 56px;
-    }
-    .nav-brand {
-      font-family: var(--font-display);
-      color: var(--white);
-      font-size: 1rem;
-      letter-spacing: 0.02em;
-      white-space: nowrap;
-    }
-    .nav-brand span { color: var(--gold); }
-    .nav-links {
-      display: flex;
-      gap: 0.25rem;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .nav-links::-webkit-scrollbar { display: none; }
-    .nav-links a {
-      color: var(--gray-200);
-      text-decoration: none;
-      font-size: 0.78rem;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 0.35rem 0.65rem;
-      border-radius: 4px;
-      white-space: nowrap;
-      transition: background 0.15s, color 0.15s;
-    }
-    .nav-links a:hover { background: rgba(201,168,76,0.15); color: var(--gold-light); }
+  /* Stats */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 8px;text-align:center}
+  .stat b{display:block;font-family:Fraunces,serif;font-size:1.6rem;color:var(--navy)}
+  .stat span{font-size:.78rem;color:var(--muted)}
 
-    /* ── HERO ── */
-    .hero {
-      background: var(--navy);
-      padding: 5rem 2rem 4rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 50% 100%, rgba(201,168,76,0.12) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .hero-eyebrow {
-      font-family: var(--font-body);
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1rem;
-    }
-    .hero h1 {
-      font-family: var(--font-display);
-      font-size: clamp(2.4rem, 5vw, 3.8rem);
-      color: var(--white);
-      line-height: 1.15;
-      margin-bottom: 1rem;
-    }
-    .hero-sub {
-      font-size: 1rem;
-      color: rgba(255,255,255,0.65);
-      max-width: 480px;
-      margin: 0 auto 2.5rem;
-      font-weight: 300;
-    }
-    .hero-divider {
-      width: 48px;
-      height: 2px;
-      background: var(--gold);
-      margin: 0 auto;
-    }
+  /* Link cards */
+  .links{display:grid;gap:10px}
+  .lcard{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--r);padding:16px;text-decoration:none}
+  .lcard b{color:var(--navy)}
+  .lcard small{display:block;color:var(--muted)}
+  .lcard .arr{color:var(--gold);font-size:1.3rem}
 
-    /* ── FILTER BAR ── */
-    .filter-bar {
-      background: var(--white);
-      border-bottom: 1px solid var(--gray-200);
-      padding: 1rem 2rem;
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      position: sticky;
-      top: 56px;
-      z-index: 90;
-    }
-    .filter-btn {
-      font-family: var(--font-body);
-      font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      color: var(--gray-700);
-      background: var(--gray-100);
-      border: 1px solid var(--gray-200);
-      border-radius: 100px;
-      padding: 0.4rem 1rem;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .filter-btn:hover { border-color: var(--navy); color: var(--navy); }
-    .filter-btn.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+  /* Vendors */
+  .search{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:10px;font-size:1rem;font-family:inherit;background:#fff}
+  .search:focus{outline:none;border-color:var(--navy)}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:12px 0 6px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{white-space:nowrap;border:1.5px solid var(--line);background:#fff;color:var(--navy);border-radius:999px;padding:7px 14px;font-weight:600;font-size:.86rem;cursor:pointer;font-family:inherit}
+  .chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+  .count{font-size:.82rem;color:var(--muted);margin:6px 0 10px}
+  .group h3{font-family:Inter,sans-serif;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+  .vcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin-bottom:10px}
+  .vcard.pick{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+  .vtop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+  .vname{font-weight:700;color:var(--navy)}
+  .badge{flex:none;background:var(--gold);color:var(--navy);font-size:.7rem;font-weight:700;border-radius:999px;padding:3px 9px;letter-spacing:.03em}
+  .vmeta{font-size:.87rem;color:var(--muted);margin-top:2px}
+  .vact{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .empty{text-align:center;color:var(--muted);padding:24px 0}
 
-    /* ── SECTIONS ── */
-    .sections { max-width: 900px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+  /* Steps */
+  .steps{list-style:none;padding:0;margin:0;counter-reset:s}
+  .steps li{counter-increment:s;position:relative;padding:0 0 18px 50px}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:0;width:34px;height:34px;border-radius:50%;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-weight:700;font-family:Fraunces,serif}
+  .steps li:not(:last-child)::after{content:"";position:absolute;left:16px;top:38px;bottom:4px;width:2px;background:var(--line)}
+  .steps b{color:var(--navy)}
+  .steps p{margin:2px 0 0;color:var(--muted);font-size:.93rem}
 
-    .category-section { margin-bottom: 4rem; }
+  /* Forms */
+  .form{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-top:8px}
+  .form label{display:block;font-size:.82rem;font-weight:600;color:var(--navy);margin:0 0 5px}
+  .form input,.form textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:9px;font:inherit;margin-bottom:12px;background:#fff}
+  .form input:focus,.form textarea:focus{outline:none;border-color:var(--navy)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 
-    .category-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .category-icon {
-      width: 42px;
-      height: 42px;
-      background: var(--navy);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      flex-shrink: 0;
-    }
-    .category-label {
-      font-family: var(--font-display);
-      font-size: 1.5rem;
-      color: var(--navy);
-      font-weight: 600;
-    }
-    .category-rule {
-      flex: 1;
-      height: 1px;
-      background: var(--gray-200);
-    }
-
-    /* ── VENDOR CARDS ── */
-    .vendor-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1rem;
-    }
-
-    .vendor-card {
-      background: var(--white);
-      border: 1px solid var(--gray-200);
-      border-radius: 10px;
-      padding: 1.25rem 1.25rem 1rem;
-      border-left: 4px solid var(--gold);
-      transition: box-shadow 0.2s, transform 0.2s;
-      display: flex;
-      flex-direction: column;
-    }
-    .vendor-card:hover {
-      box-shadow: 0 6px 24px rgba(27,58,92,0.1);
-      transform: translateY(-2px);
-    }
-    .vendor-name {
-      font-family: var(--font-display);
-      font-size: 1.05rem;
-      color: var(--navy);
-      font-weight: 600;
-      margin-bottom: 0.35rem;
-    }
-    .vendor-note {
-      font-size: 0.83rem;
-      color: var(--gray-500);
-      font-style: italic;
-      margin-bottom: 0.75rem;
-      line-height: 1.5;
-      flex: 1;
-    }
-    .vendor-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      font-size: 0.8rem;
-      color: var(--gray-700);
-      border-top: 1px solid var(--gray-100);
-      padding-top: 0.75rem;
-      margin-top: 0.25rem;
-    }
-    .vendor-meta a {
-      color: var(--navy);
-      text-decoration: none;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-    .vendor-meta a:hover { color: var(--gold); text-decoration: underline; }
-    .meta-row { display: flex; align-items: flex-start; gap: 0.4rem; }
-    .meta-icon { opacity: 0.5; flex-shrink: 0; margin-top: 1px; }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--navy-deep);
-      color: rgba(255,255,255,0.55);
-      text-align: center;
-      padding: 2rem 1.5rem;
-      font-size: 0.82rem;
-    }
-    footer strong { color: var(--gold); font-weight: 600; }
-
-    /* ── HIDDEN ── */
-    .category-section.hidden { display: none; }
-
-    /* ── MOBILE ── */
-    @media (max-width: 600px) {
-      nav { padding: 0 1rem; }
-      .nav-brand { font-size: 0.85rem; }
-      .hero { padding: 3.5rem 1.25rem 3rem; }
-      .filter-bar { padding: 0.75rem 1rem; }
-      .sections { padding: 2rem 1rem 4rem; }
-      .vendor-grid { grid-template-columns: 1fr; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .vendor-card { transition: none; }
-    }
-  </style>
+  /* Share + footer */
+  .share{text-align:center}
+  footer{background:var(--navy);color:#cfd6e6;padding:28px 0 40px;font-size:.84rem}
+  footer b{color:#fff}
+  footer .gold{color:var(--gold)}
+  footer p{margin:0 0 10px}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:var(--navy);color:#fff;padding:11px 18px;border-radius:999px;font-size:.9rem;transition:transform .25s;z-index:50}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+</style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-brand">Stephen Leick &nbsp;<span>|</span>&nbsp; KW Greater Omaha</div>
-  <div class="nav-links">
-    <a href="#movers">Movers</a>
-    <a href="#mortgage">Lenders</a>
-    <a href="#homeservices">Home Services</a>
-    <a href="#contractors">Contractors</a>
-    <a href="#restaurants">Restaurants</a>
-    <a href="#thingstodo">Things To Do</a>
+<header>
+  <div class="wrap">
+    <div class="mono">SL</div>
+    <div class="firm">Leick Realty</div>
+    <h1>Stephen Leick</h1>
+    <div class="brk">REALTOR® · Keller Williams Greater Omaha<br>Licensed in Nebraska &amp; Iowa</div>
+    <div class="area">Serving Omaha, Council Bluffs, Papillion, La Vista, Bellevue, Elkhorn &amp; Southwest Iowa</div>
   </div>
-</nav>
+</header>
 
-<section class="hero">
-  <p class="hero-eyebrow">Keller Williams Greater Omaha</p>
-  <h1>My Trusted<br>Vendor List</h1>
-  <p class="hero-sub">Hand-picked recommendations I stand behind — for every stage of your move and life in Omaha.</p>
-  <div class="hero-divider"></div>
-</section>
-
-<div class="filter-bar">
-  <button class="filter-btn active" data-filter="all">All</button>
-  <button class="filter-btn" data-filter="movers">Movers</button>
-  <button class="filter-btn" data-filter="mortgage">Lenders</button>
-  <button class="filter-btn" data-filter="homeservices">Home Services</button>
-  <button class="filter-btn" data-filter="contractors">Contractors</button>
-  <button class="filter-btn" data-filter="restaurants">Restaurants</button>
-  <button class="filter-btn" data-filter="thingstodo">Things To Do</button>
+<div class="contact" id="contact">
+  <div class="wrap">
+    <a class="btn btn-navy" data-call href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>Call</a>
+    <a class="btn btn-gold" data-text href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Text</a>
+    <a class="btn btn-ghost" data-email href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>Email</a>
+  </div>
+  <div class="contact-sub"><span data-phone-text></span> · <span data-email-text></span></div>
 </div>
 
-<main class="sections">
+<main class="wrap">
 
-  <!-- MOVERS -->
-  <section class="category-section" id="movers" data-category="movers">
-    <div class="category-header">
-      <div class="category-icon">🚚</div>
-      <h2 class="category-label">Movers</h2>
-      <div class="category-rule"></div>
+  <div class="tip">
+    <div style="font-size:1.6rem">📲</div>
+    <div>
+      <strong>Keep this on your home screen</strong>
+      <p>No app, no login. Save it once and you'll always have my number, my trusted vendors, and your next steps one tap away.</p>
+      <button class="btn btn-navy btn-sm" id="howBtn">Show me how</button>
+      <div class="howto" id="howto">
+        <b>iPhone:</b> tap the Share icon in Safari → <i>Add to Home Screen</i>.<br>
+        <b>Android:</b> tap the ⋮ menu in Chrome → <i>Add to Home screen</i>.
+      </div>
     </div>
-    <div class="vendor-grid">
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
-      </div>
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
-      </div>
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
-      </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b data-cfg="stat1">—</b><span data-cfg="stat1Label"></span></div>
+    <div class="stat"><b data-cfg="stat2">—</b><span data-cfg="stat2Label"></span></div>
+    <div class="stat"><b data-cfg="stat3">—</b><span data-cfg="stat3Label"></span></div>
+  </div>
+
+  <section id="search">
+    <div class="eyebrow">Search homes</div>
+    <h2>Find your next place</h2>
+    <p class="lead">Every listing on the market, updated live. See something you like? Text me the address.</p>
+    <div class="links">
+      <a class="lcard" data-href="searchUrl" href="#"><div><b>Search Omaha-area homes</b><small>All MLS listings in Nebraska &amp; Southwest Iowa</small></div><span class="arr">→</span></a>
+      <a class="lcard" data-href="valueUrl" href="#"><div><b>What's my home worth?</b><small>Get a free market analysis from me</small></div><span class="arr">→</span></a>
     </div>
   </section>
 
-  <!-- MORTGAGE LENDERS -->
-  <section class="category-section" id="mortgage" data-category="mortgage">
-    <div class="category-header">
-      <div class="category-icon">🏦</div>
-      <h2 class="category-label">Mortgage Lenders</h2>
-      <div class="category-rule"></div>
-    </div>
-    <div class="vendor-grid">
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
-      </div>
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
-      </div>
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
-      </div>
+  <section id="reviews">
+    <div class="eyebrow">Reviews</div>
+    <h2>What clients say</h2>
+    <p class="lead">Reviews from past buyers and sellers. If I helped you, a quick review means a lot.</p>
+    <div class="links">
+      <a class="lcard" data-href="readReviewsUrl" href="#"><div><b>Read my reviews</b><small>Google · Zillow</small></div><span class="arr">→</span></a>
+      <a class="lcard" data-href="leaveReviewUrl" href="#"><div><b>Leave a review</b><small>Takes about a minute</small></div><span class="arr">→</span></a>
     </div>
   </section>
 
-  <!-- HOME SERVICES -->
-  <section class="category-section" id="homeservices" data-category="homeservices">
-    <div class="category-header">
-      <div class="category-icon">🔧</div>
-      <h2 class="category-label">Home Services</h2>
-      <div class="category-rule"></div>
-    </div>
-    <div class="vendor-grid">
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
-      </div>
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
-      </div>
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
-      </div>
-    </div>
+  <section id="vendors">
+    <div class="eyebrow">Preferred vendors</div>
+    <h2>People I trust</h2>
+    <p class="lead">The lenders, inspectors, trades and local spots I send my own clients to. My top picks are marked ★.</p>
+    <input class="search" id="vq" type="search" placeholder="Search plumber, lender, roofer…" autocomplete="off">
+    <div class="chips" id="chips"></div>
+    <div class="count" id="vcount"></div>
+    <div id="vlist"></div>
   </section>
 
-  <!-- CONTRACTORS -->
-  <section class="category-section" id="contractors" data-category="contractors">
-    <div class="category-header">
-      <div class="category-icon">🪚</div>
-      <h2 class="category-label">Contractors & Handymen</h2>
-      <div class="category-rule"></div>
-    </div>
-    <div class="vendor-grid">
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
+  <section id="sellers">
+    <div class="eyebrow">Selling</div>
+    <h2>Thinking about selling?</h2>
+    <p class="lead">Here's how it works with me.</p>
+    <ol class="steps">
+      <li><b>Send me your address</b><p>I'll pull recent sales and current competition in your neighborhood.</p></li>
+      <li><b>We walk the house together</b><p>I'll point out what's worth fixing, what to leave alone, and who can help.</p></li>
+      <li><b>Price it right and list it</b><p>Professional photos, MLS, and marketing to get the right buyers in the door.</p></li>
+      <li><b>Negotiate through closing</b><p>Offers, inspection, appraisal, and title. I handle the back-and-forth.</p></li>
+    </ol>
+    <form class="form" id="sellForm">
+      <label for="sAddr">Property address</label>
+      <input id="sAddr" placeholder="123 Main St, Omaha, NE" required>
+      <div class="row2">
+        <button class="btn btn-gold" type="submit" data-via="text">Text it to me</button>
+        <button class="btn btn-ghost" type="submit" data-via="email">Email it</button>
       </div>
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
-      </div>
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
-      </div>
-    </div>
+    </form>
   </section>
 
-  <!-- RESTAURANTS -->
-  <section class="category-section" id="restaurants" data-category="restaurants">
-    <div class="category-header">
-      <div class="category-icon">🍽️</div>
-      <h2 class="category-label">Restaurants</h2>
-      <div class="category-rule"></div>
-    </div>
-    <div class="vendor-grid">
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
-      </div>
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
-      </div>
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
-      </div>
-    </div>
+  <section id="buyers">
+    <div class="eyebrow">Buying</div>
+    <h2>Ready to buy?</h2>
+    <p class="lead">Five steps from first showing to keys in hand.</p>
+    <ol class="steps">
+      <li><b>Get pre-approved</b><p>Know your budget before you fall in love with a house. <a href="#vendors" data-jump="Lenders" style="color:var(--navy);font-weight:600">See my lenders →</a></p></li>
+      <li><b>Search</b><p>I'll set up a live search so you see new listings the minute they hit.</p></li>
+      <li><b>Tour and write offers</b><p>We'll compare homes, and I'll write a strong offer when you find the one.</p></li>
+      <li><b>Inspect and insure</b><p>Inspection, insurance quotes, and appraisal. I'll line up people I trust.</p></li>
+      <li><b>Close</b><p>Final walkthrough, sign at title, get your keys.</p></li>
+    </ol>
   </section>
 
-  <!-- THINGS TO DO -->
-  <section class="category-section" id="thingstodo" data-category="thingstodo">
-    <div class="category-header">
-      <div class="category-icon">🎯</div>
-      <h2 class="category-label">Things To Do</h2>
-      <div class="category-rule"></div>
-    </div>
-    <div class="vendor-grid">
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
+  <section id="clients">
+    <div class="eyebrow">Past clients</div>
+    <h2>Already worked with me?</h2>
+    <p class="lead">Need a contractor? <a href="#vendors" style="color:var(--navy);font-weight:600">Check my vendor list</a>. Know someone thinking about buying or selling? I'd be glad to help them.</p>
+    <form class="form" id="refForm">
+      <div class="row2">
+        <div><label for="rName">Their name</label><input id="rName" required></div>
+        <div><label for="rPhone">Their phone</label><input id="rPhone" type="tel"></div>
       </div>
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
+      <label for="rNote">Anything I should know?</label>
+      <textarea id="rNote" rows="2" placeholder="Buying, selling, timeline…"></textarea>
+      <div class="row2">
+        <button class="btn btn-gold" type="submit" data-via="text">Text referral</button>
+        <button class="btn btn-ghost" type="submit" data-via="email">Email referral</button>
       </div>
-      <div class="vendor-card">
-        <div class="vendor-name">Vendor Name</div>
-        <div class="vendor-note">Add a short note about why you recommend them.</div>
-        <div class="vendor-meta">
-          <div class="meta-row"><span class="meta-icon">📍</span> Omaha, NE</div>
-          <div class="meta-row"><span class="meta-icon">📞</span> (402) 000-0000</div>
-          <div class="meta-row"><span class="meta-icon">🌐</span> <a href="https://www.example.com" target="_blank" rel="noopener">example.com</a></div>
-        </div>
-      </div>
-    </div>
+    </form>
   </section>
 
+  <section class="share" style="border-bottom:0">
+    <h2>Know someone who'd use this?</h2>
+    <p class="lead">Send them the link.</p>
+    <button class="btn btn-navy" id="shareBtn">Share this page</button>
+  </section>
 </main>
 
 <footer>
-  <strong>Stephen Leick</strong> &nbsp;·&nbsp; Keller Williams Greater Omaha<br>
-  <span style="font-size:0.75rem; opacity:0.6; margin-top:0.4rem; display:block;">Questions? Reach out anytime — I'm always happy to help.</span>
+  <div class="wrap">
+    <p><b>Stephen Leick</b>, REALTOR® · <span class="gold">Keller Williams Greater Omaha</span><br>Licensed in Nebraska &amp; Iowa · <span data-phone-text></span> · <span data-email-text></span></p>
+    <p>Vendor recommendations are provided as a courtesy only. Stephen Leick, Leick Realty LLC, and Keller Williams Greater Omaha are not affiliated with, and are not responsible or liable for, the products or services of any business listed. Please do your own due diligence before hiring.</p>
+    <p>Each Keller Williams office is independently owned and operated. Equal Housing Opportunity.</p>
+  </div>
 </footer>
 
+<div class="toast" id="toast"></div>
+
 <script>
-  const btns = document.querySelectorAll('.filter-btn');
-  const sections = document.querySelectorAll('.category-section');
+/* =========================================================
+   Your info and vendors come from your Google Sheet:
+   "Stephen Leick – Website Data". Edit the Sheet, not this file.
+   The values below are only a backup if the Sheet can't load.
+   ========================================================= */
+const SHEET_ID = "1XluNvaKMuCE5ZSEVjFrmukfpiq-uKAWySEVFOcuiK0Q";
 
-  btns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      btns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const filter = btn.dataset.filter;
-      sections.forEach(sec => {
-        if (filter === 'all' || sec.dataset.category === filter) {
-          sec.classList.remove('hidden');
-        } else {
-          sec.classList.add('hidden');
-        }
-      });
-    });
+let CONFIG = {
+  phone: "4029904750",
+  email: "stephen@leickhomes.com",
+  textGreeting: "Hi Stephen! ",
+  stat1: "150+", stat1Label: "homes sold",
+  stat2: "9+",   stat2Label: "years in real estate",
+  stat3: "5★",   stat3Label: "client reviews",      // REPLACE
+  searchUrl: "https://www.kw.com/",                  // your KW search link — REPLACE
+  valueUrl: "",                                      // blank = opens a text to you
+  readReviewsUrl: "https://www.google.com/search?q=Stephen+Leick+Keller+Williams+Omaha",
+  leaveReviewUrl: "",                                // your Google "write a review" link — REPLACE
+};
+
+/* Vendors: cat = filter group, sub = type. pick:true pins to the top with a ★.
+   Leave any field "" to hide its button. */
+let VENDORS = [
+  {cat:"Real estate", sub:"Lenders", name:"Lender name", contact:"Loan officer", phone:"", email:"", web:"", address:"", pick:true},
+  {cat:"Real estate", sub:"Lenders", name:"Lender name", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Real estate", sub:"Home insurance", name:"Insurance agency", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Real estate", sub:"Title & escrow", name:"Title company", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Real estate", sub:"Home inspectors", name:"Inspection company", contact:"", phone:"", email:"", web:"", address:"", pick:true},
+  {cat:"Real estate", sub:"Radon & sewer scope", name:"Radon / sewer scope company", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Legal & tax", sub:"Real estate attorney", name:"Law firm", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Legal & tax", sub:"Estate & probate", name:"Law firm", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Legal & tax", sub:"CPA / taxes", name:"CPA firm", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Home services", sub:"Plumbers", name:"Plumbing company", contact:"", phone:"", email:"", web:"", address:"", pick:true},
+  {cat:"Home services", sub:"Electricians", name:"Electrical company", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Home services", sub:"HVAC", name:"Heating & air company", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Home services", sub:"Roofers", name:"Roofing company", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Home services", sub:"General contractors", name:"Contractor", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Home services", sub:"Handyman", name:"Handyman", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Home services", sub:"Painters", name:"Painting company", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Home services", sub:"Garage doors", name:"Garage door company", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Home services", sub:"Foundation & waterproofing", name:"Foundation repair company", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Home services", sub:"Lawn & landscaping", name:"Lawn care company", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Home services", sub:"Tree service", name:"Tree service", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Home services", sub:"Snow removal", name:"Snow removal", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Home services", sub:"Pest control", name:"Pest control company", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Home services", sub:"Cleaning", name:"Cleaning service", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Moving & specialty", sub:"Movers", name:"Moving company", contact:"", phone:"", email:"", web:"", address:"", pick:true},
+  {cat:"Moving & specialty", sub:"Junk removal", name:"Junk removal", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Moving & specialty", sub:"Storage", name:"Storage facility", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Moving & specialty", sub:"Security systems", name:"Security company", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Local favorites", sub:"Restaurants", name:"Restaurant", contact:"", phone:"", email:"", web:"", address:""},
+  {cat:"Local favorites", sub:"Things to do", name:"Local spot", contact:"", phone:"", email:"", web:"", address:""},
+];
+
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const digits = s => String(s||"").replace(/\D/g,"");
+const fmtPhone = s => { const d=digits(s); return d.length===10 ? `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}` : s; };
+const sms = (num, body) => `sms:${digits(num)}${/iP(hone|ad|od)/.test(navigator.userAgent)?'&':'?'}body=${encodeURIComponent(body)}`;
+const mail = (subj, body) => `mailto:${CONFIG.email}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+const toast = m => { const t=$('#toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); };
+const esc = s => String(s??"").replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fixUrl = u => !u ? "" : /^https?:\/\//i.test(u) ? u : "https://"+u;
+
+function applyConfig(){
+  $$('[data-call]').forEach(a=>a.href=`tel:${digits(CONFIG.phone)}`);
+  $$('[data-text]').forEach(a=>a.href=sms(CONFIG.phone, CONFIG.textGreeting));
+  $$('[data-email]').forEach(a=>a.href=mail("Real estate question",""));
+  $$('[data-phone-text]').forEach(e=>e.innerHTML=`<a href="tel:${digits(CONFIG.phone)}">${esc(fmtPhone(CONFIG.phone))}</a>`);
+  $$('[data-email-text]').forEach(e=>e.innerHTML=`<a href="mailto:${esc(CONFIG.email)}">${esc(CONFIG.email)}</a>`);
+  $$('[data-cfg]').forEach(e=>e.textContent=CONFIG[e.dataset.cfg]||"");
+  $$('[data-href]').forEach(a=>{
+    const u=fixUrl(CONFIG[a.dataset.href]);
+    if(u){a.href=u;a.target="_blank";a.rel="noopener";}
+    else {a.removeAttribute('target'); a.href=sms(CONFIG.phone, a.dataset.href==="valueUrl" ? CONFIG.textGreeting+"I'd like to know what my home is worth. My address is: " : CONFIG.textGreeting);}
   });
-</script>
+}
 
+// Vendors
+let cat="All";
+function buildChips(){
+  const cats=["All",...new Set(VENDORS.map(v=>v.cat).filter(Boolean))];
+  if(!cats.includes(cat)) cat="All";
+  $('#chips').innerHTML=cats.map(c=>`<button class="chip${c===cat?" on":""}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
+}
+$('#chips').onclick=e=>{const b=e.target.closest('.chip'); if(!b) return; cat=b.dataset.c; $$('.chip').forEach(x=>x.classList.toggle('on',x===b)); render();};
+$('#vq').oninput=render;
+
+function card(v){
+  const a=[];
+  if(digits(v.phone)){a.push(`<a class="btn btn-navy btn-sm" href="tel:${digits(v.phone)}">Call</a>`);a.push(`<a class="btn btn-gold btn-sm" href="${sms(v.phone,"Hi, Stephen Leick referred me. ")}">Text</a>`);}
+  if(v.email) a.push(`<a class="btn btn-ghost btn-sm" href="mailto:${esc(v.email)}?subject=${encodeURIComponent("Referred by Stephen Leick")}">Email</a>`);
+  if(v.web) a.push(`<a class="btn btn-ghost btn-sm" href="${esc(fixUrl(v.web))}" target="_blank" rel="noopener">Website</a>`);
+  const meta=[v.contact, v.phone&&fmtPhone(v.phone), v.address].filter(Boolean).map(esc).join(" · ");
+  return `<div class="vcard${v.pick?" pick":""}"><div class="vtop"><div class="vname">${esc(v.name)}</div>${v.pick?'<span class="badge">★ Stephen\'s pick</span>':""}</div>${meta?`<div class="vmeta">${meta}</div>`:""}${a.length?`<div class="vact">${a.join("")}</div>`:""}</div>`;
+}
+function render(){
+  const q=$('#vq').value.trim().toLowerCase();
+  const list=VENDORS.filter(v=>v.name&&(cat==="All"||v.cat===cat)&&(!q||[v.name,v.sub,v.cat,v.contact,v.address].join(" ").toLowerCase().includes(q)));
+  const groups={};
+  list.forEach(v=>(groups[v.sub||"Other"]=groups[v.sub||"Other"]||[]).push(v));
+  $('#vcount').textContent=`${list.length} vendor${list.length===1?"":"s"}`;
+  $('#vlist').innerHTML=Object.keys(groups).length
+    ? Object.entries(groups).map(([s,vs])=>`<div class="group"><h3>${esc(s)}</h3>${vs.sort((a,b)=>(b.pick?1:0)-(a.pick?1:0)).map(card).join("")}</div>`).join("")
+    : `<div class="empty">No matches. <a href="${sms(CONFIG.phone,CONFIG.textGreeting+"Do you know a good ")}" style="color:var(--navy);font-weight:600">Text me</a> and I'll find someone.</div>`;
+}
+$$('[data-jump]').forEach(a=>a.addEventListener('click',()=>{$('#vq').value=a.dataset.jump;render();}));
+
+function applyAll(){ applyConfig(); buildChips(); render(); }
+applyAll();
+
+// Load the Google Sheet
+function parseCSV(t){
+  const rows=[]; let row=[], f="", q=false;
+  for(let i=0;i<t.length;i++){
+    const c=t[i];
+    if(q){ if(c==='"'){ if(t[i+1]==='"'){f+='"';i++;} else q=false; } else f+=c; }
+    else if(c==='"') q=true;
+    else if(c===','){ row.push(f); f=""; }
+    else if(c==='\n'||c==='\r'){ if(c==='\r'&&t[i+1]==='\n') i++; row.push(f); rows.push(row); row=[]; f=""; }
+    else f+=c;
+  }
+  if(f!==""||row.length){ row.push(f); rows.push(row); }
+  return rows;
+}
+async function sheetTab(name){
+  const r=await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(name)}`,{cache:"no-store"});
+  if(!r.ok) throw new Error(r.status);
+  const rows=parseCSV(await r.text());
+  const head=rows.shift().map(h=>h.trim().toLowerCase());
+  return rows.map(r=>Object.fromEntries(head.map((h,i)=>[h,(r[i]||"").trim()])));
+}
+(async()=>{
+  try{
+    const [info, vendors] = await Promise.all([sheetTab("Info"), sheetTab("Vendors")]);
+    const cfg={...CONFIG};
+    info.forEach(r=>{ if(r.setting && r.setting in cfg) cfg[r.setting]=r.value; });
+    if(!/\s$/.test(cfg.textGreeting)) cfg.textGreeting+=" ";
+    CONFIG=cfg;
+    const v=vendors.filter(r=>r.business).map(r=>({cat:r.category,sub:r.type,name:r.business,contact:r.contact,phone:r.phone,email:r.email,web:r.website,address:r.address,pick:/^(y|yes|x|★|true)/i.test(r["top pick"]||"")}));
+    if(v.length) VENDORS=v;
+    applyAll();
+  }catch(e){ /* Sheet unavailable: backup values stay on screen */ }
+})();
+
+// Forms
+function viaSubmit(form, build){
+  let via="text";
+  form.querySelectorAll('[data-via]').forEach(b=>b.addEventListener('click',()=>via=b.dataset.via));
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const {subj,body}=build();
+    location.href = via==="text" ? sms(CONFIG.phone, body) : mail(subj, body);
+  });
+}
+viaSubmit($('#sellForm'),()=>({subj:"Thinking about selling", body:`${CONFIG.textGreeting}I'm thinking about selling. My address is ${$('#sAddr').value}.`}));
+viaSubmit($('#refForm'),()=>({subj:"Referral", body:`${CONFIG.textGreeting}I have a referral for you: ${$('#rName').value}${$('#rPhone').value?`, ${$('#rPhone').value}`:""}.${$('#rNote').value?` ${$('#rNote').value}`:""}`}));
+$('#howBtn').onclick=()=>$('#howto').classList.toggle('show');
+
+// Share
+$('#shareBtn').onclick=async()=>{
+  const data={title:"Stephen Leick | Keller Williams Greater Omaha",text:"My go-to real estate agent and his trusted vendor list:",url:location.href.split('#')[0]};
+  try{ if(navigator.share){ await navigator.share(data); return; } }catch(e){ if(e.name==="AbortError") return; }
+  try{ await navigator.clipboard.writeText(data.url); toast("Link copied"); }catch(e){ toast(data.url); }
+};
+</script>
 </body>
 </html>
