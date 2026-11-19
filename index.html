@@ -303,6 +303,7 @@
   .ss-card{width:100%;max-width:440px;background:var(--paper);border-radius:22px;padding:20px 18px 14px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
   .ss-k{margin:0;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-ink)}
   .ss-t{margin:4px 0 0;font-family:var(--serif);font-size:24px;line-height:1.15;font-style:italic;color:var(--ink)}
+  .ss-co{margin:2px 0 0;font-size:17px;font-weight:600;color:var(--ink)}
   .ss-d{margin:10px 0 0;font-size:16px;line-height:1.5;color:var(--ink)}
   .ss-go{display:block;width:100%;height:52px;margin-top:16px;border:0;border-radius:16px;background:var(--navy);color:var(--cream);font-size:16px;font-weight:600;cursor:pointer}
   .ss-no{display:block;width:100%;height:44px;margin-top:6px;border:0;background:none;color:var(--muted);font-size:15px;font-weight:600;cursor:pointer}
@@ -768,7 +769,7 @@ function vcardFor(v){
   const saved=new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
   L.push(`NOTE:${e((v.sub?v.sub+" · ":"")+"Recommended by Stephen Leick · Saved "+saved)}`);
   L.push("END:VCARD");
-  return { text:L.join("\r\n")+"\r\n", file:(person||biz).replace(/[^A-Za-z0-9 &'-]/g,"").trim().replace(/\s+/g,"-")+".vcf", label:person||biz, title:person?person+" | "+biz:biz };
+  return { text:L.join("\r\n")+"\r\n", file:(person||biz).replace(/[^A-Za-z0-9 &'-]/g,"").trim().replace(/\s+/g,"-")+".vcf", label:person||biz, sub:person?biz:"" };
 }
 function saveContact(v){
   const c=vcardFor(v), ios=/iP(hone|ad|od)/.test(navigator.userAgent);
@@ -776,18 +777,19 @@ function saveContact(v){
   const url=URL.createObjectURL(blob);
   const go=()=>{ const a=document.createElement('a'); a.href=url; a.download=c.file; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),60000); };
   // iPhone opens a preview; the add button is at the bottom of it, so say so first.
-  if(ios){ iosSaveSheet(c.title,go); }
+  if(ios){ iosSaveSheet(c.label,c.sub,go); }
   else { go(); toast("Open the download to add "+c.label); }
   try{ track('vendor-save-contact',{vendor:c.label}); }catch(_){}
 }
 /* iPhone: explain the next screen first, and open the contact only when they tap the button. */
-function iosSaveSheet(label,go){
+function iosSaveSheet(label,sub,go){
   let el=$('#saveSheet');
   if(!el){
     el=document.createElement('div'); el.id='saveSheet';
     el.innerHTML=`<div class="ss-card" role="dialog" aria-modal="true" aria-labelledby="ssT">
       <p class="ss-k">Save to contacts</p>
       <p class="ss-t" id="ssT"></p>
+      <p class="ss-co"></p>
       <p class="ss-d">On the next screen, <b>scroll to the bottom</b> and tap <b>Add to Contacts</b> (or <b>Create New Contact</b>).</p>
       <button type="button" class="ss-go">Open contact</button>
       <button type="button" class="ss-no">Cancel</button></div>`;
@@ -795,6 +797,7 @@ function iosSaveSheet(label,go){
     el.addEventListener('click',e=>{ if(e.target===el||e.target.closest('.ss-no')) el.classList.remove('show'); });
   }
   el.querySelector('.ss-t').textContent=label;
+  el.querySelector('.ss-co').textContent=sub||""; el.querySelector('.ss-co').hidden=!sub;
   el.querySelector('.ss-go').onclick=()=>{ el.classList.remove('show'); go(); };
   el.classList.add('show');
 }
