@@ -13,7 +13,33 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<script defer src="https://cloud.umami.is/script.js" data-website-id="e9c338e4-6dce-4bea-92c1-7bca11f58880" data-domains="vendors.leickhomes.com"></script>
+<script>
+/* Personal links: put the client's tag on every Umami entry so the Activity list shows who did what. */
+(function(){
+  var c='';
+  try{ c=new URLSearchParams(location.search).get('c')||localStorage.getItem('slc')||''; }catch(e){}
+  c=String(c).toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40);
+  window.umamiBeforeSend=function(type,p){
+    try{
+      if(!c||!p) return p;
+      if(type==='event'&&p.name){
+        var d=p.data||{}, k=Object.keys(d).filter(function(x){return x!=='client';})[0];
+        var detail=k?String(d[k]):'', tail=' · '+c, base=p.name+(detail?': ':'');
+        var room=50-base.length-tail.length;
+        if(detail&&room<4){ detail=''; base=p.name; room=50-base.length-tail.length; }
+        if(detail.length>room) detail=detail.slice(0,room-1)+'…';
+        p.name=(base+detail+tail).slice(0,50);
+        p.data=Object.assign({},d,{client:c});
+      } else if(p.url){
+        var u=new URL(p.url,location.origin);
+        p.url='/c/'+c+u.pathname+u.hash;
+      }
+    }catch(e){}
+    return p;
+  };
+})();
+</script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="e9c338e4-6dce-4bea-92c1-7bca11f58880" data-domains="vendors.leickhomes.com" data-before-send="umamiBeforeSend"></script>
 <title>Stephen Leick's Vendor List</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
