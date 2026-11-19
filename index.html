@@ -744,6 +744,15 @@ document.addEventListener('click',e=>{
   const act=a.classList.contains('call')?'call':(a.getAttribute('aria-label')||a.textContent).trim().toLowerCase();
   track('vendor-'+act,{vendor:(cardEl&&cardEl.querySelector('.vname')||{}).textContent||'', type:sub?sub.dataset.key.split('|')[1]:''});
 });
+// Call / text / email links open another app right away, which can cut off the tracking message.
+// Give it a quarter second to send first.
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[href^="tel:"],a[href^="sms:"],a[href^="mailto:"]');
+  if(!a || e.defaultPrevented || e.metaKey || e.ctrlKey) return;
+  e.preventDefault();
+  const href=a.getAttribute('href');
+  setTimeout(()=>{ location.href=href; },250);
+});
 // "+ more" / show-less links and category chips
 document.addEventListener('click',e=>{
   const m=e.target.closest('.more'); if(m){ const sub=m.closest('.vsub'); track(m.classList.contains('less')?'type-collapse':'type-expand',{type:sub?sub.dataset.key.split('|')[1]:''}); }
