@@ -422,14 +422,6 @@
     </div>
   </section>
 
-  <section id="lenders">
-    <p class="eyebrow">Get pre-approved</p>
-    <h2>Two lenders I trust</h2>
-    <p class="lead">Both are local loan officers my clients use. Talk to one or both, compare, and go with whoever fits you best.</p>
-    <div class="lgrid" id="lgrid"></div>
-    <p class="hint">You're free to use any lender you choose.</p>
-  </section>
-
   <section id="buyers">
     <p class="eyebrow">Buyers</p>
     <h2>From pre-approval to keys</h2>
@@ -440,6 +432,14 @@
       <li><span class="num">4</span><div><b>Inspect and insure</b><p>Inspection, insurance quotes, and radon and sewer checks from people I trust. They're all in the vendor list.</p></div></li>
       <li><span class="num">5</span><div><b>Close</b><p>Final walkthrough, sign at title, and get your keys.</p></div></li>
     </ol>
+  </section>
+
+  <section id="lenders">
+    <p class="eyebrow">Get pre-approved</p>
+    <h2>Two lenders I trust</h2>
+    <p class="lead">Both are local loan officers my clients use. Talk to one or both, compare, and go with whoever fits you best.</p>
+    <div class="lgrid" id="lgrid"></div>
+    <p class="hint">You're free to use any lender you choose.</p>
   </section>
 </div>
 <div class="panel" data-panel="selling">
@@ -820,7 +820,7 @@ function applyLender(){
       ${btns.length?`<div class="row">${btns.join("")}</div>`:""}
     </div>`;
   }).join("");
-  $('#lenderLine').textContent = lenders.length>1 ? `Talk to ${lenders.map(first).join(lenders.length===2?" or ":", ")} above.` : (lenders.length ? `Start with ${first(lenders[0])} above.` : "");
+  $('#lenderLine').textContent = lenders.length>1 ? `Talk to ${lenders.map(first).join(lenders.length===2?" or ":", ")} below.` : (lenders.length ? `Start with ${first(lenders[0])} below.` : "");
 }
 $('#lgrid').addEventListener('click',e=>{
   const a=e.target.closest('[data-lact]'); if(!a) return;
