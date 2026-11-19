@@ -745,7 +745,7 @@ viaSubmit($('#refForm'),()=>({subj:"Referral", body:`${CONFIG.textGreeting}I hav
 /* ---------- Home screen + share ---------- */
 $('#hsBtn').onclick=()=>$('#howto').classList.toggle('show');
 $$('[data-share]').forEach(b=>b.onclick=async()=>{
-  const data={title:"Stephen Leick's Vendor List",text:"My go-to real estate agent and his trusted vendor list:",url:location.href.split('#')[0]};
+  const data={title:"Stephen Leick's Vendor List",text:"My go-to real estate agent and his trusted vendor list:",url:location.origin+location.pathname+(CLIENT?"?ref="+CLIENT:"")};
   try{ if(navigator.share){ await navigator.share(data); return; } }catch(e){ if(e.name==="AbortError") return; }
   try{ await navigator.clipboard.writeText(data.url); toast("Link copied"); }catch(e){ toast(data.url); }
 });
@@ -759,6 +759,13 @@ function track(name,data){ try{ if(window.umami) umami.track(name, CLIENT?Object
   if(!window.umami){ if(n<40) setTimeout(()=>whenUmami(n+1),250); return; }
   try{ umami.identify(CLIENT,{client:CLIENT}); }catch(e){ try{ umami.identify({client:CLIENT}); }catch(_){} }
   track('client-visit');
+})(0);
+// Shared links (?ref=mary-leick, ?ref=qr, ?ref=vendor): who or what sent this visitor
+(function whenRef(n){
+  let r=''; try{ r=(new URLSearchParams(location.search).get('ref')||'').toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40); }catch(e){}
+  if(!r) return;
+  if(!window.umami){ if(n<40) setTimeout(()=>whenRef(n+1),250); return; }
+  track('referred-visit',{ref:r});
 })(0);
 // Keep the personal tag if they add the site to their home screen
 if(CLIENT){ try{
