@@ -235,6 +235,7 @@
   nav svg{width:20px;height:20px}
 
   .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);opacity:0;background:var(--navy);color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;transition:.2s;z-index:40;pointer-events:none}
+  .toast{width:max-content;max-width:calc(100% - 40px);text-align:center}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
   /* Desktop */
@@ -571,7 +572,7 @@ const digits = s => { const d=String(s||"").replace(/\D/g,""); return d.length==
 const fmtPhone = s => { const d=digits(s); return d.length===10 ? `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}` : (s||""); };
 const sms = (num, body) => `sms:${digits(num)}${/iP(hone|ad|od)/.test(navigator.userAgent)?'&':'?'}body=${encodeURIComponent(body)}`;
 const mail = (subj, body) => `mailto:${CONFIG.email}?subject=${encodeURIComponent("Vendor List: "+subj)}&body=${encodeURIComponent(body)}`;
-const toast = m => { const t=$('#toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); };
+const toast = (m,ms) => { const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.remove('show'),ms||2200); };
 const esc = s => String(s??"").replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fixUrl = u => !u ? "" : /^https?:\/\//i.test(u) ? u : "https://"+u;
 const cap = s => s ? s.charAt(0).toUpperCase()+s.slice(1) : s;
@@ -750,18 +751,20 @@ function vcardFor(v){
   if(digits(v.office)) L.push(`TEL;TYPE=WORK:${fmtPhone(v.office)}`);
   if(v.email) L.push(`EMAIL;TYPE=WORK:${String(v.email).trim()}`);
   if(v.web) L.push(`URL:${fixUrl(v.web)}`);
+  L.push("item1.URL:https://vendors.leickhomes.com/?ref=contact", "item1.X-ABLabel:Stephen's Vendor List");
   if(local&&v.contact) L.push(`ADR;TYPE=WORK:;;${e(v.contact)};;;;`);
   L.push(`NOTE:${e((v.sub?v.sub+" · ":"")+"Recommended by Stephen Leick · vendors.leickhomes.com")}`);
   L.push("END:VCARD");
   return { text:L.join("\r\n")+"\r\n", file:(person||biz).replace(/[^A-Za-z0-9 &'-]/g,"").trim().replace(/\s+/g,"-")+".vcf", label:person||biz };
 }
 function saveContact(v){
-  const c=vcardFor(v);
+  const c=vcardFor(v), ios=/iP(hone|ad|od)/.test(navigator.userAgent);
   const blob=new Blob([c.text],{type:"text/vcard;charset=utf-8"});
   const url=URL.createObjectURL(blob);
-  const a=document.createElement('a'); a.href=url; a.download=c.file; document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),60000);
-  toast("Contact card saved. Open it to add "+c.label);
+  const go=()=>{ const a=document.createElement('a'); a.href=url; a.download=c.file; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),60000); };
+  // iPhone opens a preview; the add button is at the bottom of it, so say so first.
+  if(ios){ toast("Next: scroll to the bottom and tap Add to Contacts to save "+c.label,3500); setTimeout(go,1300); }
+  else { go(); toast("Open the download to add "+c.label); }
   try{ track('vendor-save-contact',{vendor:c.label}); }catch(_){}
 }
 document.addEventListener('click',e=>{ const b=e.target.closest('.vsave'); if(!b) return; const v=VENDORS[+b.dataset.vid]; if(v) saveContact(v); });
