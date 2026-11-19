@@ -442,6 +442,7 @@
 
   <footer>
     <p>Vendor recommendations are a courtesy only. Stephen Leick and Keller Williams Greater Omaha are not affiliated with or liable for these businesses. Each Keller Williams office is independently owned and operated. Equal Housing Opportunity.</p>
+    <p>Personal links help Stephen follow up with helpful info. No cookies, nothing sold.</p>
     <p>Stephen Leick · <span data-cfg="brokerage"></span> · Licensed in Nebraska &amp; Iowa · <span data-email-text></span></p>
   </footer>
 </main>
@@ -736,7 +737,21 @@ $$('[data-share]').forEach(b=>b.onclick=async()=>{
 });
 
 /* ---------- Visit tracking (Umami, cookie-free) ---------- */
-function track(name,data){ try{ if(window.umami) umami.track(name,data); }catch(e){} }
+/* Personal links: vendors.leickhomes.com/?c=mary-leick tags that visitor (remembered on their device) */
+const CLIENT=(()=>{ let c=null; try{ c=new URLSearchParams(location.search).get('c'); if(c) localStorage.setItem('slc',c); else c=localStorage.getItem('slc'); }catch(e){} return c?String(c).toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40):''; })();
+function track(name,data){ try{ if(window.umami) umami.track(name, CLIENT?Object.assign({},data||{},{client:CLIENT}):data); }catch(e){} }
+(function whenUmami(n){
+  if(!CLIENT) return;
+  if(!window.umami){ if(n<40) setTimeout(()=>whenUmami(n+1),250); return; }
+  try{ umami.identify(CLIENT,{client:CLIENT}); }catch(e){ try{ umami.identify({client:CLIENT}); }catch(_){} }
+  track('client-visit');
+})(0);
+// Keep the personal tag if they add the site to their home screen
+if(CLIENT){ try{
+  const m={name:"Stephen Leick's Vendor List",short_name:"Stephen Leick's Vendor List",start_url:location.origin+location.pathname+"?c="+CLIENT,scope:location.origin+location.pathname,display:"standalone",background_color:"#14213d",theme_color:"#14213d",icons:[{src:location.origin+location.pathname+"icon-192.png",sizes:"192x192",type:"image/png"},{src:location.origin+location.pathname+"icon-512.png",sizes:"512x512",type:"image/png"}]};
+  const l=document.querySelector('link[rel=manifest]'); if(l) l.href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/manifest+json'}));
+  if(!new URLSearchParams(location.search).get('c')) history.replaceState(null,'',location.pathname+"?c="+CLIENT+location.hash);
+}catch(e){} }
 // Vendor buttons: which vendor, which action
 document.addEventListener('click',e=>{
   const a=e.target.closest('.vbtns a'); if(!a) return;
