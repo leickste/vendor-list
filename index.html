@@ -408,6 +408,19 @@
       </div>
     </form>
   </section>
+
+  <section id="moving">
+    <form class="card refer" id="moveForm" style="margin-top:0">
+      <h3><svg><use href="#i-users"/></svg>Moving out of the area?</h3>
+      <p>I'll sell your home here and connect you with an agent I've vetted where you're headed, so you're covered on both ends.</p>
+      <label class="label" for="mWhere">Where are you moving?</label>
+      <input class="field" id="mWhere" placeholder="Denver, CO" required>
+      <div class="pair">
+        <button class="btn dark" type="submit" data-via="text">Text Stephen</button>
+        <button class="btn light" type="submit" data-via="email">Email Stephen</button>
+      </div>
+    </form>
+  </section>
 </div>
 <div class="panel" data-panel="refer">
   <section id="reviews">
@@ -649,7 +662,7 @@ $('#lenderBtn').addEventListener('click',e=>{ if($('#lenderBtn').getAttribute('h
 
 /* ---------- Tabs ---------- */
 const TABS=["vendors","local","buying","selling","refer"];
-const ALIAS={sellers:"selling",buyers:"buying",search:"buying",reviews:"refer",help:"refer"};
+const ALIAS={sellers:"selling",buyers:"buying",search:"buying",reviews:"refer",help:"refer",moving:"selling"};
 function tabFromHash(){ const h=location.hash.slice(1); return TABS.includes(h)?h:(ALIAS[h]||"vendors"); }
 function showTab(name, scroll){
   $$('.panel').forEach(p=>p.classList.toggle('on', p.dataset.panel===name));
@@ -726,6 +739,7 @@ function viaSubmit(form, build){
   });
 }
 viaSubmit($('#sellForm'),()=>({subj:"What's my home worth?", body:`${CONFIG.textGreeting}I'd like to know what my home is worth. The address is ${$('#sAddr').value}.`}));
+viaSubmit($('#moveForm'),()=>({subj:"Moving out of the area", body:`${CONFIG.textGreeting}I'm moving to ${$('#mWhere').value}. Can you help me sell here and find an agent there?`}));
 viaSubmit($('#refForm'),()=>({subj:"Referral", body:`${CONFIG.textGreeting}I have a referral for you: ${$('#rInfo').value}.`}));
 
 /* ---------- Home screen + share ---------- */
@@ -787,6 +801,7 @@ $('#vq').addEventListener('input',()=>{
 // Forms and share
 $('#sellForm').addEventListener('submit',()=>track('seller-lead'));
 $('#refForm').addEventListener('submit',()=>track('referral-sent'));
+$('#moveForm').addEventListener('submit',()=>track('relocation-lead',{to:$('#mWhere').value.slice(0,60)}));
 $$('[data-share]').forEach(b=>b.addEventListener('click',()=>track('share')));
 $$('nav:not(.tabs) a, nav:not(.tabs) button').forEach(x=>x.addEventListener('click',()=>track('bottom-bar',{item:x.textContent.trim()})));
 </script>
