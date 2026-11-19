@@ -768,7 +768,7 @@ function vcardFor(v){
   const saved=new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
   L.push(`NOTE:${e((v.sub?v.sub+" · ":"")+"Recommended by Stephen Leick · Saved "+saved)}`);
   L.push("END:VCARD");
-  return { text:L.join("\r\n")+"\r\n", file:(person||biz).replace(/[^A-Za-z0-9 &'-]/g,"").trim().replace(/\s+/g,"-")+".vcf", label:person||biz };
+  return { text:L.join("\r\n")+"\r\n", file:(person||biz).replace(/[^A-Za-z0-9 &'-]/g,"").trim().replace(/\s+/g,"-")+".vcf", label:person||biz, title:person?person+" | "+biz:biz };
 }
 function saveContact(v){
   const c=vcardFor(v), ios=/iP(hone|ad|od)/.test(navigator.userAgent);
@@ -776,7 +776,7 @@ function saveContact(v){
   const url=URL.createObjectURL(blob);
   const go=()=>{ const a=document.createElement('a'); a.href=url; a.download=c.file; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),60000); };
   // iPhone opens a preview; the add button is at the bottom of it, so say so first.
-  if(ios){ iosSaveSheet(c.label,go); }
+  if(ios){ iosSaveSheet(c.title,go); }
   else { go(); toast("Open the download to add "+c.label); }
   try{ track('vendor-save-contact',{vendor:c.label}); }catch(_){}
 }
