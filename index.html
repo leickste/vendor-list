@@ -275,6 +275,16 @@
   .search input::placeholder{color:#8a7a4a}
   .search svg{color:var(--gold-ink) !important;width:18px;height:18px}
   .search input:focus{outline:3px solid rgba(201,162,39,.35) !important;outline-offset:1px}
+  .search input{padding-right:46px}
+  .search input::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none;display:none}
+  .search .clear{position:absolute;right:9px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;border:0;background:#efe5c8;color:var(--navy);font-size:20px;line-height:30px;padding:0;cursor:pointer}
+  .search .clear[hidden]{display:none}
+  .try{display:flex;flex-wrap:nowrap;align-items:center;gap:6px;margin:10px -20px 0;padding:0 20px 2px;overflow-x:auto;scrollbar-width:none;font-size:13px;color:var(--muted);white-space:nowrap}
+  .try::-webkit-scrollbar{display:none}
+  .try button{flex:none}
+  @media (min-width:960px){ .try{margin:10px 0 0;padding:0;flex-wrap:wrap} }
+  .try button{border:1px solid var(--gold);background:#fff;color:var(--navy);border-radius:999px;padding:4px 11px;font-size:13px;font-weight:600;cursor:pointer}
+  .vwhy{margin:4px 0 0;font-size:13px;color:var(--gold-ink);font-weight:600}
   #rInfo{border:2px solid var(--gold) !important;background:#fff8e6 !important;box-shadow:0 2px 8px rgba(201,162,39,.18)}
   #rInfo::placeholder{color:#8a7a4a}
   #rInfo:focus{outline:3px solid rgba(201,162,39,.35) !important;outline-offset:1px}
@@ -373,7 +383,8 @@
     <p class="eyebrow">Preferred vendors</p>
     <h2>People I actually call</h2>
     <p class="lead">Lenders, inspectors, and the trades I send my own clients to. My top picks are pinned at the top of their lists.</p>
-    <label class="search"><svg><use href="#i-search"/></svg><input id="vq" type="search" placeholder="Search plumber, lender, name…" autocomplete="off"></label>
+    <label class="search"><svg><use href="#i-search"/></svg><input id="vq" type="search" placeholder="Search plumber, lender, name…" autocomplete="off" enterkeyhint="search"><button type="button" class="clear" id="vclear" aria-label="Clear search" hidden>×</button></label>
+    <p class="try" id="vtry">Popular: <button type="button" data-q="plumber">Plumber</button><button type="button" data-q="hvac">HVAC</button><button type="button" data-q="roofer">Roofer</button><button type="button" data-q="handyman">Handyman</button><button type="button" data-q="electrician">Electrician</button><button type="button" data-q="lender">Lender</button><button type="button" data-q="inspector">Inspector</button></p>
     <div class="chips" id="chips"></div>
     <p class="count" id="vcount"></p>
     <div id="vlist"></div>
@@ -532,6 +543,7 @@ let CONFIG = {
   leaveReviewUrl: "https://g.page/leickhomes/review?gm",
 };
 let VENDORS = [];
+const QPARAM=(()=>{ try{ return (new URLSearchParams(location.search).get("q")||"").slice(0,60); }catch(e){ return ""; } })();
 
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const digits = s => { const d=String(s||"").replace(/\D/g,""); return d.length===11 && d[0]==="1" ? d.slice(1) : d; };
@@ -569,6 +581,9 @@ function buildChips(){
 }
 $('#chips').onclick=e=>{const b=e.target.closest('.chip'); if(!b) return; cat=b.dataset.c; $$('.chip').forEach(x=>x.classList.toggle('on',x===b)); render();};
 $('#vq').oninput=render;
+$('#vclear').onclick=e=>{ e.preventDefault(); $('#vq').value=""; render(); $('#vq').focus(); };
+$('#vtry').onclick=e=>{ const b=e.target.closest('[data-q]'); if(!b) return; $('#vq').value=b.dataset.q; render(); try{ track('quick-search',{q:b.dataset.q}); }catch(_){} };
+$('#vq').addEventListener('keydown',e=>{ if(e.key==="Enter"){ e.preventDefault(); $('#vq').blur(); } });
 
 /* Extra words people search for, matched against each vendor's Type */
 const SYNONYMS = [
@@ -621,6 +636,55 @@ function matchText(text,q){
   const sq=squish(q);
   return sq.length>=4 && squish(t).includes(sq);
 }
+/* Plain-English searches: drop filler words, match the rest in any order, forgive small typos. */
+const STOP=new Set(("i im my me we our us a an the for to of in on at and or is are it its this that there "+
+  "need needs needed want wanted wants looking look find finding someone somebody anyone anybody person people guy guys gal "+
+  "company companies business service services good best great reliable trusted cheap affordable local near nearby around area "+
+  "omaha council bluffs iowa nebraska recommend recommendation recommendations recommended who can could would should do does "+
+  "help with get got fix fixing fixed repair repairs repairing install installing installation installed replace replacing "+
+  "replacement new broken broke quote quotes estimate estimates please thanks thank know any some type kind").split(" "));
+const words = q => q.toLowerCase().replace(/['’]/g,"").split(/[^a-z0-9]+/).filter(w=>w&&!STOP.has(w));
+function editDist(a,b,max){            // Damerau (adjacent swap counts as 1); stops early past max
+  if(Math.abs(a.length-b.length)>max) return max+1;
+  const d=[]; for(let i=0;i<=a.length;i++){ d[i]=[i]; } for(let j=1;j<=b.length;j++) d[0][j]=j;
+  for(let i=1;i<=a.length;i++){ let rowMin=99;
+    for(let j=1;j<=b.length;j++){
+      const c=a[i-1]===b[j-1]?0:1;
+      d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+c);
+      if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1]) d[i][j]=Math.min(d[i][j],d[i-2][j-2]+1);
+      rowMin=Math.min(rowMin,d[i][j]);
+    }
+    if(rowMin>max) return max+1;
+  }
+  return d[a.length][b.length];
+}
+function hayOf(v){
+  const visible=[v.name,v.sub,v.cat,v.contact,v.note].join(" ").toLowerCase();
+  const all=(visible+" "+[v.keywords,extraWords(v)].join(" ")).toLowerCase();
+  return {visible, all, tokens:new Set(all.replace(/['’]/g,"").split(/[^a-z0-9]+/).filter(Boolean))};
+}
+function exactHit(w,H){                 // the word as typed (or its singular) is in this vendor's words
+  if(w.length<=3) return H.tokens.has(w) ? w : "";
+  if(H.all.includes(w)) return w;
+  if(w.length>4 && /s$/.test(w) && H.all.includes(w.slice(0,-1))) return w.slice(0,-1);
+  if(squish(H.all).includes(w)) return w;
+  return "";
+}
+function fuzzyHit(w,H,dist){            // a word within `dist` typos of what was typed
+  if(w.length<4||!dist) return "";
+  for(const t of H.tokens){ if(t.length>=4 && editDist(w,t,dist)<=dist) return t; }
+  return "";
+}
+/* For each typo'd word, the smallest number of typos that finds anything (so "furnance" finds furnace, not finance). */
+function typoBudget(w,Hs){
+  if(w.length<4 || Hs.some(H=>exactHit(w,H))) return 0;
+  const max = w.length>=8 ? 2 : 1;
+  let best=max+1;
+  for(const H of Hs) for(const t of H.tokens){ if(t.length>=4){ const d=editDist(w,t,best-1<0?0:Math.min(max,best)); if(d<best) best=d; } }
+  return best<=max ? best : 0;
+}
+let LAST_CLOSEST=false;
+const WHY=new Map();                    // vendor -> hidden words that matched (shown on the card)
 const extraWords = v => SYNONYMS.filter(([re])=>re.test(v.sub||"")).map(([,w])=>w).join(" ");
 
 function card(v){
@@ -637,6 +701,7 @@ function card(v){
     <div class="vtop"><p class="vname">${esc(title)}</p>${v.pick?`<span class="badge">${icon('star')}Stephen's pick</span>`:""}</div>
     ${tag?`<p class="vtag">${esc(tag)}</p>`:""}
     ${sub?`<p class="vco">${esc(sub)}</p>`:""}
+    ${WHY.get(v)?`<p class="vwhy">Matches: ${esc(WHY.get(v))}</p>`:""}
     ${b.length?`<div class="vbtns">${b.join("")}</div>`:""}
   </article>`;
 }
@@ -649,18 +714,44 @@ function treeOf(list){
   return tree;
 }
 function render(){
-  const q=$('#vq').value.trim().toLowerCase(), qd=digits(q);
+  const raw=$('#vq').value.trim(), q=raw.toLowerCase(), qd=digits(q);
+  $('#vclear').hidden=!raw;
+  WHY.clear(); LAST_CLOSEST=false;
   // Vendors tab: everything except Local Favorites (searching looks through everything)
-  const list=VENDORS.filter(v=>v.name&&(q||!isLocal(v))&&(cat==="All"||v.cat===cat)&&(!q||matchText([v.name,v.sub,v.cat,v.contact,v.note,v.keywords,extraWords(v)].join(" "),q)||(qd.length>2&&(digits(v.phone)+" "+digits(v.office)).includes(qd))));
-  $('#vcount').textContent=`${list.length} ${q?"match":"vendor"}${list.length===1?"":(q?"es":"s")}`;
+  const base=VENDORS.filter(v=>v.name&&(q||!isLocal(v))&&(cat==="All"||v.cat===cat));
+  let list=base;
+  if(q){
+    const nq=q.replace(/\ba\/c\b/g,"ac");
+    const ws=words(nq);
+    const Hs=base.map(hayOf);
+    const budget=ws.map(w=>typoBudget(w,Hs));
+    const phrase = H => nq.replace(/[^a-z0-9]/g,"").length<=3 ? false : matchText(H.all,nq);
+    const scored=base.map((v,i)=>{
+      const H=Hs[i];
+      if(phrase(H)) return {v,n:1e9,why:matchText(H.visible,nq)?"":raw};
+      if(qd.length>2&&(digits(v.phone)+" "+digits(v.office)).includes(qd)) return {v,n:1e9,why:""};
+      const hits=ws.map((w,k)=>exactHit(w,H)||fuzzyHit(w,H,budget[k])).filter(Boolean);
+      const hidden=hits.filter(h=>!H.visible.includes(h));
+      return {v,n:hits.length,why:hidden.length?[...new Set(hits)].join(" "):""};
+    });
+    // Best tier wins: the whole phrase > every word (any order) > the most words ("closest")
+    let keep=scored.filter(x=>x.n===1e9);
+    if(!keep.length) keep=scored.filter(x=>ws.length&&x.n===ws.length);
+    if(!keep.length){ const best=Math.max(0,...scored.map(x=>x.n)); if(best>0){ keep=scored.filter(x=>x.n===best); LAST_CLOSEST=true; } }
+    keep.forEach(x=>{ if(x.why) WHY.set(x.v,x.why); });
+    list=keep.map(x=>x.v);
+  }
+  $('#vcount').textContent = q
+    ? (LAST_CLOSEST?`No exact match. ${list.length} closest for “${raw}”`:`${list.length} match${list.length===1?"":"es"}`)
+    : `${list.length} vendor${list.length===1?"":"s"}`;
   const force = !!q;
   const catOpen = c => force || cat!=="All" || !OPEN_CATS.has(c);
   const subOpen = (c,s) => force || cat!=="All" || OPEN_SUBS.has(c+"|"+s);
   $('#vlist').innerHTML = list.length
     ? Object.entries(treeOf(list)).map(([c,subs])=>`<section class="vcat${catOpen(c)?" open":""}" data-cat="${esc(c)}"><button type="button" class="cat" aria-expanded="${catOpen(c)}">${esc(c)}<svg class="chev"><use href="#i-chev"/></svg></button><div class="catbody">`+Object.entries(subs).map(([s,vs])=>subHTML(c,s,vs,subOpen(c,s))).join("")+`</div></section>`).join("")
-    : `<div class="empty">No matches. <a href="${sms(CONFIG.phone,CONFIG.textGreeting+"Do you know a good ")}">Text me</a> and I'll find someone.</div>`;
+    : `<div class="empty">Nothing on my list for “${esc(raw)}” yet. <a href="${sms(CONFIG.phone,CONFIG.textGreeting+"Do you know a good "+raw+"?")}">Text me</a> and I'll find someone.</div>`;
   // Local tab: restaurants and things to do
-  const loc=VENDORS.filter(v=>v.name&&isLocal(v));
+  const loc=VENDORS.filter(v=>v.name&&isLocal(v)); loc.forEach(v=>WHY.delete(v));
   $('#llist').innerHTML = loc.length
     ? Object.entries(treeOf(loc)).map(([c,subs])=>Object.entries(subs).map(([s,vs])=>subHTML(c,s,vs,OPEN_SUBS.has(c+"|"+s))).join("")).join("")
     : `<div class="empty">Coming soon.</div>`;
@@ -845,7 +936,7 @@ $('#vq').addEventListener('input',()=>{
     const q=$('#vq').value.trim().toLowerCase();
     if(q.length<3 || /\d/.test(q)) return;
     const n=[...document.querySelectorAll('#vlist .vcard')].length;
-    track(n?'search':'search-no-results',{q:q.slice(0,40)});
+    track(!n?'search-no-results':(LAST_CLOSEST?'search-closest':'search'),{q:q.slice(0,40)});
   },1500);
 });
 // Forms and share
@@ -854,6 +945,14 @@ $('#refForm').addEventListener('submit',()=>track('referral-sent'));
 $('#moveForm').addEventListener('submit',()=>track('relocation-lead',{to:$('#mWhere').value.slice(0,60)}));
 $$('[data-share]').forEach(b=>b.addEventListener('click',()=>track('share')));
 $$('nav:not(.tabs) a, nav:not(.tabs) button').forEach(x=>x.addEventListener('click',()=>track('bottom-bar',{item:x.textContent.trim()})));
+// Search links: vendors.leickhomes.com/?q=plumber opens with plumbers showing
+(function(){
+  const q0=QPARAM;
+  if(!q0) return;
+  $('#vq').value=q0; showTab('vendors',false); render();
+  setTimeout(()=>{ const t=$('#vendors').getBoundingClientRect().top+scrollY-$('#tabs').offsetHeight-8; window.scrollTo({top:Math.max(0,t)}); },400);
+  (function wait(n){ if(window.umami) track('link-search',{q:q0.toLowerCase().slice(0,40)}); else if(n<40) setTimeout(()=>wait(n+1),250); })(0);
+})();
 </script>
 </body>
 </html>
