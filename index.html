@@ -384,7 +384,7 @@
     <h2>People I actually call</h2>
     <p class="lead">Lenders, inspectors, and the trades I send my own clients to. My top picks are pinned at the top of their lists.</p>
     <label class="search"><svg><use href="#i-search"/></svg><input id="vq" type="search" placeholder="Search plumber, lender, name…" autocomplete="off" enterkeyhint="search"><button type="button" class="clear" id="vclear" aria-label="Clear search" hidden>×</button></label>
-    <p class="try" id="vtry">Popular: <button type="button" data-q="plumber">Plumber</button><button type="button" data-q="hvac">HVAC</button><button type="button" data-q="roofer">Roofer</button><button type="button" data-q="handyman">Handyman</button><button type="button" data-q="electrician">Electrician</button><button type="button" data-q="lender">Lender</button><button type="button" data-q="inspector">Inspector</button></p>
+    <p class="try" id="vtry"></p>
     <div class="chips" id="chips"></div>
     <p class="count" id="vcount"></p>
     <div id="vlist"></div>
@@ -541,6 +541,7 @@ let CONFIG = {
   valueUrl: "https://hmbt.co/fXzfAh",
   readReviewsUrl: "https://search.google.com/local/reviews?placeid=ChIJ3YgRuxzzk4cRTqJIUmbXi-E",
   leaveReviewUrl: "https://g.page/leickhomes/review?gm",
+  popular: "Plumber, HVAC, Roofer, Handyman, Electrician, Lender, Inspector",
 };
 let VENDORS = [];
 const QPARAM=(()=>{ try{ return (new URLSearchParams(location.search).get("q")||"").slice(0,60); }catch(e){ return ""; } })();
@@ -569,6 +570,10 @@ function applyConfig(){
     else {a.removeAttribute('target'); a.href=sms(CONFIG.phone, CONFIG.textGreeting);}
   });
   document.title = "Stephen Leick's Vendor List";
+  // "Popular" search buttons come from the sheet's Info tab (popular row), comma separated
+  const pop=String(CONFIG.popular||"").split(",").map(x=>x.trim()).filter(Boolean).slice(0,12);
+  $('#vtry').innerHTML = pop.length ? "Popular: "+pop.map(x=>`<button type="button" data-q="${esc(x.toLowerCase())}">${esc(x)}</button>`).join("") : "";
+  $('#vtry').hidden = !pop.length;
 }
 
 /* ---------- Vendors ---------- */
