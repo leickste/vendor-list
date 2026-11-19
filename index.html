@@ -295,6 +295,8 @@
   .lcard2 .row a svg{width:16px;height:16px}
   #lenders .hint{margin-top:10px}
   @media (min-width:960px){ .lgrid{grid-template-columns:1fr 1fr} }
+  .vsave{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;margin-top:10px;padding:2px 0;border:0;background:none;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--gold-ink);text-decoration:underline;text-decoration-color:rgba(154,122,23,.4);text-underline-offset:3px}
+  .vsave svg{width:16px;height:16px}
   .vwhy{margin:4px 0 0;font-size:13px;color:var(--gold-ink);font-weight:600}
   #rInfo{border:2px solid var(--gold) !important;background:#fff8e6 !important;box-shadow:0 2px 8px rgba(201,162,39,.18)}
   #rInfo::placeholder{color:#8a7a4a}
@@ -324,6 +326,7 @@
   <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
   <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
   <symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-addc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M19 8v6M16 11h6"/></symbol>
   <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M16 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6.3"/></symbol>
 </svg>
 
@@ -725,8 +728,44 @@ function card(v){
     ${sub?`<p class="vco">${esc(sub)}</p>`:""}
     ${WHY.get(v)?`<p class="vwhy">Matches: ${esc(WHY.get(v))}</p>`:""}
     ${b.length?`<div class="vbtns">${b.join("")}</div>`:""}
+    ${(digits(num)||v.email||v.web)?`<button type="button" class="vsave" data-vid="${VENDORS.indexOf(v)}">${icon('addc')}Save to contacts</button>`:""}
   </article>`;
 }
+/* "Save to contacts": builds a contact card file (.vcf). iPhone shows "Create New Contact";
+   Android opens it in the Contacts app after the download. */
+function vcardFor(v){
+  const m=String(v.name).match(/^(.*?)\s*\(([^()]+)\)\s*$/);
+  const biz=(m?m[1]:v.name).replace(/^#\d+\s*/,"").trim();
+  const e=x=>String(x||"").replace(/\\/g,"\\\\").replace(/\n/g,"\\n").replace(/([,;])/g,"\\$1");
+  const L=[ "BEGIN:VCARD","VERSION:3.0" ];
+  const local=isLocal(v), person=!local&&v.contact ? String(v.contact).trim().replace(/\s+/g," ") : "";
+  if(person){
+    const parts=person.split(" "), last=parts.length>1?parts.pop():"", first=parts.join(" ");
+    L.push(`N:${e(last)};${e(first)};;;`, `FN:${e(person)}`, `ORG:${e(biz)}`);
+    if(v.note) L.push(`TITLE:${e(v.note)}`);
+  } else {
+    L.push(`N:;;;;`, `FN:${e(biz)}`, `ORG:${e(biz)}`, "X-ABShowAs:COMPANY");
+  }
+  if(digits(v.phone)) L.push(`TEL;TYPE=CELL:${fmtPhone(v.phone)}`);
+  if(digits(v.office)) L.push(`TEL;TYPE=WORK:${fmtPhone(v.office)}`);
+  if(v.email) L.push(`EMAIL;TYPE=WORK:${String(v.email).trim()}`);
+  if(v.web) L.push(`URL:${fixUrl(v.web)}`);
+  if(local&&v.contact) L.push(`ADR;TYPE=WORK:;;${e(v.contact)};;;;`);
+  L.push(`NOTE:${e((v.sub?v.sub+" · ":"")+"Recommended by Stephen Leick · vendors.leickhomes.com")}`);
+  L.push("END:VCARD");
+  return { text:L.join("\r\n")+"\r\n", file:(person||biz).replace(/[^A-Za-z0-9 &'-]/g,"").trim().replace(/\s+/g,"-")+".vcf", label:person||biz };
+}
+function saveContact(v){
+  const c=vcardFor(v);
+  const blob=new Blob([c.text],{type:"text/vcard;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=c.file; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),60000);
+  toast("Contact card saved. Open it to add "+c.label);
+  try{ track('vendor-save-contact',{vendor:c.label}); }catch(_){}
+}
+document.addEventListener('click',e=>{ const b=e.target.closest('.vsave'); if(!b) return; const v=VENDORS[+b.dataset.vid]; if(v) saveContact(v); });
+
 function subHTML(c,s,vs,open){
   return `<div class="vsub${open?" open":""}" data-key="${esc(c+"|"+s)}"><button type="button" class="sub" aria-expanded="${open}"><span>${esc(s)}<svg class="chev"><use href="#i-chev"/></svg></span></button><div class="vgrid">`+vs.sort((a,b)=>(b.pick?1:0)-(a.pick?1:0)).map(card).join("")+`</div>${moreLink(s,vs)}</div>`;
 }
@@ -818,6 +857,7 @@ function applyLender(){
       ${L.note?`<p class="ti">${esc(L.note)}${digits(num)?" · "+esc(fmtPhone(num)):""}</p>`:(digits(num)?`<p class="ti">${esc(fmtPhone(num))}</p>`:"")}
       ${L.web?`<a class="apply" href="${esc(fixUrl(L.web))}" target="_blank" rel="noopener" data-lact="apply">Apply online with ${esc(f)}</a>`:""}
       ${btns.length?`<div class="row">${btns.join("")}</div>`:""}
+      <button type="button" class="vsave" data-vid="${VENDORS.indexOf(L)}">${icon('addc')}Save ${esc(f)} to contacts</button>
     </div>`;
   }).join("");
   $('#lenderLine').textContent = lenders.length>1 ? `Talk to ${lenders.map(first).join(lenders.length===2?" or ":", ")} below.` : (lenders.length ? `Start with ${first(lenders[0])} below.` : "");
