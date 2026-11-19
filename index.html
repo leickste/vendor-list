@@ -612,6 +612,15 @@ const SYNONYMS = [
   [/restaurant/i, "restaurant restaurants food eat eating places to eat where to eat dining dine dinner lunch breakfast brunch fine dining casual cuisine"],
   [/things to do/i, "things to do fun family kids attractions activities outdoors outside hiking trails nature park parks walk walking bike zoo aquarium museum museums art history garden gardens shopping downtown riverfront weekend visitors out of town guests"],
 ];
+/* Search match that ignores spaces, hyphens and apostrophes, so "fire place" finds fireplace,
+   "dry wall" finds drywall, "andys" finds Andy's, and "hand yman"-style splits still work. */
+const squish = t => String(t).toLowerCase().replace(/[^a-z0-9]/g,"");
+function matchText(text,q){
+  const t=String(text).toLowerCase();
+  if(t.includes(q)) return true;
+  const sq=squish(q);
+  return sq.length>=4 && squish(t).includes(sq);
+}
 const extraWords = v => SYNONYMS.filter(([re])=>re.test(v.sub||"")).map(([,w])=>w).join(" ");
 
 function card(v){
@@ -642,7 +651,7 @@ function treeOf(list){
 function render(){
   const q=$('#vq').value.trim().toLowerCase(), qd=digits(q);
   // Vendors tab: everything except Local Favorites (searching looks through everything)
-  const list=VENDORS.filter(v=>v.name&&(q||!isLocal(v))&&(cat==="All"||v.cat===cat)&&(!q||[v.name,v.sub,v.cat,v.contact,v.note,v.keywords,extraWords(v)].join(" ").toLowerCase().includes(q)||(qd.length>2&&(digits(v.phone)+" "+digits(v.office)).includes(qd))));
+  const list=VENDORS.filter(v=>v.name&&(q||!isLocal(v))&&(cat==="All"||v.cat===cat)&&(!q||matchText([v.name,v.sub,v.cat,v.contact,v.note,v.keywords,extraWords(v)].join(" "),q)||(qd.length>2&&(digits(v.phone)+" "+digits(v.office)).includes(qd))));
   $('#vcount').textContent=`${list.length} ${q?"match":"vendor"}${list.length===1?"":(q?"es":"s")}`;
   const force = !!q;
   const catOpen = c => force || cat!=="All" || !OPEN_CATS.has(c);
