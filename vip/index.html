@@ -11,23 +11,31 @@
 <script>
 /* Personal links: put the client's tag on every Umami entry so the Activity list shows who did what. */
 (function(){
-  var c='';
-  try{ c=new URLSearchParams(location.search).get('c')||localStorage.getItem('slc')||''; }catch(e){}
-  c=String(c).toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40);
+  var clean=function(x){ return String(x||'').toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40); };
+  var c='', r='', q;
+  try{
+    q=new URLSearchParams(location.search);
+    c=clean(q.get('c')||localStorage.getItem('slc'));
+    r=clean(q.get('ref'));
+    // Someone who arrived through a shared link (?ref=mary-leick) is remembered as "via mary-leick".
+    // The first share link they used wins; clients with their own personal link are never relabeled.
+    if(!c){ var old=clean(localStorage.getItem('slr')); if(old) r=old; else if(r) localStorage.setItem('slr',r); }
+  }catch(e){}
+  var tag = c ? c : (r ? 'via '+r : ''), path = c ? '/c/'+c : (r ? '/via/'+r : '');
   window.umamiBeforeSend=function(type,p){
     try{
-      if(!c||!p) return p;
+      if(!tag||!p) return p;
       if(type==='event'&&p.name){
         var d=p.data||{}, k=Object.keys(d).filter(function(x){return x!=='client';})[0];
-        var detail=k?String(d[k]):'', tail=' · '+c, base=p.name+(detail?': ':'');
+        var detail=k?String(d[k]):'', tail=' · '+tag; if(detail&&tail.indexOf(detail)>=0) detail=''; var base=p.name+(detail?': ':'');
         var room=50-base.length-tail.length;
         if(detail&&room<4){ detail=''; base=p.name; room=50-base.length-tail.length; }
         if(detail.length>room) detail=detail.slice(0,room-1)+'…';
         p.name=(base+detail+tail).slice(0,50);
-        p.data=Object.assign({},d,{client:c});
+        p.data=Object.assign({},d,c?{client:c}:{via:r});
       } else if(p.url){
         var u=new URL(p.url,location.origin);
-        p.url='/c/'+c+u.pathname+u.hash;
+        p.url=path+u.pathname+u.hash;
       }
     }catch(e){}
     return p;
@@ -173,7 +181,7 @@
 <script>
 /* The VIP content below is encrypted with the VIP password (AES-GCM, PBKDF2).
    It cannot be read without the password. */
-const VAULT = {"salt": "e/wIQRg7Ng2SoSFX78Bbbg==", "iv": "Lpa3JsSo/Z2sVheq", "iter": 310000, "data": "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"};
+const VAULT = {"salt": "oZtexasB1wlR+Ej+nvXPLg==", "iv": "/ycts+mEFpM0ruu6", "iter": 310000, "data": "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"};
 const KEY = "stephen-vip-pw";
 const sms=(n,b)=>`sms:${n}${/iP(hone|ad|od)/.test(navigator.userAgent)?'&':'?'}body=${encodeURIComponent(b)}`;
 const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));

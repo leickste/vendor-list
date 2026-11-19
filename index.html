@@ -16,23 +16,31 @@
 <script>
 /* Personal links: put the client's tag on every Umami entry so the Activity list shows who did what. */
 (function(){
-  var c='';
-  try{ c=new URLSearchParams(location.search).get('c')||localStorage.getItem('slc')||''; }catch(e){}
-  c=String(c).toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40);
+  var clean=function(x){ return String(x||'').toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40); };
+  var c='', r='', q;
+  try{
+    q=new URLSearchParams(location.search);
+    c=clean(q.get('c')||localStorage.getItem('slc'));
+    r=clean(q.get('ref'));
+    // Someone who arrived through a shared link (?ref=mary-leick) is remembered as "via mary-leick".
+    // The first share link they used wins; clients with their own personal link are never relabeled.
+    if(!c){ var old=clean(localStorage.getItem('slr')); if(old) r=old; else if(r) localStorage.setItem('slr',r); }
+  }catch(e){}
+  var tag = c ? c : (r ? 'via '+r : ''), path = c ? '/c/'+c : (r ? '/via/'+r : '');
   window.umamiBeforeSend=function(type,p){
     try{
-      if(!c||!p) return p;
+      if(!tag||!p) return p;
       if(type==='event'&&p.name){
         var d=p.data||{}, k=Object.keys(d).filter(function(x){return x!=='client';})[0];
-        var detail=k?String(d[k]):'', tail=' · '+c, base=p.name+(detail?': ':'');
+        var detail=k?String(d[k]):'', tail=' · '+tag; if(detail&&tail.indexOf(detail)>=0) detail=''; var base=p.name+(detail?': ':'');
         var room=50-base.length-tail.length;
         if(detail&&room<4){ detail=''; base=p.name; room=50-base.length-tail.length; }
         if(detail.length>room) detail=detail.slice(0,room-1)+'…';
         p.name=(base+detail+tail).slice(0,50);
-        p.data=Object.assign({},d,{client:c});
+        p.data=Object.assign({},d,c?{client:c}:{via:r});
       } else if(p.url){
         var u=new URL(p.url,location.origin);
-        p.url='/c/'+c+u.pathname+u.hash;
+        p.url=path+u.pathname+u.hash;
       }
     }catch(e){}
     return p;
