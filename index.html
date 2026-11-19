@@ -284,6 +284,17 @@
   .try button{flex:none}
   @media (min-width:960px){ .try{margin:10px 0 0;padding:0;flex-wrap:wrap} }
   .try button{border:1px solid var(--gold);background:#fff;color:var(--navy);border-radius:999px;padding:4px 11px;font-size:13px;font-weight:600;cursor:pointer}
+  .lgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:16px}
+  .lcard2{background:var(--pick);border:1px solid var(--pick-line);border-radius:22px;padding:18px;min-width:0}
+  .lcard2 .who{margin:0;font-family:var(--serif);font-size:24px;line-height:1.15;font-style:italic}
+  .lcard2 .co{margin:2px 0 0;font-size:16px;font-weight:600}
+  .lcard2 .ti{margin:0;font-size:14px;color:var(--muted)}
+  .lcard2 .apply{display:flex;align-items:center;justify-content:center;height:50px;margin-top:14px;border-radius:16px;background:var(--navy);color:var(--cream);font-weight:600;font-size:15px}
+  .lcard2 .row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px}
+  .lcard2 .row a{display:flex;align-items:center;justify-content:center;gap:6px;height:44px;border-radius:14px;border:1px solid var(--line);background:#fff;font-size:14px;font-weight:600}
+  .lcard2 .row a svg{width:16px;height:16px}
+  #lenders .hint{margin-top:10px}
+  @media (min-width:960px){ .lgrid{grid-template-columns:1fr 1fr} }
   .vwhy{margin:4px 0 0;font-size:13px;color:var(--gold-ink);font-weight:600}
   #rInfo{border:2px solid var(--gold) !important;background:#fff8e6 !important;box-shadow:0 2px 8px rgba(201,162,39,.18)}
   #rInfo::placeholder{color:#8a7a4a}
@@ -411,6 +422,14 @@
     </div>
   </section>
 
+  <section id="lenders">
+    <p class="eyebrow">Get pre-approved</p>
+    <h2>Two lenders I trust</h2>
+    <p class="lead">Both are local loan officers my clients use. Talk to one or both, compare, and go with whoever fits you best.</p>
+    <div class="lgrid" id="lgrid"></div>
+    <p class="hint">You're free to use any lender you choose.</p>
+  </section>
+
   <section id="buyers">
     <p class="eyebrow">Buyers</p>
     <h2>From pre-approval to keys</h2>
@@ -421,8 +440,6 @@
       <li><span class="num">4</span><div><b>Inspect and insure</b><p>Inspection, insurance quotes, and radon and sewer checks from people I trust. They're all in the vendor list.</p></div></li>
       <li><span class="num">5</span><div><b>Close</b><p>Final walkthrough, sign at title, and get your keys.</p></div></li>
     </ol>
-    <a class="btn dark wide" id="lenderBtn" data-umami-event="pre-approval" href="#vendors" style="height:52px">Get pre-approved</a>
-    <p class="center" id="lenderCall"></p>
   </section>
 </div>
 <div class="panel" data-panel="selling">
@@ -785,19 +802,31 @@ $('.main').addEventListener('click', e=>{
 });
 
 function applyLender(){
-  const lenders=VENDORS.filter(v=>/lend|mortgage/i.test(v.sub||""));
-  const L=lenders.find(v=>v.pick)||lenders[0];
-  const lnum = L ? (L.phone||L.office) : ""; const real = L && digits(lnum);
-  const who = L ? (L.contact||L.name) : "";
-  const first = who.split(" ")[0];
-  $('#lenderLine').textContent = real ? `Start with ${who}${L.contact&&L.name?` at ${L.name}`:""}.` : "Start with a lender from my list.";
-  $('#lenderBtn').textContent = (real || (L&&L.web)) ? `Get pre-approved with ${first}` : "See my lenders";
-  const btn=$('#lenderBtn');
-  if(L && L.web){ btn.href=fixUrl(L.web); btn.target="_blank"; btn.rel="noopener"; }
-  else { btn.href = real ? `tel:${digits(lnum)}` : "#vendors"; btn.removeAttribute('target'); }
-  $('#lenderCall').textContent = real ? `Or call ${first} at ${fmtPhone(lnum)}` : "";
+  // Buying tab: show every lender (picks first, up to 3) and let the client choose
+  const lenders=VENDORS.filter(v=>/lend|mortgage/i.test(v.sub||"")).sort((a,b)=>(b.pick?1:0)-(a.pick?1:0)).slice(0,3);
+  const first = L => (L.contact||L.name||"").split(" ")[0];
+  $('#lenders').hidden = !lenders.length;
+  $('#lenders h2').textContent = lenders.length===1 ? "A lender I trust" : (lenders.length===2 ? "Two lenders I trust" : "Lenders I trust");
+  $('#lgrid').innerHTML = lenders.map(L=>{
+    const num=L.phone||L.office, f=first(L), btns=[];
+    if(digits(num)) btns.push(`<a href="tel:${digits(num)}" data-lact="call">${icon('phone')}Call</a>`);
+    if(digits(L.phone)) btns.push(`<a href="${sms(L.phone,"Hi "+f+", Stephen Leick referred me. I'd like to get pre-approved. ")}" data-lact="text">${icon('msg')}Text</a>`);
+    if(L.email) btns.push(`<a href="mailto:${esc(L.email)}?subject=${encodeURIComponent("Pre-approval (referred by Stephen Leick)")}" data-lact="email">${icon('mail')}Email</a>`);
+    return `<div class="lcard2" data-lender="${esc(L.contact||L.name)}">
+      <p class="who">${esc(L.contact||L.name)}</p>
+      ${L.contact?`<p class="co">${esc(L.name)}</p>`:""}
+      ${L.note?`<p class="ti">${esc(L.note)}${digits(num)?" · "+esc(fmtPhone(num)):""}</p>`:(digits(num)?`<p class="ti">${esc(fmtPhone(num))}</p>`:"")}
+      ${L.web?`<a class="apply" href="${esc(fixUrl(L.web))}" target="_blank" rel="noopener" data-lact="apply">Apply online with ${esc(f)}</a>`:""}
+      ${btns.length?`<div class="row">${btns.join("")}</div>`:""}
+    </div>`;
+  }).join("");
+  $('#lenderLine').textContent = lenders.length>1 ? `Talk to ${lenders.map(first).join(lenders.length===2?" or ":", ")} above.` : (lenders.length ? `Start with ${first(lenders[0])} above.` : "");
 }
-$('#lenderBtn').addEventListener('click',e=>{ if($('#lenderBtn').getAttribute('href')==="#vendors"){ $('#vq').value="lender"; render(); }});
+$('#lgrid').addEventListener('click',e=>{
+  const a=e.target.closest('[data-lact]'); if(!a) return;
+  const who=a.closest('[data-lender]').dataset.lender, act=a.dataset.lact;
+  try{ track(act==="apply"?"pre-approval":"lender-"+act,{lender:who}); }catch(_){}
+});
 
 /* ---------- Tabs ---------- */
 const TABS=["vendors","local","buying","selling","refer"];
