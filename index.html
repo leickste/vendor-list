@@ -298,6 +298,15 @@
   @media (min-width:960px){ .lgrid{grid-template-columns:1fr 1fr} }
   .vsave{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;margin-top:10px;padding:2px 0;border:0;background:none;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--gold-ink);text-decoration:underline;text-decoration-color:rgba(154,122,23,.4);text-underline-offset:3px}
   .vsave svg{width:16px;height:16px}
+  #saveSheet{position:fixed;inset:0;z-index:60;display:none;align-items:flex-end;justify-content:center;background:rgba(20,33,61,.45);padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+  #saveSheet.show{display:flex}
+  .ss-card{width:100%;max-width:440px;background:var(--paper);border-radius:22px;padding:20px 18px 14px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .ss-k{margin:0;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-ink)}
+  .ss-t{margin:4px 0 0;font-family:var(--serif);font-size:24px;line-height:1.15;font-style:italic;color:var(--ink)}
+  .ss-d{margin:10px 0 0;font-size:16px;line-height:1.5;color:var(--ink)}
+  .ss-go{display:block;width:100%;height:52px;margin-top:16px;border:0;border-radius:16px;background:var(--navy);color:var(--cream);font-size:16px;font-weight:600;cursor:pointer}
+  .ss-no{display:block;width:100%;height:44px;margin-top:6px;border:0;background:none;color:var(--muted);font-size:15px;font-weight:600;cursor:pointer}
+  @media (min-width:960px){ #saveSheet{align-items:center} }
   .vwhy{margin:4px 0 0;font-size:13px;color:var(--gold-ink);font-weight:600}
   #rInfo{border:2px solid var(--gold) !important;background:#fff8e6 !important;box-shadow:0 2px 8px rgba(201,162,39,.18)}
   #rInfo::placeholder{color:#8a7a4a}
@@ -766,9 +775,27 @@ function saveContact(v){
   const url=URL.createObjectURL(blob);
   const go=()=>{ const a=document.createElement('a'); a.href=url; a.download=c.file; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),60000); };
   // iPhone opens a preview; the add button is at the bottom of it, so say so first.
-  if(ios){ toast("Next: scroll to the bottom and tap Add to Contacts to save "+c.label,3500); setTimeout(go,1300); }
+  if(ios){ iosSaveSheet(c.label,go); }
   else { go(); toast("Open the download to add "+c.label); }
   try{ track('vendor-save-contact',{vendor:c.label}); }catch(_){}
+}
+/* iPhone: explain the next screen first, and open the contact only when they tap the button. */
+function iosSaveSheet(label,go){
+  let el=$('#saveSheet');
+  if(!el){
+    el=document.createElement('div'); el.id='saveSheet';
+    el.innerHTML=`<div class="ss-card" role="dialog" aria-modal="true" aria-labelledby="ssT">
+      <p class="ss-k">Save to contacts</p>
+      <p class="ss-t" id="ssT"></p>
+      <p class="ss-d">On the next screen, <b>scroll to the bottom</b> and tap <b>Add to Contacts</b> (or <b>Create New Contact</b>).</p>
+      <button type="button" class="ss-go">Open contact</button>
+      <button type="button" class="ss-no">Cancel</button></div>`;
+    document.body.appendChild(el);
+    el.addEventListener('click',e=>{ if(e.target===el||e.target.closest('.ss-no')) el.classList.remove('show'); });
+  }
+  el.querySelector('.ss-t').textContent=label;
+  el.querySelector('.ss-go').onclick=()=>{ el.classList.remove('show'); go(); };
+  el.classList.add('show');
 }
 document.addEventListener('click',e=>{ const b=e.target.closest('.vsave'); if(!b) return; const v=VENDORS[+b.dataset.vid]; if(v) saveContact(v); });
 
