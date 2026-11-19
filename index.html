@@ -763,9 +763,10 @@ function vcardFor(v){
   // Link back to the list. Credit goes to whoever brought this person here (never their personal ?c= tag,
   // so a shared contact can't make someone else look like them): ?ref=mary-leick, else ?ref=contact.
   let via=""; try{ via=CLIENT||String(localStorage.getItem('slr')||"").toLowerCase().replace(/[^a-z0-9-]/g,"").slice(0,40); }catch(_){}
-  L.push(`item1.URL:https://vendors.leickhomes.com/?ref=${via||"contact"}`, "item1.X-ABLabel:Stephen's Vendor List");
+  L.push(`item1.URL:https://vendors.leickhomes.com/?ref=${via||"contact"}`, "item1.X-ABLabel:Stephen Leick's Vendor List");
   if(local&&v.contact) L.push(`ADR;TYPE=WORK:;;${e(v.contact)};;;;`);
-  L.push(`NOTE:${e((v.sub?v.sub+" · ":"")+"Recommended by Stephen Leick · vendors.leickhomes.com")}`);
+  const saved=new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+  L.push(`NOTE:${e((v.sub?v.sub+" · ":"")+"Recommended by Stephen Leick · Saved "+saved)}`);
   L.push("END:VCARD");
   return { text:L.join("\r\n")+"\r\n", file:(person||biz).replace(/[^A-Za-z0-9 &'-]/g,"").trim().replace(/\s+/g,"-")+".vcf", label:person||biz };
 }
