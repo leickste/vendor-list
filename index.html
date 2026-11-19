@@ -13,6 +13,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script defer src="https://cloud.umami.is/script.js" data-website-id="e9c338e4-6dce-4bea-92c1-7bca11f58880" data-domains="vendors.leickhomes.com"></script>
 <title>Stephen Leick's Vendor List</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -284,18 +285,18 @@
           <p class="brk" data-cfg="brokerage"></p>
         </div>
       </div>
-      <a class="vippill" href="vip/">VIP</a>
+      <a class="vippill" href="vip/" data-umami-event="vip-open" data-umami-event-from="header">VIP</a>
       </div>
       <h1>Stephen Leick</h1>
       <p class="tagline" data-cfg="tagline"></p>
       <div class="hero-btns">
-        <a class="hbtn white" data-call href="#"><svg><use href="#i-phone"/></svg>Call</a>
-        <a class="hbtn gold" data-text href="#"><svg><use href="#i-msg"/></svg>Text</a>
+        <a class="hbtn white" data-call href="#" data-umami-event="header-call"><svg><use href="#i-phone"/></svg>Call</a>
+        <a class="hbtn gold" data-text href="#" data-umami-event="header-text"><svg><use href="#i-msg"/></svg>Text</a>
       </div>
       <a class="hphone" data-call data-phone-text href="#"></a>
       <div class="hero-btns sm">
-        <a class="glass" data-email href="#"><svg><use href="#i-mail"/></svg>Email</a>
-        <a class="glass" data-href="websiteUrl" href="#"><svg><use href="#i-globe"/></svg><span data-cfg="websiteLabel"></span></a>
+        <a class="glass" data-email href="#" data-umami-event="header-email"><svg><use href="#i-mail"/></svg>Email</a>
+        <a class="glass" data-href="websiteUrl" href="#" data-umami-event="header-website"><svg><use href="#i-globe"/></svg><span data-cfg="websiteLabel"></span></a>
       </div>
     </div>
   </header>
@@ -306,7 +307,7 @@
     <div>
       <strong>Keep this on your home screen</strong>
       <p>No app, no login. Save it once and you'll always have my number, my trusted vendors, and your next steps one tap away.</p>
-      <button class="btn dark" id="hsBtn">Show me how</button>
+      <button class="btn dark" id="hsBtn" data-umami-event="home-screen-howto">Show me how</button>
       <div class="howto" id="howto"><b>iPhone (Safari):</b> tap <b>•••</b> next to the address bar → <i>Share</i> → scroll down (or tap <i>View More</i>) → <i>Add to Home Screen</i> → <i>Add</i>. On older iPhones, tap the Share icon first.<br><b>Android:</b> tap the ⋮ menu in Chrome → <i>Add to Home screen</i>.</div>
     </div>
   </div>
@@ -314,10 +315,10 @@
   <div class="stats">
     <div class="stat"><b data-cfg="stat1"></b><span data-cfg="stat1Label"></span></div>
     <div class="stat"><b data-cfg="stat2"></b><span data-cfg="stat2Label"></span></div>
-    <a class="stat link" data-href="readReviewsUrl" href="#reviews"><b data-cfg="stat3"></b><span data-cfg="stat3Label"></span></a>
+    <a class="stat link" data-href="readReviewsUrl" href="#reviews" data-umami-event="reviews-read" data-umami-event-from="stat"><b data-cfg="stat3"></b><span data-cfg="stat3Label"></span></a>
   </div>
 
-  <a class="vipcard" href="vip/">
+  <a class="vipcard" href="vip/" data-umami-event="vip-open" data-umami-event-from="card">
     <p class="k">Stephen's VIP Page</p>
     <p class="t">Log in here for VIP clients</p>
     <p class="d">A private page for Stephen's VIP's. Click here to enter the VIP password.</p>
@@ -357,7 +358,7 @@
     <p class="eyebrow">Search homes</p>
     <h2>See what's on the market</h2>
     <div class="lcards">
-    <a class="lcard dark" data-href="searchUrl" href="#">
+    <a class="lcard dark" data-href="searchUrl" href="#" data-umami-event="home-search">
       <p class="k">Home search</p>
       <p class="t" data-cfg="websiteLabel"></p>
       <p class="d">Every listing in Omaha, Council Bluffs, and the surrounding area.</p>
@@ -375,7 +376,7 @@
       <li><span class="num">4</span><div><b>Inspect and insure</b><p>Inspection, insurance quotes, and radon and sewer checks from people I trust. They're all in the vendor list.</p></div></li>
       <li><span class="num">5</span><div><b>Close</b><p>Final walkthrough, sign at title, and get your keys.</p></div></li>
     </ol>
-    <a class="btn dark wide" id="lenderBtn" href="#vendors" style="height:52px">Get pre-approved</a>
+    <a class="btn dark wide" id="lenderBtn" data-umami-event="pre-approval" href="#vendors" style="height:52px">Get pre-approved</a>
     <p class="center" id="lenderCall"></p>
   </section>
 </div>
@@ -385,7 +386,7 @@
     <h2>What's my home worth?</h2>
     <p class="lead">An online estimate is a starting guess. I price from homes that actually sold on your street.</p>
   <div class="lcards one">
-    <a class="lcard" data-href="valueUrl" href="#sellers">
+    <a class="lcard" data-href="valueUrl" href="#sellers" data-umami-event="home-value-estimate">
       <p class="k">Instant estimate</p>
       <p class="t">Get an online home value</p>
       <p class="d">A quick starting point. For a real number, send me your address below.</p>
@@ -414,8 +415,8 @@
     <h2>What clients say</h2>
     <p class="lead">Reviews from buyers and sellers across Nebraska and Iowa. If I helped you, a quick review means a lot.</p>
     <div class="pair">
-      <a class="btn dark" data-href="readReviewsUrl" href="#"><svg><use href="#i-star"/></svg>Read reviews</a>
-      <a class="btn light" data-href="leaveReviewUrl" href="#">Leave a review</a>
+      <a class="btn dark" data-href="readReviewsUrl" href="#" data-umami-event="reviews-read"><svg><use href="#i-star"/></svg>Read reviews</a>
+      <a class="btn light" data-href="leaveReviewUrl" href="#" data-umami-event="reviews-leave">Leave a review</a>
     </div>
   </section>
 
@@ -659,6 +660,7 @@ function showTab(name, scroll){
 }
 $('#tabs').addEventListener('click',e=>{
   const a=e.target.closest('a[data-tab]'); if(!a) return;
+  track('tab',{tab:a.dataset.tab});
   e.preventDefault();
   try{ history.pushState(null,'','#'+a.dataset.tab); }catch(_){}
   showTab(a.dataset.tab,true);
@@ -732,6 +734,37 @@ $$('[data-share]').forEach(b=>b.onclick=async()=>{
   try{ if(navigator.share){ await navigator.share(data); return; } }catch(e){ if(e.name==="AbortError") return; }
   try{ await navigator.clipboard.writeText(data.url); toast("Link copied"); }catch(e){ toast(data.url); }
 });
+
+/* ---------- Visit tracking (Umami, cookie-free) ---------- */
+function track(name,data){ try{ if(window.umami) umami.track(name,data); }catch(e){} }
+// Vendor buttons: which vendor, which action
+document.addEventListener('click',e=>{
+  const a=e.target.closest('.vbtns a'); if(!a) return;
+  const cardEl=a.closest('.vcard'), sub=a.closest('.vsub');
+  const act=a.classList.contains('call')?'call':(a.getAttribute('aria-label')||a.textContent).trim().toLowerCase();
+  track('vendor-'+act,{vendor:(cardEl&&cardEl.querySelector('.vname')||{}).textContent||'', type:sub?sub.dataset.key.split('|')[1]:''});
+});
+// "+ more" / show-less links and category chips
+document.addEventListener('click',e=>{
+  const m=e.target.closest('.more'); if(m){ const sub=m.closest('.vsub'); track(m.classList.contains('less')?'type-collapse':'type-expand',{type:sub?sub.dataset.key.split('|')[1]:''}); }
+  const c=e.target.closest('.chip'); if(c) track('category-filter',{category:c.dataset.c});
+});
+// Searches: words only (skipped if it contains numbers, so no phone numbers get logged)
+let searchTimer;
+$('#vq').addEventListener('input',()=>{
+  clearTimeout(searchTimer);
+  searchTimer=setTimeout(()=>{
+    const q=$('#vq').value.trim().toLowerCase();
+    if(q.length<3 || /\d/.test(q)) return;
+    const n=[...document.querySelectorAll('#vlist .vcard')].length;
+    track(n?'search':'search-no-results',{q:q.slice(0,40)});
+  },1500);
+});
+// Forms and share
+$('#sellForm').addEventListener('submit',()=>track('seller-lead'));
+$('#refForm').addEventListener('submit',()=>track('referral-sent'));
+$$('[data-share]').forEach(b=>b.addEventListener('click',()=>track('share')));
+$$('nav:not(.tabs) a, nav:not(.tabs) button').forEach(x=>x.addEventListener('click',()=>track('bottom-bar',{item:x.textContent.trim()})));
 </script>
 </body>
 </html>
