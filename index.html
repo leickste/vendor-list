@@ -670,11 +670,21 @@ const SYNONYMS = [
 /* Search match that ignores spaces, hyphens and apostrophes, so "fire place" finds fireplace,
    "dry wall" finds drywall, "andys" finds Andy's, and "hand yman"-style splits still work. */
 const squish = t => String(t).toLowerCase().replace(/[^a-z0-9]/g,"");
+/* Partial words match only from the START of a word: "roof" finds Roofing, "roofing" does not find Waterproofing. */
+const reEsc = x => x.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+function wordStart(t,q){ return new RegExp("(^|[^a-z0-9])"+reEsc(q)).test(t); }
+function squishStart(t,sq){             // "fire place" -> fireplace, "andys" -> Andy's, but still word-start only
+  const toks=t.split(/[^a-z0-9]+/).filter(Boolean);
+  let joined="",starts=[];
+  for(const k of toks){ starts.push(joined.length); joined+=k; }
+  for(const st of starts) if(joined.startsWith(sq,st)) return true;
+  return false;
+}
 function matchText(text,q){
   const t=String(text).toLowerCase();
-  if(t.includes(q)) return true;
+  if(wordStart(t,q)) return true;
   const sq=squish(q);
-  return sq.length>=4 && squish(t).includes(sq);
+  return sq.length>=4 && squishStart(t,sq);
 }
 /* Plain-English searches: drop filler words, match the rest in any order, forgive small typos. */
 const STOP=new Set(("i im my me we our us a an the for to of in on at and or is are it its this that there "+
@@ -705,9 +715,10 @@ function hayOf(v){
 }
 function exactHit(w,H){                 // the word as typed (or its singular) is in this vendor's words
   if(w.length<=3) return H.tokens.has(w) ? w : "";
-  if(H.all.includes(w)) return w;
-  if(w.length>4 && /s$/.test(w) && H.all.includes(w.slice(0,-1))) return w.slice(0,-1);
-  if(squish(H.all).includes(w)) return w;
+  const A=String(H.all).toLowerCase();
+  if(wordStart(A,w)) return w;
+  if(w.length>4 && /s$/.test(w) && wordStart(A,w.slice(0,-1))) return w.slice(0,-1);
+  if(squishStart(A,squish(w))) return w;
   return "";
 }
 function fuzzyHit(w,H,dist){            // a word within `dist` typos of what was typed
