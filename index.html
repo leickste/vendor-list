@@ -852,6 +852,16 @@ function render(){
     if(!keep.length) keep=scored.filter(x=>ws.length&&x.n===ws.length);
     if(!keep.length){ const best=Math.max(0,...scored.map(x=>x.n)); if(best>0){ keep=scored.filter(x=>x.n===best); LAST_CLOSEST=true; } }
     keep.forEach(x=>{ if(x.why) WHY.set(x.v,x.why); });
+    // Most relevant first: the search word in the Type name ("electric" -> Electricians) beats the business name,
+    // which beats contact/notes, which beats hidden search words. Ties keep the sheet's order.
+    const lc=x=>String(x||"").toLowerCase();
+    const rel=v=>{ const terms=[nq,...ws]; let best=0;
+      for(const t of terms){ if(!t) continue;
+        if(matchText(lc(v.sub),t)) best=Math.max(best,4);
+        else if(matchText(lc(v.name),t)) best=Math.max(best,3);
+        else if(matchText(lc([v.contact,v.note,v.cat].join(" ")),t)) best=Math.max(best,2); }
+      return best; };
+    keep=keep.map((x,i)=>({...x,r:rel(x.v),i})).sort((a,b)=>b.r-a.r||a.i-b.i);
     list=keep.map(x=>x.v);
   }
   $('#vcount').textContent = q
