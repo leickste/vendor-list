@@ -827,13 +827,28 @@ function treeOf(list){
   list.forEach(v=>{ const c=v.cat||"Other", s=v.sub||"Other"; (tree[c]=tree[c]||{}); (tree[c][s]=tree[c][s]||[]).push(v); });
   return tree;
 }
+/* Home Services order: most-needed trades first (national repair surveys from Angi, HomeAdvisor, AHS, Thumbtack, Housecall Pro).
+   Types not listed here go after these, A to Z. Other categories keep the sheet's order. */
+const TYPE_RANK=[/plumb/i,/hvac|heating/i,/electric/i,/\broof/i,/appliance/i,/handyman/i,/foundation|waterproof/i,/garage door/i,
+  /pest/i,/lawn|landscap/i,/tree/i,/fence/i,/paint/i,/gutter/i,/sprinkl|irrigat/i,/concrete/i,/mudjack/i,/siding|exterior/i,
+  /general contractor/i,/remodel/i,/house clean|^clean|maid/i,/carpet/i,/duct/i,/junk/i,/^mov/i,/storage/i,/snow/i,/septic/i,
+  /radon/i,/mold|odor|abatement/i,/insulation/i,/chimney|fireplace/i,/garage floor|epoxy/i,/caulk/i,/blind|window cover|shade/i,
+  /cabinet/i,/countertop/i,/structural|engineer/i,/survey/i];
+const isHome = v => /home serv/i.test(v.cat||"");
+const typeRank = v => { if(!isHome(v)) return -1; const i=TYPE_RANK.findIndex(re=>re.test(v.sub||"")); return i<0?999:i; };
+function byTypeRank(list){
+  const catAt=new Map(); list.forEach((v,i)=>{ if(!catAt.has(v.cat)) catAt.set(v.cat,i); });
+  return list.map((v,i)=>({v,i})).sort((a,b)=>
+    catAt.get(a.v.cat)-catAt.get(b.v.cat) || typeRank(a.v)-typeRank(b.v) ||
+    (typeRank(a.v)===999 ? String(a.v.sub).localeCompare(String(b.v.sub)) : 0) || a.i-b.i).map(x=>x.v);
+}
 function render(){
   const raw=$('#vq').value.trim(), q=raw.toLowerCase(), qd=digits(q);
   $('#vclear').hidden=!raw;
   WHY.clear(); LAST_CLOSEST=false;
   // Vendors tab: everything except Local Favorites (searching looks through everything)
   const base=VENDORS.filter(v=>v.name&&(q||!isLocal(v))&&(cat==="All"||v.cat===cat));
-  let list=base;
+  let list=byTypeRank(base);
   if(q){
     const nq=q.replace(/\ba\/c\b/g,"ac");
     const ws=words(nq);
@@ -862,7 +877,8 @@ function render(){
         else if(matchText(lc(v.name),t)) best=Math.max(best,3);
         else if(matchText(lc([v.contact,v.note,v.cat].join(" ")),t)) best=Math.max(best,2); }
       return best; };
-    keep=keep.map((x,i)=>({...x,r:rel(x.v),i})).sort((a,b)=>b.r-a.r||a.i-b.i);
+    const ord=new Map(byTypeRank(base).map((v,i)=>[v,i]));
+    keep=keep.map(x=>({...x,r:rel(x.v),i:ord.get(x.v)})).sort((a,b)=>b.r-a.r||a.i-b.i);
     list=keep.map(x=>x.v);
   }
   $('#vcount').textContent = q
